@@ -18,7 +18,7 @@
 
     <select id="findList" parameterType="CustomUserInfo" resultMap="BaseResultMap">
         select
-        a.custom_id as 'id',b.user_name as'user_name',b.login_name as 'login_name',c.qq_number as'qq_number',c.level as'level',b.custom_status as 'custom_status'
+        a.custom_id as 'id',b.user_name as'user_name',b.login_name as 'login_name',c.qq_number as'qq_number',c.level as'level',c.custom_status as 'custom_status'
         from tb_custom_userinfo a INNER join tb_custominfo c on a.custom_id=c.id  INNER JOIN tb_userinfo b on c.user_id=b.id
         where
         <if test="customStatus != null and customStatus != ''">
