@@ -63,7 +63,7 @@
     <if test="endTime != null">
       verify_date <![CDATA[ <=  ]]>#{endTime,jdbcType=TIMESTAMP} and
     </if>
-    flag=#{flag} order by create_date
+    flag=#{flag} order by id desc
   </select>
 
   <delete id="delete" parameterType="Article">

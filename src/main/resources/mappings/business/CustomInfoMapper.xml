@@ -4,7 +4,9 @@
   <resultMap id="BaseResultMap" type="com.ggj.article.module.business.bean.CustomInfo">
     <id column="id" jdbcType="INTEGER" property="id" />
     <result column="user_id" jdbcType="INTEGER" property="userId" />
+    <result column="custom_user_id" jdbcType="INTEGER" property="customUserId" />
     <result column="qq_number" jdbcType="INTEGER" property="qqNumber" />
+    <result column="user_type" jdbcType="INTEGER" property="userType" />
     <result column="level" jdbcType="VARCHAR" property="level" />
     <result column="flag" jdbcType="VARCHAR" property="flag" />
     <result column="create_user" jdbcType="VARCHAR" property="createUser" />
@@ -37,10 +39,10 @@
      a.*,b.user_name as 'user_name',b.phone_number as 'phone_number',b.login_name,c.role_id as 'role.id'
   </sql>
   <sql id="Base_Column_List">
-     a.*,b.user_name as 'user_name',b.phone_number as 'phone_number',b.login_name
+     a.*,b.user_name as 'user_name',b.user_type as 'user_type',b.phone_number as 'phone_number',b.login_name,d.user_id as 'custom_user_id'
   </sql>
   <sql id="Innerjoin_column">
-    INNER  JOIN tb_userinfo b on a.user_id=b.id
+    INNER  JOIN tb_userinfo b on a.user_id=b.id INNER JOIN  tb_custom_userinfo d on d.custom_id=a.id
   </sql>
   <sql id="Role_Innerjoin_column">
     INNER  JOIN tb_userinfo b on a.user_id=b.id left JOIN tc_userinfo_role c on b.id=c.user_info_id

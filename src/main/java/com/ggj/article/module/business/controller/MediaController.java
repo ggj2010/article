@@ -72,6 +72,8 @@ public class MediaController extends BaseController {
         PageInfo<Media> pageInfo = mediaService.findPage(media);
         model.addAttribute("pageInfo", pageInfo);
         addSelectType(model);
+        Principal principal = UserUtils.getPrincipal();
+        model.addAttribute("principal", principal);
         model.addAttribute("media", media);
         return "bussiness/media/bussiness_media_list";
     }
@@ -97,7 +99,7 @@ public class MediaController extends BaseController {
         addSelectType(model);
         model.addAttribute("media", media);
         Principal principal = UserUtils.getPrincipal();
-        model.addAttribute("userType", principal.getUserType());
+        model.addAttribute("principal", principal);
         return "bussiness/media/bussiness_media_select";
     }
 

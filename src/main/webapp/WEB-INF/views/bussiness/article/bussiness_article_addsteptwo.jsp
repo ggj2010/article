@@ -29,6 +29,7 @@
                             <span class="glyphicon  form-control-feedback" aria-hidden="true"></span>
                         </div>
                     </div>
+                    <c:if test="${principal.userType==0}">
                     <div class="form-group">
                         <label class="col-sm-2 control-label">客户信息</label>
                         <div class="col-sm-8">
@@ -40,6 +41,7 @@
                             <span class="glyphicon  form-control-feedback" aria-hidden="true"></span>
                         </div>
                     </div>
+                    </c:if>
                     <div class="form-group">
                         <label class="col-sm-2 control-label">稿件类型</label>
                         <div class="col-sm-8">
@@ -144,10 +146,10 @@
                 var html = "";
                 html += "<tr id=\"" + id + "\">";
                 html += "<td>" + name + "</td>";
-                <c:if test="${userType==0}">
+                <c:if test="${principal.userType==0}">
                 html += "<td><input type=\"text\" value=\"" + price + "\"><input type=\"hidden\" value=\"" + id + "\"></td>";
                 </c:if>
-                <c:if test="${userType==1}">
+                <c:if test="${principal.userType==1}">
                 html += "<td><input type=\"text\" value=\"" + price + "\" readonly><input type=\"hidden\" value=\"" + id + "\"></td>";
                 </c:if>
                 html += "<td><a class=\"btn btn-info\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"删除\" onclick='deleteChoose(\"" + id + "\")'><span class=\"glyphicon glyphicon-trash\"></span></td>";

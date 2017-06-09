@@ -54,17 +54,17 @@
 								<td>${entity.id}</td>
 								<td>${entity.name}</td>
 								<!--价格-->
-								<c:if test="${userType==0}">
+								<c:if test="${principal.userType==0}">
 									<td>${entity.bronzePrice}</td>
 								</c:if>
-								<c:if test="${userType==1}">
-									<c:if test="${level=='金牌'}">
+								<c:if test="${principal.userType==1}">
+									<c:if test="${principal.level=='金牌'}">
 									<td>${entity.goldPrice}</td>
 									</c:if>
-									<c:if test="${level=='铜牌'}">
+									<c:if test="${principal.level=='铜牌'}">
 									<td>${entity.silverPrice}</td>
 									</c:if>
-									<c:if test="${level=='银牌'}">
+									<c:if test="${principal.level=='银牌'}">
 									<td>${entity.bronzePrice}</td>
 									</c:if>
 								</c:if>
@@ -117,10 +117,10 @@
 				var html="";
 				html+="<tr id=\""+id+"\">";
 				html+="<td>"+name+"</td>";
-				<c:if test="${userType==0}">
+				<c:if test="${principal.userType==0}">
 				html+="<td><input type=\"text\" value=\""+price+"\"><input type=\"hidden\" value=\""+id+"\"></td>";
 				</c:if>
-				<c:if test="${userType==1}">
+				<c:if test="${principal.userType==1}">
 				html+="<td><input type=\"text\" value=\""+price+"\" readonly><input type=\"hidden\" value=\""+id+"\"></td>";
 				</c:if>
 				html+="<td><a class=\"btn btn-info\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"删除\" onclick='deleteChoose(\""+id+"\")'><span class=\"glyphicon glyphicon-trash\"></span></td>";

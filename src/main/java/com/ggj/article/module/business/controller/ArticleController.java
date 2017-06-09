@@ -120,6 +120,7 @@ public class ArticleController extends BaseController {
 		List<CustomUserInfo> customUserInfoList = customInfoService.getCustomUser(principal.getId());
 		model.addAttribute("customUserInfoList", customUserInfoList);
 		model.addAttribute("article", article);
+		model.addAttribute("principal", principal);
 		return "bussiness/article/bussiness_article_addsteptwo";
 	}
 	

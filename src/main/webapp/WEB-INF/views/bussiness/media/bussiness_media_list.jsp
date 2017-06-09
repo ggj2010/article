@@ -53,8 +53,11 @@
 					<table class="table table-hover  table-striped table-bordered">
 						<tr class="info">
 							<th>名称</th>
+							<shiro:hasPermission name="bussiness:media:edit">
 							<th>金/银/铜价格</th>
 							<th>成本价格</th>
+							</shiro:hasPermission>
+							<th>价格</th>
 							<th>收录类型</th>
 							<th>媒体类型</th>
 							<th>媒体区域</th>
@@ -68,8 +71,27 @@
 						<c:forEach items="${pageInfo.list}" var="entity">
 							<tr>
 								<td title="${entity.name}">${fn:substring(entity.name, 0, 10)}</td>
+								<shiro:hasPermission name="bussiness:media:edit">
 								<td>${entity.goldPrice}/${entity.silverPrice}/${entity.bronzePrice}</td>
 								<td>${entity.costPrice}</td>
+								</shiro:hasPermission>
+
+
+								<c:if test="${principal.userType==0}">
+									<td>${entity.bronzePrice}</td>
+								</c:if>
+								<c:if test="${principal.userType==1}">
+									<c:if test="${principal.level=='金牌'}">
+										<td>${entity.goldPrice}</td>
+									</c:if>
+									<c:if test="${principal.level=='铜牌'}">
+										<td>${entity.silverPrice}</td>
+									</c:if>
+									<c:if test="${principal.level=='银牌'}">
+										<td>${entity.bronzePrice}</td>
+									</c:if>
+								</c:if>
+
 								<td>${entity.collectionType}</td>
 								<td>${entity.mediaType}</td>
 								<td>${entity.mediaRegion}</td>
