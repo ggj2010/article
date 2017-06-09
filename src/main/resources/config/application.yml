@@ -1,0 +1,78 @@
+spring:
+  #文件大小
+  http:
+    multipart:
+      maxFileSize: 50Mb
+      maxRequestSize: 100Mb
+  mvc:
+    view:
+      prefix: /WEB-INF/views/
+      suffix: .jsp
+  redis:
+    database: 2
+    host: 123.56.118.135
+    password: gaoguangjin
+    pool.max-active: 50000
+    pool.max-idle: 500
+    pool.max-wait: 1000
+    pool.min-idle: 300
+    port: 6379
+    timeout: 100000
+  datasource:
+      name: database
+      url: jdbc:mysql://123.56.118.135:3306/media?useUnicode=true&characterEncoding=utf-8
+      username: mobile
+      password: mobile
+      # 使用druid数据源
+      type: com.alibaba.druid.pool.DruidDataSource
+      driver-class-name: com.mysql.jdbc.Driver
+      filters: stat
+      maxActive: 20
+      initialSize: 1
+      maxWait: 60000
+      minIdle: 1
+      timeBetweenEvictionRunsMillis: 60000
+      minEvictableIdleTimeMillis: 300000
+      validationQueryTimeout: 900000
+      validationQuery: SELECT SYSDATE() from dual
+      testWhileIdle: true
+      testOnBorrow: false
+      testOnReturn: false
+      poolPreparedStatements: true
+      maxOpenPreparedStatements: 20
+
+qiniu:
+  accessKey: aL-Y877Xpt0daNLqkule0TwNTsAFWR0aoYHUTRaA
+  secretKey: ngCEeu-AABo_d5GdGJ076bUNSBsntAyisPPeB9ed
+  #ggj2010 ggjqn
+  bucketName: ggjqn
+  domain: http://o8c5x5dg6.bkt.clouddn.com/
+
+server:
+  port: 80
+  http:
+    encoding:
+    charset: UTF-8
+    enabled: true
+    force: true
+#日志颜色
+  output:
+    ansi:
+      enabled: ALWAYS
+
+
+mybatis:
+  config: classpath:mybatis-config.xml
+  mapperLocations: classpath:mappings/**/*.xml
+  typeAliasesPackage: com.ggj.article.module
+
+
+#######################阿里云sdk############
+##Access Key管理
+access_Key_ID: ueRiEczaGI5oVGbH
+access_Key_Secret: DELR4vRsu4y0ZrSg8UPxs4SOEFqKUB
+#Endpoint是阿里云OSS服务在各个区域的域名地址,外网Endpoint规则 Region + .aliyuncs.com
+endpoint: http://oss-cn-qingdao.aliyuncs.com
+#存储bucket
+bucket: gaoguangjin
+bucket_imgkey: background_img

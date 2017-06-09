@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ggj.article.module.business.dao.ArticleMapper">
+  <resultMap id="BaseResultMap" type="com.ggj.article.module.business.bean.Article">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="user_id" jdbcType="INTEGER" property="userId" />
+    <result column="custom_id" jdbcType="INTEGER" property="customId" />
+    <result column="media_id" jdbcType="INTEGER" property="mediaId" />
+    <result column="editor_id" jdbcType="INTEGER" property="editorId" />
+    <result column="media_name" jdbcType="VARCHAR" property="mediaName" />
+    <result column="title" jdbcType="VARCHAR" property="title" />
+    <result column="custom_name" jdbcType="VARCHAR" property="customName" />
+    <result column="article_type" jdbcType="TINYINT" property="articleType" />
+    <result column="url" jdbcType="VARCHAR" property="url" />
+    <result column="verify_url" jdbcType="VARCHAR" property="verifyUrl" />
+    <result column="cost_price" jdbcType="DECIMAL" property="costPrice" />
+    <result column="custom_price" jdbcType="DECIMAL" property="customPrice" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <result column="status" jdbcType="TINYINT" property="status" />
+    <result column="flag" jdbcType="VARCHAR" property="flag" />
+    <result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
+    <result column="verify_date" jdbcType="TIMESTAMP" property="verifyDate" />
+    <result column="create_user" jdbcType="VARCHAR" property="createUser" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, user_id, custom_id,editor_id, media_id,media_name, title, custom_name, article_type,cost_price, custom_price,  url,verify_url, remark,
+    status, flag, verify_date,create_date, create_user
+  </sql>
+  <select id="get" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from tb_article
+    where id = #{id,jdbcType=INTEGER} and flag="0"
+  </select>
+
+  <select id="findList" resultMap="BaseResultMap" parameterType="Article">
+    select
+    <include refid="Base_Column_List"/>
+    from tb_article
+    where
+    <if test="userId != null and userId != ''">
+      user_id = #{userId,jdbcType=INTEGER} and
+    </if>
+    <if test="customId != null and customId!=''">
+      custom_id = #{customId,jdbcType=VARCHAR} and
+    </if>
+    <if test="editorId != null and editorId != ''">
+      editor_id = #{editorId,jdbcType=INTEGER},
+    </if>
+    <if test="mediaId != null and mediaId!=''">
+      media_id = #{mediaId,jdbcType=VARCHAR} and
+    </if>
+    <if test="status != null and status!=''">
+      status = #{status,jdbcType=VARCHAR} and
+    </if>
+    <if test="title != null and title!=''">
+      title like  concat (#{title},'%') and
+    </if>
+
+    <if test="beginTime != null">
+      create_date<![CDATA[ >=  ]]> #{beginTime,jdbcType=TIMESTAMP} and
+    </if>
+    <if test="endTime != null">
+      verify_date <![CDATA[ <=  ]]>#{endTime,jdbcType=TIMESTAMP} and
+    </if>
+    flag=#{flag} order by create_date
+  </select>
+
+  <delete id="delete" parameterType="Article">
+    delete from tb_article  where id=#{id}
+  </delete>
+  <insert id="insert" parameterType="com.ggj.article.module.business.bean.Article">
+    insert into tb_article (id, user_id, custom_id,
+    media_id, media_name,title, custom_name,
+    article_type,cost_price, custom_price,  url, remark,
+    status, flag, create_date,
+    create_user)
+    values (#{id,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, #{customId,jdbcType=INTEGER},
+    #{mediaId,jdbcType=INTEGER},#{mediaName,jdbcType=VARCHAR}, #{title,jdbcType=VARCHAR}, #{customName,jdbcType=VARCHAR},
+    #{articleType,jdbcType=TINYINT}, #{costPrice,jdbcType=DECIMAL}, #{customPrice,jdbcType=DECIMAL},  #{url,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR},
+    #{status,jdbcType=TINYINT}, #{flag,jdbcType=VARCHAR}, #{createDate,jdbcType=TIMESTAMP},
+    #{createUser,jdbcType=VARCHAR})
+  </insert>
+  <update id="update" parameterType="com.ggj.article.module.business.bean.Article">
+    update tb_article
+    <trim prefix="set" suffixOverrides=",">
+      <if test="userId != null and userId != ''">
+        user_id = #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="customId != null and customId != ''">
+        custom_id = #{customId,jdbcType=INTEGER},
+      </if>
+      <if test="editorId != null and editorId != ''">
+        editor_id = #{editorId,jdbcType=INTEGER},
+      </if>
+      <if test="mediaId != null and mediaId != ''">
+        media_id = #{mediaId,jdbcType=INTEGER},
+      </if>
+      <if test="title != null and title != '' ">
+        title = #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="customName != null and customName != ''">
+        custom_name = #{customName,jdbcType=VARCHAR},
+      </if>
+      <if test="articleType != null and articleType != ''">
+        article_type = #{articleType,jdbcType=TINYINT},
+      </if>
+      <if test="costPrice != null and costPrice != ''">
+        cost_price = #{costPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="customPrice != null and customPrice != ''">
+        custom_price = #{customPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="url != null and url != ''">
+        url = #{url,jdbcType=VARCHAR},
+      </if>
+      <if test="verifyUrl != null and verifyUrl != ''">
+        verify_url = #{verifyUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null and remark != ''">
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null and status != ''">
+        status = #{status,jdbcType=TINYINT},
+      </if>
+      <if test="flag != null and flag != ''">
+        flag = #{flag,jdbcType=VARCHAR},
+      </if>
+      <if test="verifyDate != null">
+        verify_date = #{verifyDate,jdbcType=TIMESTAMP},
+      </if>
+   </trim>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

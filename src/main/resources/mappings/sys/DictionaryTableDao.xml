@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ggj.article.module.sys.dao.DictionaryTableDao">
+    <sql id="sqlColums">
+		id,name,value,type,description,sort,create_date as 'createDate' ,create_user as 'createUser',flag
+	</sql>
+    <insert id="insert">
+		INSERT INTO tc_sys_dict(
+		name,value,type,description,sort,create_date,create_user,flag
+		) VALUES (
+		#{name},#{value},#{type},#{description},#{sort},#{createDate},#{createUser.id},#{flag}
+		)
+	</insert>
+    <update id="update">
+		update tc_sys_dict
+		set name=#{name},
+		value=#{value},
+		type=#{type},
+		description=#{description},
+		sort=#{sort}
+		where id=#{id}
+	</update>
+
+    <select id="get" resultType="DictionaryTable">
+        select
+        <include refid="sqlColums"/>
+        from tc_sys_dict where id=#{id} and flag="0"
+    </select>
+
+    <select id="getType" resultType="string">
+        select type from tc_sys_dict where flag=#{flag}
+        <if test="type!='' and type!=null">
+            and type like concat (#{type},'%')
+        </if>
+        group by type
+    </select>
+    <select id="getValue" resultType="string">
+		select value from tc_sys_dict where flag=#{flag} and type=#{type}
+	</select>
+
+    <select id="findList" resultType="DictionaryTable">
+        select
+        <include refid="sqlColums"/>
+        from tc_sys_dict where flag=#{flag}
+        <if test="type!='' and type!=null">
+            and type=#{type}
+        </if>
+        <if test="name!='' and name!=null">
+            and name like concat (#{name},'%')
+        </if>
+        order by type,sort
+    </select>
+
+
+    <update id="delete">
+		update tc_sys_dict set flag=#{flag} where id=#{id}
+	</update>
+
+</mapper>

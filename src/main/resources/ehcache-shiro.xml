@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ehcache updateCheck="false" name="defaultCache">
+
+	<diskStore path="java.io.tmpdir" />
+<!--	<diskStore path="c:/data" />-->
+
+	<!-- 默认缓存配置 -->
+	<defaultCache maxEntriesLocalHeap="100" eternal="false" timeToIdleSeconds="300" timeToLiveSeconds="600" maxEntriesLocalDisk="100000"
+		diskPersistent="true" overflowToDisk="true" />
+
+
+	<cache name="authorizationCache" maxEntriesLocalHeap="2000" eternal="false" timeToIdleSeconds="3600" timeToLiveSeconds="0" overflowToDisk="false"
+		statistics="true">
+	</cache>
+
+	<cache name="authenticationCache" maxEntriesLocalHeap="2000" eternal="false" timeToIdleSeconds="3600" timeToLiveSeconds="0" overflowToDisk="false"
+		statistics="true">
+	</cache>
+	
+	<cache name="activeSessionsCache" maxEntriesLocalHeap="10000" overflowToDisk="true" eternal="true" timeToLiveSeconds="0" timeToIdleSeconds="0"
+		diskPersistent="true" diskExpiryThreadIntervalSeconds="600" />
+
+
+	<!-- 简单页面缓存 <cache name="SimplePageCachingFilter" maxEntriesLocalHeap="100" eternal="false" overflowToDisk="true" timeToIdleSeconds="120" timeToLiveSeconds="120" 
+		memoryStoreEvictionPolicy="LFU"/> -->
+
+</ehcache>

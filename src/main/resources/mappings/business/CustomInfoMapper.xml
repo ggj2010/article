@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ggj.article.module.business.dao.CustomInfoMapper">
+  <resultMap id="BaseResultMap" type="com.ggj.article.module.business.bean.CustomInfo">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="user_id" jdbcType="INTEGER" property="userId" />
+    <result column="qq_number" jdbcType="INTEGER" property="qqNumber" />
+    <result column="level" jdbcType="VARCHAR" property="level" />
+    <result column="flag" jdbcType="VARCHAR" property="flag" />
+    <result column="create_user" jdbcType="VARCHAR" property="createUser" />
+    <result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
+    <result column="custom_status" jdbcType="BIGINT" property="customStatus" />
+    <result column="user_name" jdbcType="VARCHAR" property="userName" />
+    <result column="login_name" jdbcType="VARCHAR" property="loginName" />
+    <result column="phone_number" jdbcType="VARCHAR" property="phoneNumber" />
+  </resultMap>
+
+  <resultMap id="RoleMap" type="com.ggj.article.module.business.bean.CustomInfo">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="user_id" jdbcType="INTEGER" property="userId" />
+    <result column="qq_number" jdbcType="INTEGER" property="qqNumber" />
+    <result column="level" jdbcType="VARCHAR" property="level" />
+    <result column="flag" jdbcType="VARCHAR" property="flag" />
+    <result column="create_user" jdbcType="VARCHAR" property="createUser" />
+    <result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
+    <result column="custom_status" jdbcType="BIGINT" property="customStatus" />
+    <result column="user_name" jdbcType="VARCHAR" property="userName" />
+    <result column="login_name" jdbcType="VARCHAR" property="loginName" />
+    <result column="phone_number" jdbcType="VARCHAR" property="phoneNumber" />
+    <collection property="roleList" ofType="Role">
+      <result property="id" column="role.id" />
+    </collection>
+  </resultMap>
+
+
+  <sql id="Role_Column_List">
+     a.*,b.user_name as 'user_name',b.phone_number as 'phone_number',b.login_name,c.role_id as 'role.id'
+  </sql>
+  <sql id="Base_Column_List">
+     a.*,b.user_name as 'user_name',b.phone_number as 'phone_number',b.login_name
+  </sql>
+  <sql id="Innerjoin_column">
+    INNER  JOIN tb_userinfo b on a.user_id=b.id
+  </sql>
+  <sql id="Role_Innerjoin_column">
+    INNER  JOIN tb_userinfo b on a.user_id=b.id left JOIN tc_userinfo_role c on b.id=c.user_info_id
+  </sql>
+  <select id="get" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from tb_custominfo a
+    <include refid="Innerjoin_column" />
+    where a.id = #{id,jdbcType=INTEGER}  and a.flag="0" and b.flag="0"
+  </select>
+  <select id="getRole" parameterType="java.lang.Integer" resultMap="RoleMap">
+    select
+    <include refid="Role_Column_List" />
+    from tb_custominfo a
+    <include refid="Role_Innerjoin_column" />
+    where a.id = #{id,jdbcType=INTEGER}  and a.flag="0" and b.flag="0"
+  </select>
+
+  <select id="findList" parameterType="CustomInfo" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from tb_custominfo a
+    <include refid="Innerjoin_column" />
+    where
+    <if test="userName != null and userName != ''">
+      b.user_name like  concat (#{userName},'%') and
+    </if>
+    <if test="customStatus != null and customStatus != ''">
+      a.custom_status =#{customStatus} and
+    </if>
+    a.flag=#{flag} and b.flag=#{flag}
+  </select>
+  <update id="delete" parameterType="CustomInfo">
+    update tb_custominfo set flag=#{flag} where id=#{id}
+  </update>
+  <insert id="insert" parameterType="com.ggj.article.module.business.bean.CustomInfo" useGeneratedKeys="true" keyProperty="id">
+    insert into tb_custominfo (id, user_id, qq_number, 
+      level, flag,
+      create_user, create_date, custom_status
+      )
+    values (#{id,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, #{qqNumber,jdbcType=INTEGER}, 
+       #{level,jdbcType=VARCHAR}, #{flag,jdbcType=VARCHAR},
+      #{createUser,jdbcType=VARCHAR}, #{createDate,jdbcType=TIMESTAMP}, #{customStatus,jdbcType=BIGINT}
+      )
+  </insert>
+  <update id="update" parameterType="com.ggj.article.module.business.bean.CustomInfo">
+    update tb_custominfo
+    set user_id = #{userId,jdbcType=INTEGER},
+      qq_number = #{qqNumber,jdbcType=INTEGER},
+      level = #{level,jdbcType=VARCHAR},
+      flag = #{flag,jdbcType=VARCHAR},
+      create_user = #{createUser,jdbcType=VARCHAR},
+      create_date = #{createDate,jdbcType=TIMESTAMP},
+      custom_status = #{customStatus,jdbcType=BIGINT}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="verify" parameterType="com.ggj.article.module.business.bean.CustomInfo">
+    update tb_custominfo
+      custom_status = #{customStatus,jdbcType=BIGINT}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

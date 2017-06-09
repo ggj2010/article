@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ggj.article.module.business.dao.MediaMapper">
+    <resultMap id="BaseResultMap" type="com.ggj.article.module.business.bean.Media">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="gold_price" property="goldPrice" jdbcType="DECIMAL"/>
+        <result column="silver_price" property="silverPrice" jdbcType="DECIMAL"/>
+        <result column="bronze_price" property="bronzePrice" jdbcType="DECIMAL"/>
+        <result column="cost_price" property="costPrice" jdbcType="DECIMAL"/>
+        <result column="collection_type" property="collectionType" jdbcType="VARCHAR"/>
+        <result column="media_type" property="mediaType" jdbcType="VARCHAR"/>
+        <result column="media_region" property="mediaRegion" jdbcType="VARCHAR"/>
+        <result column="publish_speed" property="publishSpeed" jdbcType="VARCHAR"/>
+        <result column="baidu_seo" property="baiduSeo" jdbcType="TINYINT"/>
+        <result column="example_url" property="exampleUrl" jdbcType="VARCHAR"/>
+        <result column="remark" property="remark" jdbcType="VARCHAR"/>
+        <result column="flag" property="flag" jdbcType="TINYINT"/>
+        <result column="create_date" property="createDate" jdbcType="TIMESTAMP"/>
+        <result column="create_user" property="createUser" jdbcType="VARCHAR"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    a.*
+  </sql>
+    <select id="get" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        from tb_media a
+        where a.id = #{id,jdbcType=INTEGER}
+    </select>
+    <select id="findList" resultMap="BaseResultMap" parameterType="Media">
+        select
+        <include refid="Base_Column_List"/>
+        from tb_media a
+        where
+        <if test="id != null and id != ''">
+            a.id = #{id,jdbcType=INTEGER} and
+        </if>
+        <if test="name != null and name!=''">
+            a.name = #{name,jdbcType=VARCHAR} and
+        </if>
+        <if test="mediaType != null and mediaType!=''">
+            a.media_type = #{mediaType,jdbcType=VARCHAR} and
+        </if>
+        <if test="mediaRegion != null and mediaRegion!=''">
+            a.media_region = #{mediaRegion,jdbcType=VARCHAR} and
+        </if>
+        flag=#{flag}
+    </select>
+    <update id="delete" parameterType="Media">
+      update tb_media set flag=#{flag} where id=#{id}
+    </update>
+    <insert id="insert" parameterType="com.ggj.article.module.business.bean.Media">
+        insert into tb_media
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="name != null">
+                name,
+            </if>
+            <if test="goldPrice != null">
+                gold_price,
+            </if>
+            <if test="silverPrice != null">
+                silver_price,
+            </if>
+            <if test="bronzePrice != null">
+                bronze_price,
+            </if>
+            <if test="costPrice != null">
+                cost_price,
+            </if>
+            <if test="collectionType != null">
+                collection_type,
+            </if>
+            <if test="mediaType != null">
+                media_type,
+            </if>
+            <if test="mediaRegion != null">
+                media_region,
+            </if>
+            <if test="publishSpeed != null">
+                publish_speed,
+            </if>
+            <if test="baiduSeo != null">
+                baidu_seo,
+            </if>
+            <if test="exampleUrl != null">
+                example_url,
+            </if>
+            <if test="remark != null">
+                remark,
+            </if>
+            <if test="flag != null">
+                flag,
+            </if>
+            <if test="createDate != null">
+                create_date,
+            </if>
+            <if test="createUser != null">
+                create_user,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="name != null">
+                #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="goldPrice != null">
+                #{goldPrice,jdbcType=DECIMAL},
+            </if>
+            <if test="silverPrice != null">
+                #{silverPrice,jdbcType=DECIMAL},
+            </if>
+            <if test="bronzePrice != null">
+                #{bronzePrice,jdbcType=DECIMAL},
+            </if>
+            <if test="costPrice != null">
+                #{costPrice,jdbcType=DECIMAL},
+            </if>
+            <if test="collectionType != null">
+                #{collectionType,jdbcType=VARCHAR},
+            </if>
+            <if test="mediaType != null">
+                #{mediaType,jdbcType=VARCHAR},
+            </if>
+            <if test="mediaRegion != null">
+                #{mediaRegion,jdbcType=VARCHAR},
+            </if>
+            <if test="publishSpeed != null">
+                #{publishSpeed,jdbcType=VARCHAR},
+            </if>
+            <if test="baiduSeo != null">
+                #{baiduSeo,jdbcType=TINYINT},
+            </if>
+            <if test="exampleUrl != null">
+                #{exampleUrl,jdbcType=VARCHAR},
+            </if>
+            <if test="remark != null">
+                #{remark,jdbcType=VARCHAR},
+            </if>
+            <if test="flag != null">
+                #{flag,jdbcType=TINYINT},
+            </if>
+            <if test="createDate != null">
+                #{createDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="createUser != null">
+                #{createUser,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+
+    <select id="findEditorList" resultMap="BaseResultMap" >
+        select
+        <include refid="Base_Column_List"/>
+        from tb_media a INNER JOIN   tb_media_editor b  on a.id=b.media_id
+        where
+        <if test="name != null and name!=''">
+            a.name = #{name,jdbcType=VARCHAR} and
+        </if>
+        <if test="mediaType != null and mediaType!=''">
+            a.media_type = #{mediaType,jdbcType=VARCHAR} and
+        </if>
+        <if test="mediaRegion != null and mediaRegion!=''">
+            a.media_region = #{mediaRegion,jdbcType=VARCHAR} and
+        </if>
+         a.flag=#{flag}
+        AND
+        b.editor_id=#{userId}
+    </select>
+
+    <update id="update" parameterType="com.ggj.article.module.business.bean.Media">
+    update tb_media
+    set name = #{name,jdbcType=VARCHAR},
+      gold_price = #{goldPrice,jdbcType=DECIMAL},
+      silver_price = #{silverPrice,jdbcType=DECIMAL},
+      bronze_price = #{bronzePrice,jdbcType=DECIMAL},
+      cost_price = #{costPrice,jdbcType=DECIMAL},
+      collection_type = #{collectionType,jdbcType=VARCHAR},
+      media_type = #{mediaType,jdbcType=VARCHAR},
+      media_region = #{mediaRegion,jdbcType=VARCHAR},
+      publish_speed = #{publishSpeed,jdbcType=VARCHAR},
+      baidu_seo = #{baiduSeo,jdbcType=TINYINT},
+      example_url = #{exampleUrl,jdbcType=VARCHAR},
+      remark = #{remark,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

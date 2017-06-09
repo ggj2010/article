@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ggj.article.module.business.dao.UserInfoRoleMapper">
+  <resultMap id="BaseResultMap" type="com.ggj.article.module.business.bean.UserInfoRole">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="user_info_id" jdbcType="INTEGER" property="userInfoId" />
+    <result column="role_id" jdbcType="INTEGER" property="roleId" />
+    <result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
+    <result column="create_user" jdbcType="VARCHAR" property="createUser" />
+    <result column="flag" jdbcType="VARCHAR" property="flag" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, user_info_id, role_id, create_date, create_user, flag
+  </sql>
+  <delete id="delete" parameterType="java.lang.Integer">
+    delete from tc_userinfo_role
+    where user_info_id = #{userInfoId,jdbcType=INTEGER}
+  </delete>
+  <insert id="saveUserInfoRole">
+    insert into tc_userinfo_role (user_info_id,role_id,create_date,create_user,flag)
+    <foreach collection="roleList" item="item" separator=" union all ">
+      select
+      #{id},#{item.id},#{createDate},#{createUser},#{flag} from dual
+    </foreach>
+  </insert>
+  <update id="update" parameterType="com.ggj.article.module.business.bean.UserInfoRole">
+    update tc_userinfo_role
+    set user_info_id = #{userInfoId,jdbcType=INTEGER},
+      role_id = #{roleId,jdbcType=INTEGER},
+      create_date = #{createDate,jdbcType=TIMESTAMP},
+      create_user = #{createUser,jdbcType=VARCHAR},
+      flag = #{flag,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

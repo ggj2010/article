@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ggj.article.module.business.dao.CustomUserInfoMapper">
+    <resultMap id="BaseResultMap" type="com.ggj.article.module.business.bean.CustomInfo">
+        <id column="id" jdbcType="INTEGER" property="id" />
+        <result column="user_id" jdbcType="INTEGER" property="userId" />
+        <result column="qq_number" jdbcType="INTEGER" property="qqNumber" />
+        <result column="level" jdbcType="VARCHAR" property="level" />
+        <result column="flag" jdbcType="VARCHAR" property="flag" />
+        <result column="create_user" jdbcType="VARCHAR" property="createUser" />
+        <result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
+        <result column="custom_status" jdbcType="BIGINT" property="customStatus" />
+        <result column="user_name" jdbcType="VARCHAR" property="userName" />
+        <result column="login_name" jdbcType="VARCHAR" property="loginName" />
+        <result column="phone_number" jdbcType="VARCHAR" property="phoneNumber" />
+    </resultMap>
+
+
+    <select id="findList" parameterType="CustomUserInfo" resultMap="BaseResultMap">
+        select
+        a.custom_id as 'id',b.user_name as'user_name',b.login_name as 'login_name',c.qq_number as'qq_number',c.level as'level',b.custom_status as 'custom_status'
+        from tb_custom_userinfo a INNER join tb_custominfo c on a.custom_id=c.id  INNER JOIN tb_userinfo b on c.user_id=b.id
+        where
+        <if test="customStatus != null and customStatus != ''">
+            c.custom_status =#{customStatus} and
+        </if>
+         a.user_id = #{userId,jdbcType=INTEGER} and a.flag="0"and b.flag="0"
+    </select>
+
+    <delete id="delete" parameterType="CustomUserInfo">
+    delete from tb_custom_userinfo
+    where custom_id = #{customId,jdbcType=INTEGER}
+    </delete>
+
+    <insert id="insert" parameterType="com.ggj.article.module.business.bean.CustomUserInfo">
+    insert into tb_custom_userinfo ( custom_id, user_id,
+      flag, create_date, create_user
+      )
+    values (#{customId,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER},
+      #{flag,jdbcType=VARCHAR}, #{createDate,jdbcType=TIMESTAMP}, #{createUser,jdbcType=VARCHAR}
+      )
+  </insert>
+</mapper>

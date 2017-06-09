@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ggj.article.module.business.dao.MediaSettleMentMapper">
+  <resultMap id="BaseResultMap" type="com.ggj.article.module.business.bean.MediaSettleMent">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="article_id" jdbcType="INTEGER" property="articleId" />
+    <result column="type" jdbcType="VARCHAR" property="type" />
+    <result column="price" jdbcType="DECIMAL" property="price" />
+    <result column="status" jdbcType="VARCHAR" property="status" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <result column="flag" jdbcType="VARCHAR" property="flag" />
+    <result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
+    <result column="create_user" jdbcType="VARCHAR" property="createUser" />
+    <association property="article" javaType="article">
+      <result column="user_id" jdbcType="INTEGER" property="userId" />
+      <result column="custom_id" jdbcType="INTEGER" property="customId" />
+      <result column="editor_id" jdbcType="INTEGER" property="editorId" />
+      <result column="custom_name" jdbcType="VARCHAR" property="customName" />
+      <result column="media_name" jdbcType="VARCHAR" property="mediaName" />
+      <result column="title" jdbcType="VARCHAR" property="title" />
+      <result column="cost_price" jdbcType="DECIMAL" property="costPrice" />
+      <result column="custom_price" jdbcType="DECIMAL" property="customPrice" />
+    </association>
+  </resultMap>
+  <sql id="Base_Column_List">
+    a.*,b.user_id as'user_id',b.custom_id as'custom_id',b.editor_id as'editor_id',b.media_name as'media_name',b.custom_name as'custom_name'
+    ,b.title as 'title',b.cost_price as 'cost_price',b.custom_price as'custom_price'
+  </sql>
+  <sql id="Inner_jonid_Column">
+    INNER JOIN  tb_article b on a.article_id = b.id
+  </sql>
+  <select id="get" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from tb_media_settlement
+    where id = #{id,jdbcType=INTEGER} and flag="0"
+  </select>
+  <select id="findList" parameterType="MediaSettleMent" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from tb_media_settlement a
+    <include refid="Inner_jonid_Column"/>
+    where  a.flag="0" and b.status="2"
+    <if test="articleId!=null and articleId!=''">
+    and a.article_id=#{articleId}
+    </if>
+    <if test="status!=null and status!=''">
+    and a.status=#{status}
+    </if>
+    <if test="type!=null and type!=''">
+    and a.type=#{type}
+    </if>
+    <if test="article!=null and article.userId!=null and article.userId!=''">
+    and b.user_id=#{article.userId}
+    </if>
+    <if test="article.editorId!=null and article.editorId!=''">
+    and b.editor_id=#{article.editorId}
+    </if>
+    <if test="article.customId!=null and article.customId!=''">
+    and b.custom_id=#{article.customId}
+    </if>
+  </select>
+  <delete id="delete" parameterType="MediaSettleMent">
+    delete from tb_media_settlement  where article_id=#{articleId}
+  </delete>
+  <insert id="insert" parameterType="com.ggj.article.module.business.bean.MediaSettleMent">
+    insert into tb_media_settlement
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="articleId != null">
+        article_id,
+      </if>
+      <if test="type != null">
+        type,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="remark != null">
+        remark,
+      </if>
+      <if test="flag != null">
+        flag,
+      </if>
+      <if test="createDate != null">
+        create_date,
+      </if>
+      <if test="createUser != null">
+        create_user,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="articleId != null">
+        #{articleId,jdbcType=INTEGER},
+      </if>
+      <if test="type != null">
+        #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null">
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="flag != null">
+        #{flag,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null">
+        #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createUser != null">
+        #{createUser,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="update" parameterType="com.ggj.article.module.business.bean.MediaSettleMent">
+    update tb_media_settlement
+    set
+      price = #{price,jdbcType=DECIMAL},
+      status = #{status,jdbcType=VARCHAR},
+      remark = #{remark,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

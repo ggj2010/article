@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ggj.article.module.business.dao.UserInfoMapper">
+  <resultMap id="BaseResultMap" type="com.ggj.article.module.business.bean.UserInfo">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="password" jdbcType="VARCHAR" property="password" />
+    <result column="login_name" jdbcType="VARCHAR" property="loginName" />
+    <result column="user_name" jdbcType="VARCHAR" property="userName" />
+    <result column="phone_number" jdbcType="VARCHAR" property="phoneNumber" />
+    <result column="flag" jdbcType="VARCHAR" property="flag" />
+    <result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
+    <result column="create_user" jdbcType="VARCHAR" property="createUser" />
+    <result column="user_type" jdbcType="BIGINT" property="userType" />
+    <result column="salt" jdbcType="VARCHAR" property="salt" />
+    <collection property="roleList" ofType="Role">
+      <result property="id" column="role.id" />
+    </collection>
+  </resultMap>
+
+
+  <resultMap id="MediaMap" type="com.ggj.article.module.business.bean.UserInfo">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <collection property="mediaList" ofType="Media">
+      <result property="id" column="media.media_id" />
+      <result property="name" column="meida.name" />
+      <result property="cost_price" column="meida.costPrice" />
+    </collection>
+  </resultMap>
+  <sql id="Media_Column_List">
+    a.id,b.media_id as 'media.media_id' ,c.name as 'meida.name',c.cost_price as 'meida.costPrice'
+  </sql>
+
+  <sql id="jionUserInfoRoleColums">
+    left JOIN tc_userinfo_role b on a.id=b.user_info_id
+  </sql>
+  <sql id="Media_Innerjoin_column">
+   INNER JOIN  tb_media_editor b on a.id=b.editor_id LEFT JOIN tb_media c  on c.id=b.media_id
+  </sql>
+
+  <sql id="Base_Column_List">
+    a.*,b.role_id as 'role.id'
+  </sql>
+
+  <select id="getMedia" parameterType="java.lang.Integer" resultMap="MediaMap">
+    select
+    <include refid="Media_Column_List" />
+    from tb_userinfo a
+    <include refid="Media_Innerjoin_column" />
+    where a.id = #{id,jdbcType=INTEGER}  and a.flag="0" and b.flag="0"
+  </select>
+
+  <select id="get" resultMap="BaseResultMap" parameterType="com.ggj.article.module.business.bean.UserInfo">
+    select
+    <include refid="Base_Column_List" />
+    from tb_userinfo a
+    <include refid="jionUserInfoRoleColums" />
+    where a.id=#{id} and a.flag="0" and b.flag="0"
+  </select>
+  <select id="findList" resultMap="BaseResultMap" parameterType="com.ggj.article.module.business.bean.UserInfo">
+    select
+    <include refid="Base_Column_List" />
+    from tb_userinfo a
+    <include refid="jionUserInfoRoleColums" />
+    where
+    <if test="userType != null">
+      a.user_type=#{userType} and
+    </if>
+    <if test="loginName != null and loginName != ''">
+      a.login_name=#{loginName} and
+    </if>
+    <if test="userName != null and userName != ''">
+      a.user_name like  concat (#{userName},'%') and
+    </if>
+    a.flag=#{flag} and b.flag=#{flag}
+  </select>
+
+
+  <update id="delete" parameterType="UserInfo">
+    update tb_userinfo set flag=#{flag} where id=#{id}
+  </update>
+  <insert id="insert" parameterType="com.ggj.article.module.business.bean.UserInfo" useGeneratedKeys="true" keyProperty="id">
+    insert into tb_userinfo ( password, login_name,
+      user_name, phone_number, flag,
+      create_date, create_user, user_type, 
+      salt)
+    values ( #{password,jdbcType=VARCHAR}, #{loginName,jdbcType=VARCHAR},
+      #{userName,jdbcType=VARCHAR}, #{phoneNumber,jdbcType=VARCHAR}, #{flag,jdbcType=VARCHAR},
+      #{createDate,jdbcType=TIMESTAMP}, #{createUser,jdbcType=VARCHAR}, #{userType,jdbcType=BIGINT}, 
+      #{salt,jdbcType=VARCHAR})
+  </insert>
+
+  <update id="update" parameterType="com.ggj.article.module.business.bean.UserInfo">
+    update tb_userinfo
+    set password = #{password,jdbcType=VARCHAR},
+      login_name = #{loginName,jdbcType=VARCHAR},
+      user_name = #{userName,jdbcType=VARCHAR},
+      phone_number = #{phoneNumber,jdbcType=VARCHAR},
+      user_type = #{userType,jdbcType=BIGINT},
+      salt = #{salt,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

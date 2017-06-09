@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ggj.article.module.sys.dao.RoleDao">
+
+	<resultMap type="Role" id="RoleMap">
+		<result property="name" column="name" />
+		<result property="remark" column="remark" />
+		<collection property="menuList" ofType="Menu">
+			<result property="id" column="menu.id" />
+		</collection>
+	</resultMap>
+
+	<sql id="sqlColums">
+		a.id,a.name,a.remark,a.create_date as 'createDate' ,a.create_user as 'createUser',a.flag
+	</sql>
+
+	<sql id="innerJionColums">
+		left JOIN tc_sys_role_menu b on a.id=b.role_id
+	</sql>
+	
+	<insert id="insert" useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO tc_sys_role(
+		name,create_date,create_user,flag
+		) VALUES (
+		#{name},#{createDate},#{createUser.id},#{flag}
+		)
+	</insert>
+	<update id="update">
+		update tc_sys_role
+		set name=#{name},
+		remark=#{remark}
+		where id=#{id}
+	</update>
+
+	<select id="get" resultMap="RoleMap">
+		select
+		<include refid="sqlColums" />
+		,b.menu_id as 'menu.id'
+		from tc_sys_role a
+		<include refid="innerJionColums" />
+		where a.id=#{id} and a.flag="0" and b.flag="0"
+	</select>
+
+	<select id="findList" resultType="Role">
+		select
+		<include refid="sqlColums" />
+		from tc_sys_role a where a.flag=#{flag}
+		<if test="name!='' and name!=null">
+			and name like concat (#{name},'%')
+		</if>
+		order by name
+	</select>
+
+	<update id="delete">
+		update tc_sys_role set flag=#{flag} where id=#{id}
+	</update>
+
+	<delete id="deleteRoleMenu">
+		delete from tc_sys_role_menu where role_id=#{id};
+	</delete>
+
+	<insert id="saveRoleMenu">
+		insert into tc_sys_role_menu (role_id,menu_id,create_date,create_user,flag)
+		<foreach collection="menuList" item="item" separator=" union all ">
+			select
+			#{id},#{item.id},#{item.createDate},#{createUser},#{flag} from dual
+		</foreach>
+	</insert>
+
+
+</mapper>
