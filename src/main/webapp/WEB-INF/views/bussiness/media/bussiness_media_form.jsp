@@ -82,6 +82,7 @@
 						</form:select>
 					</div>
 				</div>
+
 				<div class="form-group">
 					<label class="col-sm-2 control-label" for="mediaRegion">媒体区域</label>
 					<div class="col-sm-8">
@@ -91,6 +92,7 @@
 						</form:select>
 					</div>
 				</div>
+
 				<div class="form-group">
 					<label class="col-sm-2 control-label" for="publishSpeed">发布速度</label>
 					<div class="col-sm-8">
@@ -100,25 +102,25 @@
 						</form:select>
 					</div>
 				</div>
-				<div class="form-group">
-					<label class="col-sm-2 control-label" for="collectionType">发布速度</label>
-					<div class="col-sm-8">
-						<form:select id="collectionType" path="collectionType" cssClass="form-control">
-							<form:option value="" label=""/>
-							<form:options items="${collectionTypeList}"/>
-						</form:select>
-					</div>
-				</div>
-				<div class="form-group">
-					<label class="col-sm-2 control-label" for="baiduSeo">百度权重</label>
-					<div class="col-sm-8">
-						<form:select id="baiduSeo" path="baiduSeo" cssClass="form-control">
-							<form:option value="" label=""/>
-							<form:options items="${baiduSeoList}"/>
-						</form:select>
-					</div>
-				</div>
 
+            <div class="form-group">
+                <label class="col-sm-2 control-label" for="collectionType">收录类型</label>
+                <div class="col-sm-8">
+                    <form:select id="collectionType" path="collectionType" cssClass="form-control">
+                        <form:option value="0" label=""/>
+                        <form:options items="${collectionTypeList}"/>
+                    </form:select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label" for="baiduSeo">百度权重</label>
+                <div class="col-sm-8">
+                    <form:select id="baiduSeo" path="baiduSeo" cssClass="form-control">
+                        <form:option value="" label=""/>
+                        <form:options items="${baiduSeoList}"/>
+                    </form:select>
+                </div>
+            </div>
 				<div class="form-group">
 					<label class="col-sm-2 control-label" for="remark">备注</label>
 					<div class="col-sm-8">

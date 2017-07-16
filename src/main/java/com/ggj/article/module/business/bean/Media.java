@@ -28,7 +28,7 @@ public class Media extends BaseEntity {
 
     private String publishSpeed;
 
-    private int baiduSeo;
+    private Integer  baiduSeo;
 
     private String exampleUrl;
 
