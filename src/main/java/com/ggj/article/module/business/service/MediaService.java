@@ -3,9 +3,14 @@ package com.ggj.article.module.business.service;
 import com.ggj.article.module.business.bean.Media;
 import com.ggj.article.module.business.dao.MediaMapper;
 import com.ggj.article.module.common.crud.CrudService;
+import com.ggj.article.module.common.utils.ExelUtil;
 import com.github.pagehelper.PageInfo;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.io.FileInputStream;
+import java.io.InputStream;
+import java.util.List;
 
 
 /**
@@ -28,5 +33,15 @@ public class MediaService extends CrudService<MediaMapper, Media> {
 
     public PageInfo<Media> findEditorList(Media media) {
         return new PageInfo<Media>(dao.findEditorList(media));
+    }
+    @Transactional(readOnly = false)
+    public void saveImport(InputStream inputStream) throws Exception {
+        List<Media> lists = ExelUtil.importMediExel(inputStream);
+        for (Media media : lists) {
+            List<Media> mediaList = super.findList(media);
+            if(mediaList.size()==0) {
+                super.save(media);
+            }
+        }
     }
 }

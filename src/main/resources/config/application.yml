@@ -20,7 +20,7 @@ spring:
     timeout: 100000
   datasource:
       name: database
-      url: jdbc:mysql://123.56.118.135:3306/media?useUnicode=true&characterEncoding=utf-8
+      url: jdbc:mysql://47.94.111.150:3306/article?useUnicode=true&characterEncoding=utf-8
       username: mobile
       password: mobile
       # 使用druid数据源

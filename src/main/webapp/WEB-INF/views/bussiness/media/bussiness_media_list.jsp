@@ -23,7 +23,7 @@
 			</shiro:hasPermission>
 		</ul>
 		<form:form id="mediaForm" modelAttribute="media"
-			action="${path}/media/editor/list" method="post" class="form-inline well">
+			action="${path}/media/editor/list" method="post" class="form-inline well" enctype="multipart/form-data">
 			 <input type="hidden" name="pageNum" id="pageNum" value="${pageInfo.pageNum}">
 			 <input type="hidden" name="pageSize" id="pageSize"  value="${pageInfo.pageSize}"> 
 			<div class="form-group">
@@ -45,6 +45,10 @@
 				<form:input type="text" class="form-control" path="name" id="name"/>
 			</div>
 			<button type="submit" class="btn btn-info">查询</button>
+			<shiro:hasPermission name="bussiness:media:edit">
+				<input type="file" class="form-control" name="meidaExelFile">
+				<a type="button" id="importExel" class="btn btn-info">导入</a>
+			</shiro:hasPermission>
 		</form:form>
 		<div class="panel panel-default">
 			<div class="panel-heading">媒体</div>
@@ -134,6 +138,11 @@
 			
 			$("a[name='pages']").on("click", function() {
 				$("input[name='pageNum']").val($(this).attr("value"));
+				$("#mediaForm").submit();
+			})
+
+			$("#importExel").on("click",function(){
+				$("#mediaForm").attr("action","${path}/media/editor/import");
 				$("#mediaForm").submit();
 			})
 			

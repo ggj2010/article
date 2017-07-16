@@ -5,6 +5,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import com.ggj.article.module.common.shiro.authc.Principal;
+import com.ggj.article.module.common.utils.ExelUtil;
 import com.ggj.article.module.common.utils.UserUtils;
 import com.ggj.article.module.sys.entity.DictionaryTable;
 import com.ggj.article.module.sys.entity.Role;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.ggj.article.module.base.web.BaseController;
@@ -83,6 +85,26 @@ public class MediaController extends BaseController {
     public String editorMedialist(Media media, HttpServletRequest request, HttpServletResponse rep, Model model) {
         pageUtils.setPage(request, rep);
         media.setUserId(UserUtils.getPrincipal().getId());
+        PageInfo<Media> pageInfo = mediaService.findEditorList(media);
+        model.addAttribute("pageInfo", pageInfo);
+        addSelectType(model);
+        model.addAttribute("media", media);
+        return "bussiness/media/bussiness_media_list";
+    }
+
+    @RequiresPermissions("bussiness:media:edit")
+    @RequestMapping(value = "editor/import")
+    public String importMedia(Media media,HttpServletRequest request, RedirectAttributes redirectAttributes, HttpServletResponse rep, Model model, @RequestParam("meidaExelFile") MultipartFile meidaExelFile) {
+        if(meidaExelFile!=null){
+            try {
+                mediaService.saveImport(meidaExelFile.getInputStream());
+                addMessage(redirectAttributes, "媒体导入保存成功!");
+            } catch (Exception e) {
+               log.error("导入表格异常",e);
+                addMessage(redirectAttributes, "导入表格异常!");
+            }
+        }
+        pageUtils.setPage(request, rep);
         PageInfo<Media> pageInfo = mediaService.findEditorList(media);
         model.addAttribute("pageInfo", pageInfo);
         addSelectType(model);
