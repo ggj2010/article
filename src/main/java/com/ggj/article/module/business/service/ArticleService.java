@@ -6,8 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.ggj.article.module.business.bean.*;
-import com.ggj.article.module.business.dao.MediaMapper;
-import com.ggj.article.module.business.dao.MediaSettleMentMapper;
+import com.ggj.article.module.business.dao.*;
 import com.ggj.article.module.common.utils.UserUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,11 +15,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.ggj.article.module.business.dao.ArticleMapper;
 import com.ggj.article.module.common.crud.CrudService;
 
 import static com.ggj.article.module.common.utils.UserUtils.getPrincipal;
-import static org.apache.coyote.http11.Constants.a;
 
 
 /**
@@ -31,6 +28,10 @@ import static org.apache.coyote.http11.Constants.a;
 @Transactional(readOnly = true)
 public class ArticleService extends CrudService<ArticleMapper, Article> {
 
+    @Autowired
+    private CustomInfoMapper customInfoMapper;
+    @Autowired
+    protected UserInfoMapper userInfoMapper;
     @Autowired
     private MediaMapper mediaDao;
     @Autowired
@@ -47,7 +48,7 @@ public class ArticleService extends CrudService<ArticleMapper, Article> {
         JSONArray articleJsonArray = articleVO.getArticleInfo();
         JSONArray mediaJsonArray = articleVO.getMediaInfo();
         List<Article> articleList = new ArrayList<Article>();
-        CustomInfo customInfo=UserUtils.getPrincipal().getUserInfo().getCustomInfo();
+        UserInfo userInfo= getPrincipal().getUserInfo();
         String customId="";
         String customName="";
         for (Object o : articleJsonArray) {
@@ -57,9 +58,17 @@ public class ArticleService extends CrudService<ArticleMapper, Article> {
             if(StringUtils.isNotEmpty(j.getString("customId"))){
                 customId = j.getString("customId");
                 customName = j.getString("customName");
-            }else{
-                customId=customInfo.getId()+"";
-                customName=UserUtils.getPrincipal().getName();
+                //新的客户
+                if("0".equals(customId)){
+                    UserInfo newUserInfo = new UserInfo();
+                    newUserInfo.setUserName(customName);
+                    userInfoMapper.insert(newUserInfo);
+                    CustomInfo customInfos=new CustomInfo();
+                    customInfos.setUserId(getPrincipal().getId());
+                    customInfos.setCustomUserId(newUserInfo.getId());
+                    customInfoMapper.insert(customInfos);
+                }
+
             }
             String fileName = j.getString("fileName");
             String type = j.getString("type");
@@ -84,10 +93,11 @@ public class ArticleService extends CrudService<ArticleMapper, Article> {
                 article.setCustomPrice(customPrice);
                 article.setCostPrice(costPrice);
                 article.setMediaName(media.getName());
-                if(customInfo.getUserType()==0) {
-                    article.setUserId(getPrincipal().getId());
+                if(userInfo.getUserType()==0) {
+                    article.setUserId(UserUtils.getPrincipal().getId());
                 }else {
-                    article.setUserId(customInfo.getCustomUserId());
+                    //个人id
+                    article.setUserId(userInfo.getCustomInfo().getCustomUserId());
                 }
                 article.setStatus(0);
                 article.setCreateDate(new Date());

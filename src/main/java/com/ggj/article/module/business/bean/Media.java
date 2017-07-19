@@ -32,6 +32,8 @@ public class Media extends BaseEntity {
 
     private String exampleUrl;
 
+    private String typeParam;
+
     public Media(int id) {
         this.id = id;
     }

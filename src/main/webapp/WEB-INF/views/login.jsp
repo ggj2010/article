@@ -3,7 +3,7 @@
 <html lang="en" class="no-js">
 <head>
     <meta charset="utf-8">
-    <title>郑州瑞辰景行管理系统</title>
+    <title>郑州佳辰景行文化传播管理系统</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
     <meta name="author" content="">
@@ -23,7 +23,8 @@
 <div class="page-container">
     <h1></h1>
     <form action="/login" method="post">
-        <div>${error}</div>
+        <div style="color:red">${error}</div>
+        <div>佳辰景行文化传播</div>
         <input type="text" name="userName" class="username" placeholder="用户名">
         <input type="password" name="password" class="password" placeholder="密码">
         <button type="submit">登录</button>

@@ -33,11 +33,18 @@
                     <div class="form-group">
                         <label class="col-sm-2 control-label">客户信息</label>
                         <div class="col-sm-8">
+                            <label class="radio-inline">
+                                <input type="radio" class="required" maxlength="255" autocomplete="off" name="custom" value="old" checked="true" />老客户
+                            </label>
+                            <label class="radio-inline">
+                                <input type="radio" class="required" maxlength="255" autocomplete="off" name="custom"  value="new"  />新客户
+                            </label>
                             <form:select id="customInfo" path="customId" class="form-control">
                                 <form:option value="" label=""/>
                                 <form:options items="${customUserInfoList}" itemValue="id"
                                               itemLabel="userName" />
                             </form:select>
+                            <input class="form-control" maxlength="255" autocomplete="off" id="customName"  type="hidden"/>
                             <span class="glyphicon  form-control-feedback" aria-hidden="true"></span>
                         </div>
                     </div>
@@ -74,7 +81,7 @@
     </div>
     <div class="form-group">
         <div class="col-sm-offset-2 col-sm-10">
-            <button class="btn btn-info" type="submit">保存</button>
+            <button class="btn btn-info" type="submit">提交</button>
             <input type="hidden" id="articleInfo" name="articleInfo">
             <input type="hidden" id="mediaInfo" name="mediaInfo">
             <a class="btn btn-danger" href="javaScript:addMore()">继续添加</a>
@@ -109,10 +116,16 @@
               if($(this).val()==1){
                   $("#file"+$(this).attr("seq")).removeAttr("readonly");
                   $("#url"+$(this).attr("seq")).attr("readonly","true");
-              }else{
+              }else if($(this).val()==2){
                   $("#file"+$(this).attr("seq")).attr("readonly","true");
                   $("#url"+$(this).attr("seq")).removeAttr("readonly");
-                }
+              }else if($(this).val()=='new'){
+                  $("#customInfo_chosen").hide();
+                  $("#customName").attr("type","text");
+              }else if($(this).val()=='old'){
+                  $("#customInfo_chosen").attr("type","hidden");
+                  $("#customInfo").show();
+              }
             })
 
             $("#entityForm").validate({
@@ -123,8 +136,14 @@
                         var articleInfo = {};
                         articleInfo.title=$(article[i]).find("input[name='title']").val();
                         if(i==0){
-                        articleInfo.customId=$(article[i]).find("select[name='customId']").val();
-                        articleInfo.customName=$(article[i]).find("option:selected").text();
+                            var customType=$("input[name='custom']:checked").val();
+                            if(customType=="old"){
+                                articleInfo.customId=$(article[i]).find("select[name='customId']").val();
+                                articleInfo.customName=$(article[i]).find("option:selected").text();
+                            }else{
+                                articleInfo.customId="0";
+                                articleInfo.customName=$("#customName").val();
+                            }
                         }
                         articleInfo.type=$(article[i]).find("input[name='type"+(i+1)+"']:checked").val();
                         articleInfo.url=$(article[i]).find("input[name='url"+(i+1)+"']").val();

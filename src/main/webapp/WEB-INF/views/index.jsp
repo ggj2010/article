@@ -200,7 +200,7 @@
             <a href="${path}/logout" class="roll-nav roll-right J_tabExit"><i class="fa fa fa-sign-out"></i> 退出</a>
         </div>
         <div class="row J_mainContent" id="content-main">
-            <iframe class="J_iframe" name="iframe0" width="100%" height="100%" seamless src="${path}/media"></iframe>
+            <iframe class="J_iframe" name="iframe0" width="100%" height="100%" seamless src=""></iframe>
         </div>
         <div class="footer">
             <div class="pull-right"><strong>Copyright</strong> 私人定制 © 2017

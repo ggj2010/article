@@ -10,6 +10,7 @@ import com.ggj.article.module.common.utils.UserUtils;
 import com.ggj.article.module.sys.entity.DictionaryTable;
 import com.ggj.article.module.sys.entity.Role;
 import com.ggj.article.module.sys.service.DictionaryTableService;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -30,10 +31,7 @@ import com.github.pagehelper.PageInfo;
 
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * 媒体列表
@@ -71,21 +69,17 @@ public class MediaController extends BaseController {
     @RequestMapping(value = "")
     public String list(Media media, HttpServletRequest request, HttpServletResponse rep, Model model) {
         pageUtils.setPage(request, rep);
-        PageInfo<Media> pageInfo = mediaService.findPage(media);
-        model.addAttribute("pageInfo", pageInfo);
-        addSelectType(model);
-        Principal principal = UserUtils.getPrincipal();
-        model.addAttribute("principal", principal);
-        model.addAttribute("media", media);
-        return "bussiness/media/bussiness_media_list";
-    }
-
-    @RequiresPermissions("bussiness:media:view")
-    @RequestMapping(value = "editor/list")
-    public String editorMedialist(Media media, HttpServletRequest request, HttpServletResponse rep, Model model) {
-        pageUtils.setPage(request, rep);
-        media.setUserId(UserUtils.getPrincipal().getId());
-        PageInfo<Media> pageInfo = mediaService.findEditorList(media);
+        String typeParam=media.getTypeParam();
+        PageInfo<Media> pageInfo=null;
+        if(StringUtils.isNotEmpty(typeParam)) {
+            if (typeParam.equals("1")) {
+                Principal principal = UserUtils.getPrincipal();
+                model.addAttribute("principal", principal);
+                pageInfo = mediaService.findPage(media);
+            } else if (typeParam.equals("2")) {
+                pageInfo = mediaService.findEditorList(media);
+            }
+        }
         model.addAttribute("pageInfo", pageInfo);
         addSelectType(model);
         model.addAttribute("media", media);
@@ -129,7 +123,7 @@ public class MediaController extends BaseController {
         model.addAttribute("mediaTypeList", dictionaryTableService.getValueList(new DictionaryTable("media_type")));
         model.addAttribute("publishSpeedList", dictionaryTableService.getValueList(new DictionaryTable("publish_speed")));
         model.addAttribute("mediaRegionList", dictionaryTableService.getValueList(new DictionaryTable("media_region")));
-        model.addAttribute("collectionTypeList", dictionaryTableService.getValueList(new DictionaryTable("collection_type")));
+        model.addAttribute("collectionTypeList", Arrays.asList("网页收录","新闻源收录"));
         model.addAttribute("baiduSeoList", dictionaryTableService.getValueList(new DictionaryTable("baidu_seo")));
     }
 

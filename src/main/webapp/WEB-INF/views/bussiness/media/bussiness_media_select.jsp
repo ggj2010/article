@@ -27,6 +27,13 @@
 				</form:select>
 			</div>
 			<div class="form-group">
+				<label>收录类型</label>
+				<form:select id="collectionType" path="collectionType" class="form-control">
+					<form:option value="" label=""/>
+					<form:options items="${collectionTypeList}"/>
+				</form:select>
+			</div>
+			<div class="form-group">
 				<label for="name">媒体名称</label>
 				<form:input type="text" class="form-control" path="name" id="name"/>
 			</div>

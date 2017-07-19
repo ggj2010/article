@@ -54,7 +54,7 @@
 
 <link  href="${path}/css/plugins/jquerytress/zTreeStyle.css" rel="stylesheet">
 <link  href="${path}/css/plugins/date/bootstrap-datetimepicker.min.css" rel="stylesheet">
-
+<link  href="${path}/css/basestyle.css" rel="stylesheet">
 
 <script type="text/javascript">
 	var path = "${path}"

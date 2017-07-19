@@ -22,15 +22,22 @@
 				</li>
 			</shiro:hasPermission>
 		</ul>
-		<form:form id="mediaForm" modelAttribute="media"
-			action="${path}/media/editor/list" method="post" class="form-inline well" enctype="multipart/form-data">
+		<form:form id="mediaForm" modelAttribute="media" action="${path}/media" method="post" class="form-inline well" enctype="multipart/form-data">
 			 <input type="hidden" name="pageNum" id="pageNum" value="${pageInfo.pageNum}">
-			 <input type="hidden" name="pageSize" id="pageSize"  value="${pageInfo.pageSize}"> 
+			 <input type="hidden" name="pageSize" id="pageSize"  value="${pageInfo.pageSize}">
+			<form:hidden path="typeParam"/>
 			<div class="form-group">
 				<label>媒体类型</label>
 				<form:select id="mediaType" path="mediaType" class="form-control">
 					<form:option value="" label=""/>
 					<form:options items="${mediaTypeList}"/>
+				</form:select>
+			</div>
+			<div class="form-group">
+				<label>收录类型</label>
+				<form:select id="collectionType" path="collectionType" class="form-control">
+					<form:option value="" label=""/>
+					<form:options items="${collectionTypeList}"/>
 				</form:select>
 			</div>
 			<div class="form-group">

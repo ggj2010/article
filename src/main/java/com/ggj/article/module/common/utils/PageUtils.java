@@ -17,7 +17,7 @@ import com.github.pagehelper.PageHelper;
  */
 @Service
 public class PageUtils {
-	private int defaultPageSize=10;
+	private int defaultPageSize=50;
 	
 	/**
 	 * @Description: 

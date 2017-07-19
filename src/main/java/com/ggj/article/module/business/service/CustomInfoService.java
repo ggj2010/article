@@ -47,18 +47,21 @@ public class CustomInfoService extends CrudService<CustomInfoMapper, CustomInfo>
         userInfo.setUserName(customInfo.getUserName());
         userInfo.setLoginName(customInfo.getLoginName());
         userInfo.setPhoneNumber(customInfo.getPhoneNumber());
-        userInfo.setId(customInfo.getUserId());
+        //userInfo.setId(customInfo.getUserId());
         //客户
         userInfo.setUserType(1l);
         userInfo.setCreateDate(new Date());
         if (customInfo.getId() == null) {
             customInfo.setCreateDate(new Date());
+            //保存用户基本信息表
             userInfoMapper.insert(userInfo);
             customInfo.setUserId(userInfo.getId());
             customInfo.setCustomStatus(0l);
+            //保存客户信息表
             dao.insert(customInfo);
             CustomUserInfo customUserInfo = new CustomUserInfo();
             customUserInfo.setCustomId(customInfo.getId());
+            //创建人id
             customUserInfo.setUserId(UserUtils.getPrincipal().getId());
             customUserInfo.setCreateDate(new Date());
             customUserInfoMapperMapper.insert(customUserInfo);

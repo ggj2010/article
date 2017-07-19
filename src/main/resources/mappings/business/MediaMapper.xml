@@ -42,6 +42,9 @@
         <if test="mediaType != null and mediaType!=''">
             a.media_type = #{mediaType,jdbcType=VARCHAR} and
         </if>
+        <if test="collectionType != null and collectionType!=''">
+            a.collection_type = #{collectionType,jdbcType=VARCHAR} and
+        </if>
         <if test="mediaRegion != null and mediaRegion!=''">
             a.media_region = #{mediaRegion,jdbcType=VARCHAR} and
         </if>
