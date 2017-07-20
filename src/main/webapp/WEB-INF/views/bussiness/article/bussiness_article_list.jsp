@@ -27,7 +27,7 @@
         <div class="form-group">
             <label for="customName">客户信息</label>
             <form:select id="customName" path="customId" class="form-control">
-                <form:option value="" label=""/>
+                <form:option value="" label="请选择"/>
                 <form:options items="${customUserInfoList}" itemValue="id"
                               itemLabel="userName"/>
             </form:select>
@@ -35,7 +35,7 @@
         <div class="form-group">
             <label for="status">状态</label>
             <form:select id="status" path="status" class="form-control">
-                <form:option value="" label=""/>
+                <form:option value="" label="请选择"/>
                 <form:options items="${articleStatusList}" itemLabel="name" itemValue="value"/>
             </form:select>
         </div>

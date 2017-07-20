@@ -33,6 +33,8 @@ public class ArticleService extends CrudService<ArticleMapper, Article> {
     @Autowired
     protected UserInfoMapper userInfoMapper;
     @Autowired
+    protected CustomUserInfoMapper customUserInfoMapperMapper;
+    @Autowired
     private MediaMapper mediaDao;
     @Autowired
     private MediaSettleMentMapper mediaSettleMentMapper;
@@ -64,9 +66,16 @@ public class ArticleService extends CrudService<ArticleMapper, Article> {
                     newUserInfo.setUserName(customName);
                     userInfoMapper.insert(newUserInfo);
                     CustomInfo customInfos=new CustomInfo();
-                    customInfos.setUserId(getPrincipal().getId());
-                    customInfos.setCustomUserId(newUserInfo.getId());
+                    customInfos.setUserId(newUserInfo.getId());
                     customInfoMapper.insert(customInfos);
+
+                    CustomUserInfo customUserInfo = new CustomUserInfo();
+                    customUserInfo.setCustomId(customInfos.getId());
+                    //创建人id
+                    customUserInfo.setUserId(UserUtils.getPrincipal().getId());
+                    customUserInfo.setCreateDate(new Date());
+                    customUserInfoMapperMapper.insert(customUserInfo);
+                    customId=customInfos.getId()+"";
                 }
 
             }

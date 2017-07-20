@@ -33,7 +33,7 @@
 			<div class="form-group">
 				<label for="status">状态</label>
 				<form:select id="status" path="customStatus" class="form-control">
-					<form:option value="" label=""/>
+					<form:option value="" label="请选择"/>
 					<form:options items="${customStatusList}" itemLabel="name" itemValue="value"/>
 				</form:select>
 			</div>

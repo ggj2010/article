@@ -40,7 +40,7 @@
                                 <input type="radio" class="required" maxlength="255" autocomplete="off" name="custom"  value="new"  />新客户
                             </label>
                             <form:select id="customInfo" path="customId" class="form-control">
-                                <form:option value="" label=""/>
+                                <form:option value="" label="请选择"/>
                                 <form:options items="${customUserInfoList}" itemValue="id"
                                               itemLabel="userName" />
                             </form:select>
@@ -96,7 +96,7 @@
     require(['jquery', 'bootstrap', 'jqueryValidateMessages'], function ($) {
         require(['Chosen', 'toastr', 'sys'], function () {
             //选择框赋值
-            $("select").chosen();
+            $("#customInfo").chosen();
 
             $("a[name='type']").on("click", function () {
                 $('#mediaForm')[0].reset();

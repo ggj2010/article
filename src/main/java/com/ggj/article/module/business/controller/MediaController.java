@@ -71,12 +71,13 @@ public class MediaController extends BaseController {
         pageUtils.setPage(request, rep);
         String typeParam=media.getTypeParam();
         PageInfo<Media> pageInfo=null;
+        Principal principal = UserUtils.getPrincipal();
+        model.addAttribute("principal", principal);
         if(StringUtils.isNotEmpty(typeParam)) {
             if (typeParam.equals("1")) {
-                Principal principal = UserUtils.getPrincipal();
-                model.addAttribute("principal", principal);
                 pageInfo = mediaService.findPage(media);
             } else if (typeParam.equals("2")) {
+                media.setUserId(principal.getId());
                 pageInfo = mediaService.findEditorList(media);
             }
         }

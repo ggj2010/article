@@ -29,21 +29,21 @@
 			<div class="form-group">
 				<label>媒体类型</label>
 				<form:select id="mediaType" path="mediaType" class="form-control">
-					<form:option value="" label=""/>
+					<form:option value="" label="请选择"/>
 					<form:options items="${mediaTypeList}"/>
 				</form:select>
 			</div>
 			<div class="form-group">
 				<label>收录类型</label>
 				<form:select id="collectionType" path="collectionType" class="form-control">
-					<form:option value="" label=""/>
+					<form:option value="" label="请选择"/>
 					<form:options items="${collectionTypeList}"/>
 				</form:select>
 			</div>
 			<div class="form-group">
 				<label>媒体区域</label>
 				<form:select id="mediaRegion" path="mediaRegion" class="form-control">
-					<form:option value="" label=""/>
+					<form:option value="" label="请选择"/>
 					<form:options items="${mediaRegionList}"/>
 				</form:select>
 			</div>
@@ -86,8 +86,6 @@
 								<td>${entity.goldPrice}/${entity.silverPrice}/${entity.bronzePrice}</td>
 								<td>${entity.costPrice}</td>
 								</shiro:hasPermission>
-
-
 								<c:if test="${principal.userType==0}">
 									<td>${entity.bronzePrice}</td>
 								</c:if>

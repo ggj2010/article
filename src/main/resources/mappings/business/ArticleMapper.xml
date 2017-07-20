@@ -50,8 +50,8 @@
     <if test="mediaId != null and mediaId!=''">
       media_id = #{mediaId,jdbcType=VARCHAR} and
     </if>
-    <if test="status != null and status!=''">
-      status = #{status,jdbcType=VARCHAR} and
+    <if test="status != null">
+      status = #{status,jdbcType=INTEGER} and
     </if>
     <if test="title != null and title!=''">
       title like  concat (#{title},'%') and
@@ -120,7 +120,7 @@
       <if test="remark != null and remark != ''">
         remark = #{remark,jdbcType=VARCHAR},
       </if>
-      <if test="status != null and status != ''">
+      <if test="status != null">
         status = #{status,jdbcType=TINYINT},
       </if>
       <if test="flag != null and flag != ''">

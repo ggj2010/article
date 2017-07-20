@@ -29,7 +29,7 @@
 			<div class="form-group">
 				<label>类型</label>
 				<form:select id="type" path="type" class="form-control">
-					<form:option value="" label=""/>
+					<form:option value="" label="请选择" />
 					<form:options items="${typeList}"/>
 				</form:select>
 			</div>

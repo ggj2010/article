@@ -77,7 +77,7 @@
 					<label class="col-sm-2 control-label" for="mediaType">媒体类型</label>
 					<div class="col-sm-8">
 						<form:select id="mediaType" path="mediaType" cssClass="form-control">
-							<form:option value="" label=""/>
+							<form:option value="" label="请选择"/>
 							<form:options items="${mediaTypeList}"/>
 						</form:select>
 					</div>
@@ -87,7 +87,7 @@
 					<label class="col-sm-2 control-label" for="mediaRegion">媒体区域</label>
 					<div class="col-sm-8">
 						<form:select id="mediaRegion" path="mediaRegion" cssClass="form-control">
-							<form:option value="" label=""/>
+							<form:option value="" label="请选择"/>
 							<form:options items="${mediaRegionList}"/>
 						</form:select>
 					</div>
@@ -97,7 +97,7 @@
 					<label class="col-sm-2 control-label" for="publishSpeed">发布速度</label>
 					<div class="col-sm-8">
 						<form:select id="publishSpeed" path="publishSpeed" cssClass="form-control">
-							<form:option value="" label=""/>
+							<form:option value="" label="请选择"/>
 							<form:options items="${publishSpeedList}"/>
 						</form:select>
 					</div>
@@ -116,7 +116,7 @@
                 <label class="col-sm-2 control-label" for="baiduSeo">百度权重</label>
                 <div class="col-sm-8">
                     <form:select id="baiduSeo" path="baiduSeo" cssClass="form-control">
-                        <form:option value="" label=""/>
+                        <form:option value="" label="请选择"/>
                         <form:options items="${baiduSeoList}"/>
                     </form:select>
                 </div>
