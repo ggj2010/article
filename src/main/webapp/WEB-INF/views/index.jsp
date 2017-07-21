@@ -74,7 +74,10 @@
             <c:if test="${menu.parentId eq '1'&&menu.isShow eq '0'}">
                 <li>
                     <a href="">
-                        <i class="fa fa-home"></i>
+                        <i class="fa  <c:if test="${menu.name=='系统管理'}"> fa-home</c:if>
+                <c:if test="${menu.name=='媒体'}"> fa-desktop</c:if>
+                <c:if test="${menu.name=='财务'}"> fa-bar-chart-o</c:if>
+                <c:if test="${menu.name=='客户管理'}"> fa-cutlery</c:if>"></i>
                         <span class="nav-label">${menu.name}</span>
                         <span class="fa arrow"></span>
                     </a>
@@ -178,14 +181,13 @@
             </button>
             <nav class="page-tabs J_menuTabs">
                 <div class="page-tabs-content">
-                    <a href="${path}/media" class="active J_menuTab" data-id="index_v1.html">首页</a>
+                    <a href="${path}" class="active J_menuTab" data-id="index_v1.html">首页</a>
                 </div>
             </nav>
             <button class="roll-nav roll-right J_tabRight"><i class="fa fa-forward"></i>
             </button>
             <div class="btn-group roll-nav roll-right">
                 <button class="dropdown J_tabClose" data-toggle="dropdown">关闭操作<span class="caret"></span>
-
                 </button>
                 <ul role="menu" class="dropdown-menu dropdown-menu-right">
                     <li class="J_tabShowActive"><a>定位当前选项卡</a>
@@ -200,10 +202,10 @@
             <a href="${path}/logout" class="roll-nav roll-right J_tabExit"><i class="fa fa fa-sign-out"></i> 退出</a>
         </div>
         <div class="row J_mainContent" id="content-main">
-            <iframe class="J_iframe" name="iframe0" width="100%" height="100%" seamless src=""></iframe>
+            <iframe class="J_iframe" name="iframe0" width="100%" height="100%" seamless src="${path}"></iframe>
         </div>
         <div class="footer">
-            <div class="pull-right"><strong>Copyright</strong> 私人定制 © 2017
+            <div class="pull-right"><strong>Copyright</strong> 郑州佳辰景行文化传播 © 2017
             </div>
         </div>
     </div>

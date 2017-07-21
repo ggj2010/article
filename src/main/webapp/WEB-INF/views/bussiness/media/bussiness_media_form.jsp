@@ -11,7 +11,7 @@
 		<ul class="nav nav-tabs">
 			<shiro:hasPermission name="bussiness:media:view">
 				<li>
-					<a href="${path}/media/">媒体列表</a>
+					<a href="${path}/media/?typeParam=${media.typeParam}">媒体列表</a>
 				</li>
 			</shiro:hasPermission>
 			<shiro:hasPermission name="bussiness:media:edit">
@@ -28,6 +28,7 @@
 				action="${path}/media/save" method="post"
 				cssClass="form-horizontal">
 					<form:hidden path="id"/>
+					<form:hidden path="typeParam"/>
 				<div class="form-group">
 					<label class="col-sm-2 control-label" for="name">名称</label>
 					<div class="col-sm-8">
@@ -107,7 +108,7 @@
                 <label class="col-sm-2 control-label" for="collectionType">收录类型</label>
                 <div class="col-sm-8">
                     <form:select id="collectionType" path="collectionType" cssClass="form-control">
-                        <form:option value="0" label=""/>
+                        <form:option value="" label="请选择"/>
                         <form:options items="${collectionTypeList}"/>
                     </form:select>
                 </div>
@@ -144,7 +145,9 @@
 <script type="text/javascript">
 	require([ 'jquery', 'bootstrap'], function() {
 		require([  'jqueryValidateMessages', 'suggest'], function() {
-			require(['sys'], function() {
+			require([ 'Chosen','sys'], function() {
+				//选择框赋值
+				$("select").chosen();
 				$("#entityForm").validate();
 			})
 		})

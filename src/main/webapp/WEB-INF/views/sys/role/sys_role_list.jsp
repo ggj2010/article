@@ -63,7 +63,7 @@
 </body>
 
 <script type="text/javascript">
-	require([ 'jquery', 'bootstrap',  'sweetalert','jqueryValidateMessages'], function($) {
+	require([ 'jquery', 'bootstrap',  'sweetalert','jqueryValidateMessages',''sweetalert''], function($) {
 		require([ 'Chosen','toastr' ,'sys' ], function() {
 			//选择框赋值
 			$("select").chosen();

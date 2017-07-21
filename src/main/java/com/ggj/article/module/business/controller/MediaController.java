@@ -88,7 +88,7 @@ public class MediaController extends BaseController {
     }
 
     @RequiresPermissions("bussiness:media:edit")
-    @RequestMapping(value = "editor/import")
+    @RequestMapping(value = "import")
     public String importMedia(Media media,HttpServletRequest request, RedirectAttributes redirectAttributes, HttpServletResponse rep, Model model, @RequestParam("meidaExelFile") MultipartFile meidaExelFile) {
         if(meidaExelFile!=null){
             try {
@@ -99,6 +99,24 @@ public class MediaController extends BaseController {
                 addMessage(redirectAttributes, "导入表格异常!");
             }
         }
+        pageUtils.setPage(request, rep);
+        PageInfo<Media> pageInfo = mediaService.findEditorList(media);
+        model.addAttribute("pageInfo", pageInfo);
+        addSelectType(model);
+        model.addAttribute("media", media);
+        return "bussiness/media/bussiness_media_list";
+    }
+    @RequiresPermissions("bussiness:media:edit")
+    @RequestMapping(value = "export")
+    public String exportMedia(Media media,HttpServletRequest request, RedirectAttributes redirectAttributes, HttpServletResponse rep, Model model) {
+            try {
+                List<Media> listMedia=mediaService.findList(media);
+                ExelUtil.exportExel(listMedia);
+                addMessage(redirectAttributes, "媒体导入保存成功!");
+            } catch (Exception e) {
+               log.error("导入表格异常",e);
+                addMessage(redirectAttributes, "导入表格异常!");
+            }
         pageUtils.setPage(request, rep);
         PageInfo<Media> pageInfo = mediaService.findEditorList(media);
         model.addAttribute("pageInfo", pageInfo);
@@ -145,6 +163,7 @@ public class MediaController extends BaseController {
             mediaService.save(media);
             addMessage(redirectAttributes, "媒体保存成功!");
         }
+        redirectAttributes.addAttribute("typeParam",media.getTypeParam());
         return "redirect:/media/";
     }
 
@@ -159,6 +178,7 @@ public class MediaController extends BaseController {
         } catch (Exception e) {
             log.error("删除媒体失败！" + e.getLocalizedMessage());
         }
+        redirectAttributes.addAttribute("typeParam",media.getTypeParam());
         return "redirect:/media/";
     }
 

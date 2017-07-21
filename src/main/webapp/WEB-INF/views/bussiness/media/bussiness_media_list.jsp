@@ -17,7 +17,7 @@
 			</shiro:hasPermission>
 			<shiro:hasPermission name="bussiness:media:edit">
 				<li>
-					<a href="${path}/media/form">媒体${not empty
+					<a href="${path}/media/form?typeParam=${media.typeParam}">媒体${not empty
 						entity.id?'修改':'添加'}</a>
 				</li>
 			</shiro:hasPermission>
@@ -53,8 +53,11 @@
 			</div>
 			<button type="submit" class="btn btn-info">查询</button>
 			<shiro:hasPermission name="bussiness:media:edit">
+			<div class="form-group">
 				<input type="file" class="form-control" name="meidaExelFile">
 				<a type="button" id="importExel" class="btn btn-info">导入</a>
+				<a type="button" id="exportExel" class="btn btn-info">导出</a>
+			</div>
 			</shiro:hasPermission>
 		</form:form>
 		<div class="panel panel-default">
@@ -112,8 +115,8 @@
 								</td>
 								<shiro:hasPermission name="bussiness:media:edit">
 								<td>
-									<a class="btn btn-info" href="${path}/media/form?id=${entity.id}"  data-toggle="tooltip" data-placement="top" title="修改" ><span class="glyphicon glyphicon-edit"></span> </a>
-									<a class="btn  btn-info" url="${path}/media/delete?id=${entity.id}" data-toggle="tooltip" data-placement="top" title="删除" name="delete"><span class="glyphicon glyphicon-trash"></span></a>
+									<a class="btn btn-info" href="${path}/media/form?id=${entity.id}&typeParam=${media.typeParam}"  data-toggle="tooltip" data-placement="top" title="修改" ><span class="glyphicon glyphicon-edit"></span> </a>
+									<a class="btn  btn-info" url="${path}/media/delete?id=${entity.id}&typeParam=${media.typeParam}" data-toggle="tooltip" data-placement="top" title="删除" name="delete"><span class="glyphicon glyphicon-trash"></span></a>
 								</td>
 								</shiro:hasPermission>
 							</tr>
@@ -127,7 +130,7 @@
 </body>
 
 <script type="text/javascript">
-	require([ 'jquery', 'bootstrap', 'jqueryValidateMessages'], function($) {
+	require([ 'jquery', 'bootstrap', 'jqueryValidateMessages','sweetalert'], function($) {
 		require([ 'Chosen','toastr' ,'sys' ], function() {
 			//选择框赋值
 			$("select").chosen();
@@ -147,10 +150,19 @@
 			})
 
 			$("#importExel").on("click",function(){
-				$("#mediaForm").attr("action","${path}/media/editor/import");
+				if($("#file").val()==null){
+					swal("导入文件不可以为空");
+				}else{
+					$("#mediaForm").attr("action","${path}/media/import");
+					$("#mediaForm").submit();
+				}
+			})
+
+			$("#exportExel").on("click",function(){
+				$("#mediaForm").attr("action","${path}/media/export");
 				$("#mediaForm").submit();
 			})
-			
+
 			if(${not empty message }){
 				toastr.options = {
 					  "closeButton": true,
