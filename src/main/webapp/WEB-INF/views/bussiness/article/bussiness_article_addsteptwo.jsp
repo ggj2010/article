@@ -123,8 +123,8 @@
                   $("#customInfo_chosen").hide();
                   $("#customName").attr("type","text");
               }else if($(this).val()=='old'){
-                  $("#customInfo_chosen").attr("type","hidden");
-                  $("#customInfo").show();
+                  $("#customName").attr("type","hidden");
+                  $("#customInfo_chosen").show();
               }
             })
 
