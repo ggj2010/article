@@ -42,10 +42,10 @@
                         <th>状态</th>
                         <c:if test="${mediaSettleMent.bussinnessType=='2'}">
                             <th>客户</th>
-                            <th>客户价格</th>
+                            <th>价格</th>
                         </c:if>
                         <c:if test="${mediaSettleMent.type=='3'}">
-                            <th>编辑价格</th>
+                            <th>价格</th>
                         </c:if>
                         <th>结算价格</th>
                         <th>备注</th>

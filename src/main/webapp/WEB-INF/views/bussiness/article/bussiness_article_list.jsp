@@ -20,10 +20,7 @@
                action="${path}/article/" method="post" class="form-inline well">
         <input type="hidden" name="pageNum" id="pageNum" value="${pageInfo.pageNum}">
         <input type="hidden" name="pageSize" id="pageSize" value="${pageInfo.pageSize}">
-        <div class="form-group">
-            <label for="title">标题</label>
-            <form:input type="text" class="form-control" path="title" id="title"/>
-        </div>
+        <c:if test="${article.typeParam==1|| article.typeParam==2 || article.typeParam==null }">
         <div class="form-group">
             <label for="customName">客户信息</label>
             <form:select id="customName" path="customId" class="form-control">
@@ -32,6 +29,7 @@
                               itemLabel="userName"/>
             </form:select>
         </div>
+        </c:if>
         <div class="form-group">
             <label for="status">状态</label>
             <form:select id="status" path="status" class="form-control">
@@ -39,19 +37,21 @@
                 <form:options items="${articleStatusList}" itemLabel="name" itemValue="value"/>
             </form:select>
         </div>
+        <div class="form-group input-append date form_datetime">
+            <label for="beginTime">发布开始时间</label>
+                <form:input type="text" class="form-control" path="beginTimeStr" id="beginTime"/>
+                <span class="add-on"><i class="icon-remove"></i></span>
+                <span class="add-on"><i class="icon-calendar"></i></span>
+        </div>
+        <div class="form-group input-append date form_datetime">
+            <label for="beginTime">发布结束时间</label>
+            <form:input type="text" class="form-control" path="endTimeStr" id="endTime"/>
+            <span class="add-on"><i class="icon-remove"></i></span>
+            <span class="add-on"><i class="icon-calendar"></i></span>
+        </div>
         <div class="form-group">
-            <label for="beginTime">发布时间</label>
-            <div class="input-append date form_datetime">
-                <form:input type="text" class="form-control" path="beginTime" id="beginTime"/>
-                <span class="add-on"><i class="icon-remove"></i></span>
-                <span class="add-on"><i class="icon-calendar"></i></span>
-            </div>
-            <div class="input-append date form_datetime">
-                <form:input type="text" class="form-control" path="endTime" id="endTime"/>
-                <span class="add-on"><i class="icon-remove"></i></span>
-                <span class="add-on"><i class="icon-calendar"></i></span>
-            </div>
-
+            <label for="title">标题</label>
+            <form:input type="text" class="form-control" path="title" id="title"/>
         </div>
         <button type="submit" class="btn btn-info">查询</button>
     </form:form>
@@ -237,6 +237,7 @@
                 todayHighlight: 1,
                 startView: 2,
                 forceParse: 0,
+                dateFormat: "yyyy-MM-dd HH:mm:ss",
                 clearBtn: true,
                 showMeridian: 1
             });

@@ -18,7 +18,7 @@
                     </div>
                 </div>
             </div>
-            <div class="panel panel-info" id="addArticle" class="hidden">
+            <div class="panel panel-info" id="addArticle" style="display: none">
                 <div class="panel-heading">输入稿件内容</div>
                 <div class="panel-body">
                     <div class="embed-responsive embed-responsive-4by3">

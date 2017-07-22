@@ -161,6 +161,7 @@
 			$("#exportExel").on("click",function(){
 				$("#mediaForm").attr("action","${path}/media/export");
 				$("#mediaForm").submit();
+				$("#mediaForm").attr("action","${path}/media/");
 			})
 
 			if(${not empty message }){

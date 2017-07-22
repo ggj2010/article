@@ -1,12 +1,13 @@
 package com.ggj.article.module.common.utils;
 
-import java.io.FileOutputStream;
+import java.io.BufferedOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.poi.hssf.usermodel.*;
-import org.apache.poi.hssf.util.HSSFColor;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -16,16 +17,14 @@ import com.ggj.article.module.business.bean.Media;
 
 import lombok.extern.slf4j.Slf4j;
 
+import javax.servlet.http.HttpServletResponse;
+
 /**
  * @author:gaoguangjin
  * @date 2017/6/25 12:52
  */
 @Slf4j
 public class ExelUtil {
-
-    public static void main(String[] args) throws Exception {
-        exportExel(new ArrayList<Media>());
-    }
 
     public static List<Media> importMediExel(InputStream fileInputStream) throws Exception {
         Workbook wb0 = null;
@@ -74,11 +73,12 @@ public class ExelUtil {
         return list;
     }
 
-    public static void exportExel(List<Media> listMedia) {
+    public static void exportExel(List<Media> listMedia, HttpServletResponse rep) {
         // 第一步，创建一个webbook，对应一个Excel文件
         HSSFWorkbook wb = new HSSFWorkbook();
         // 第二步，在webbook中添加一个sheet,对应Excel文件中的sheet
         HSSFSheet sheet = wb.createSheet("媒体列表");
+        BufferedOutputStream bos=null;
         try {
             HSSFRow row = sheet.createRow((int) 0);
             // 第四步，创建单元格，并设置值表头 设置表头居中
@@ -91,7 +91,6 @@ public class ExelUtil {
             style.setFont(font);
             HSSFCell cell = row.createCell((short) 0);
             cell.setCellValue("名称");
-            cell.setCellStyle(style);
             cell = row.createCell((short) 1);
             cell.setCellValue("金牌价");
             cell.setCellStyle(style);
@@ -111,30 +110,54 @@ public class ExelUtil {
             cell.setCellValue("区域");
             cell.setCellStyle(style);
             cell = row.createCell((short) 7);
-            cell.setCellValue("可带连接");
-            cell.setCellStyle(style);
-            cell = row.createCell((short) 8);
             cell.setCellValue("发布速度");
             cell.setCellStyle(style);
-            cell = row.createCell((short) 9);
+            cell = row.createCell((short) 8);
             cell.setCellValue("百度权重");
             cell.setCellStyle(style);
-            cell = row.createCell((short) 10);
+            cell = row.createCell((short) 9);
             cell.setCellValue("备注");
             cell.setCellStyle(style);
-            cell = row.createCell((short)11);
+            cell = row.createCell((short)10);
             cell.setCellValue("案例网址");
             cell.setCellStyle(style);
+            int i=1;
             for (Media media : listMedia) {
-
+                row = sheet.createRow((int) i);
+                row.createCell((short) 0).setCellValue(media.getName());
+                row.createCell((short) 1).setCellValue(media.getGoldPrice());
+                row.createCell((short) 2).setCellValue(media.getSilverPrice());
+                row.createCell((short)3).setCellValue(media.getBronzePrice());
+                row.createCell((short)4).setCellValue(media.getCollectionType());
+                row.createCell((short)5).setCellValue(media.getMediaType());
+                row.createCell((short)6).setCellValue(media.getMediaRegion());
+                row.createCell((short)7).setCellValue(media.getPublishSpeed());
+                row.createCell((short)8).setCellValue(media.getBaiduSeo()==null?1:media.getBaiduSeo());
+                row.createCell((short)9).setCellValue(media.getRemark());
+                row.createCell((short)10).setCellValue(media.getExampleUrl());
+                i++;
             }
-            FileOutputStream fout = new FileOutputStream("c:/text2.xls");
-            wb.write(fout);
-            fout.close();
+            String fileName = "媒体列表.xls";
+            //处理中文文件名
+            rep.setCharacterEncoding("utf-8");
+            // 若想下载时自动填好文件名，则需要设置响应头的"Content-disposition"
+            rep.setHeader("Content-disposition", "attachment;filename=" + URLEncoder.encode(fileName, "UTF-8"));
+            rep.setCharacterEncoding("utf-8");
+            bos = new BufferedOutputStream(rep.getOutputStream());
+            rep.flushBuffer();
+            wb.write(bos);
+            bos.flush();
         }catch (Exception e){
             log.error("导出媒体列表失败",e);
         }finally {
-
+            try {
+                if(bos!=null){
+                   // bos.close();
+                }
+                wb.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 }

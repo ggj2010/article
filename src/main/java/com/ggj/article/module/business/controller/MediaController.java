@@ -111,18 +111,13 @@ public class MediaController extends BaseController {
     public String exportMedia(Media media,HttpServletRequest request, RedirectAttributes redirectAttributes, HttpServletResponse rep, Model model) {
             try {
                 List<Media> listMedia=mediaService.findList(media);
-                ExelUtil.exportExel(listMedia);
+                ExelUtil.exportExel(listMedia,rep);
                 addMessage(redirectAttributes, "媒体导入保存成功!");
             } catch (Exception e) {
                log.error("导入表格异常",e);
                 addMessage(redirectAttributes, "导入表格异常!");
             }
-        pageUtils.setPage(request, rep);
-        PageInfo<Media> pageInfo = mediaService.findEditorList(media);
-        model.addAttribute("pageInfo", pageInfo);
-        addSelectType(model);
-        model.addAttribute("media", media);
-        return "bussiness/media/bussiness_media_list";
+        return null;
     }
 
     @RequiresPermissions("bussiness:media:view")

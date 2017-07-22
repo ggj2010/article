@@ -4,6 +4,7 @@ import java.util.Date;
 
 import com.ggj.article.module.common.persistence.BaseEntity;
 
+import com.ggj.article.module.common.utils.DateUtils;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -25,10 +26,23 @@ public class Article extends BaseEntity {
 	private String verifyUrl;
 	//待审核、已审核、已退稿、已删除
 	private Integer status;
-	protected Date beginTime;
-	protected Date verifyDate;
-	protected Date endTime;
-	protected String typeParam;
+	private String beginTime;
+	private String beginTimeStr;
+	private Date verifyDate;
+	private String endTime;
+	private String endTimeStr;
+
+	public Date getBeginTime() {
+		return DateUtils.parseDate(beginTimeStr);
+	}
+
+
+	public Date getEndTime() {
+		return DateUtils.parseDate(endTimeStr);
+	}
+
+
+	private String typeParam;
 
 //	public String getVerifyDate() {
 //		return DateUtils.formatDate(verfiyDate);

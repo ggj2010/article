@@ -23,7 +23,7 @@
     <collection property="mediaList" ofType="Media">
       <result property="id" column="media.media_id" />
       <result property="name" column="meida.name" />
-      <result property="cost_price" column="meida.costPrice" />
+      <result property="costPrice" column="meida.costPrice" />
     </collection>
   </resultMap>
   <sql id="Media_Column_List">

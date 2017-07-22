@@ -37,7 +37,7 @@
             a.id = #{id,jdbcType=INTEGER} and
         </if>
         <if test="name != null and name!=''">
-            a.name = #{name,jdbcType=VARCHAR} and
+            a.name like  concat (#{name},'%') and
         </if>
         <if test="mediaType != null and mediaType!=''">
             a.media_type = #{mediaType,jdbcType=VARCHAR} and

@@ -13,7 +13,7 @@
 			 <input type="hidden" name="pageNum" id="pageNum" value="${pageInfo.pageNum}">
 			 <input type="hidden" name="pageSize" id="pageSize"  value="${pageInfo.pageSize}"> 
 			<div class="form-group">
-				<label>媒体类型</label>
+				<label >媒体类型</label>
 				<form:select id="mediaType" path="mediaType" class="form-control">
 					<form:option value="" label="请选择"/>
 					<form:options items="${mediaTypeList}"/>

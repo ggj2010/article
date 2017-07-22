@@ -25,7 +25,11 @@
 <link type="text/css"
 	href="${path}/css/bootstrap-3.3.5/css/bootstrap.min.css"
 	rel="stylesheet">
-
+<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+<!--[if lt IE 11]>
+<script src="http://apps.bdimg.com/libs/html5shiv/3.7/html5shiv.min.js"></script>
+<script src="http://apps.bdimg.com/libs/respond.js/1.4.2/respond.min.js"></script>
+<![endif]-->
 <!-- jquyer通知插件 -->	
 <link href="${path}/css/plugins/toastr/toastr.min.css" rel="stylesheet">	
 	
