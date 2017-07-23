@@ -21,7 +21,7 @@
         <input type="hidden" name="pageNum" id="pageNum" value="${pageInfo.pageNum}">
         <input type="hidden" name="pageSize" id="pageSize" value="${pageInfo.pageSize}">
         <form:hidden path="typeParam"/>
-        <c:if test="${article.typeParam==1|| article.typeParam==2 || article.typeParam==null }">
+        <c:if test="${article.typeParam=='1'|| article.typeParam=='2' || article.typeParam==null }">
         <div class="form-group">
             <label for="customName">客户信息</label>
             <form:select id="customName" path="customId" class="form-control">
@@ -127,7 +127,7 @@
                             </td>
                             <td>${entity.customName}</td>
                             <c:choose>
-                                <c:when test="${article.typeParam==2}">
+                                <c:when test="${article.typeParam=='2'}">
                                     <td>${entity.costPrice}</td>
                                 </c:when>
                                 <c:otherwise>

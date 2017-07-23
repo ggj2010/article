@@ -1,14 +1,12 @@
 package com.ggj.article.module.business.controller;
 
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.ggj.article.module.business.bean.Media;
+import com.ggj.article.module.business.service.MediaService;
 import com.ggj.article.module.common.utils.*;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -61,6 +59,9 @@ public class ArticleController extends BaseController {
 	
 	@Autowired
 	private DictionaryTableService dictionaryTableService;
+
+	@Autowired
+	private MediaService mediaService;
 	
 	@ModelAttribute
 	public Article get(@RequestParam(required = false) Integer id) {
@@ -77,9 +78,9 @@ public class ArticleController extends BaseController {
 	@RequiresPermissions("bussiness:article:view")
 	@RequestMapping(value = "")
 	public String list(Article article, HttpServletRequest request, HttpServletResponse rep, Model model) {
-		pageUtils.setPage(request, rep);
 		Principal principal = UserUtils.getPrincipal();
 		setArticleParam(article,principal);
+		pageUtils.setPage(request, rep);
 		PageInfo<Article> pageInfo = articleService.findPage(article);
 		model.addAttribute("pageInfo", pageInfo);
 		List<CustomUserInfo> customUserInfoList = customInfoService.getCustomUser(principal.getId());
@@ -117,7 +118,24 @@ public class ArticleController extends BaseController {
 			if (typeParam.equals("1")) {
 				article.setUserId(principal.getId());
 			} else if (typeParam.equals("2")) {
-				article.setEditorId(principal.getId());
+				//待审核的所有编辑都可以看到
+				if(article.getStatus()==null||(article.getStatus()!=null&&article.getStatus()==0)){
+					article.setStatus(0);
+					Media media=new Media();
+					media.setUserId(principal.getId());
+					List<Media> mediaList=mediaService.findEditorList(media).getList();
+					List<String> idList=new ArrayList<String>();
+					if(mediaList!=null&&mediaList.size()>0){
+						for (Media m : mediaList) {
+							idList.add(m.getId()+"");
+						}
+					}
+					article.setMediaIdStr( StringUtils.join(idList,","));
+					article.setMediaIdStr( StringUtils.join(idList,","));
+				//已经审核的只有当前编辑的编辑才可以看到
+				}else {
+					article.setEditorId(principal.getId());
+				}
 			} else if (typeParam.equals("3")) {
 				article.setCustomId(principal.getId());
 			}

@@ -105,8 +105,8 @@
     require(['jquery', 'bootstrap', 'jqueryValidateMessages'], function ($) {
         require(['Chosen', 'toastr', 'sys'], function () {
             //选择框赋值
-            $("#customInfo").chosen();
-
+            $("select").chosen();
+            $("#customInfo_chosen").css("width","100px");
             $("a[name='type']").on("click", function () {
                 $('#mediaForm')[0].reset();
                 $("#pageNum").val("1");

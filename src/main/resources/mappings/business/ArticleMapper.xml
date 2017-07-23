@@ -61,8 +61,8 @@
     <if test="editorId != null and editorId != ''">
       a.editor_id = #{editorId,jdbcType=INTEGER} and
     </if>
-    <if test="mediaId != null and mediaId!=''">
-      a.media_id = #{mediaId,jdbcType=VARCHAR} and
+    <if test="mediaIdStr != null and mediaIdStr!=''">
+      a.media_id in(#{mediaIdStr}) and
     </if>
     <if test="status != null">
       a.status = #{status,jdbcType=INTEGER} and
