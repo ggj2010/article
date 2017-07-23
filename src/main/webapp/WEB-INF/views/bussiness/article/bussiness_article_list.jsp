@@ -17,7 +17,7 @@
         </shiro:hasPermission>
     </ul>
     <form:form id="articleForm" modelAttribute="article"
-               action="${path}/article?typeParam=${article.typeParam}" method="post" class="form-inline well">
+               action="${path}/article" method="post" class="form-inline well">
         <input type="hidden" name="pageNum" id="pageNum" value="${pageInfo.pageNum}">
         <input type="hidden" name="pageSize" id="pageSize" value="${pageInfo.pageSize}">
         <form:hidden path="typeParam"/>
