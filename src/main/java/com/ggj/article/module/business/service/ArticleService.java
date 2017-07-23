@@ -87,6 +87,7 @@ public class ArticleService extends CrudService<ArticleMapper, Article> {
             } else {
                 article.setUrl(fileUrlMap.get(fileName));
             }
+            article.setRemark(j.getString("remark"));
             articleList.add(article);
         }
         for (Object o : mediaJsonArray) {

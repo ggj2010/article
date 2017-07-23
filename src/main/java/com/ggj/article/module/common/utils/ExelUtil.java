@@ -7,17 +7,17 @@ import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.ggj.article.module.business.bean.Article;
 import org.apache.poi.hssf.usermodel.*;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.usermodel.*;
 
 import com.ggj.article.module.business.bean.Media;
 
 import lombok.extern.slf4j.Slf4j;
 
 import javax.servlet.http.HttpServletResponse;
+
+import static com.sun.tools.doclint.Entity.nu;
 
 /**
  * @author:gaoguangjin
@@ -153,6 +153,108 @@ public class ExelUtil {
             try {
                 if(bos!=null){
                    // bos.close();
+                }
+                wb.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public static void exportArticleExel(List<Article> listArticle, HttpServletResponse rep, String typeParam) {
+        // 第一步，创建一个webbook，对应一个Excel文件
+        HSSFWorkbook wb = new HSSFWorkbook();
+        // 第二步，在webbook中添加一个sheet,对应Excel文件中的sheet
+        HSSFSheet sheet = wb.createSheet("媒体列表");
+        BufferedOutputStream bos=null;
+        try {
+            HSSFRow row = sheet.createRow((int) 0);
+            // 第四步，创建单元格，并设置值表头 设置表头居中
+            HSSFCellStyle style = wb.createCellStyle();
+            style.setAlignment(HSSFCellStyle.ALIGN_CENTER); // 创建一个居中格式
+            style.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);//垂直居中
+            HSSFFont font = wb.createFont();
+            font.setFontHeightInPoints((short) 14);
+            font.setFontName("黑体");
+            style.setFont(font);
+            HSSFCell cell = row.createCell((short) 0);
+            cell.setCellValue("媒体名称");
+            cell = row.createCell((short) 1);
+            cell.setCellValue("标题");
+            cell.setCellStyle(style);
+            cell = row.createCell((short) 2);
+            cell.setCellValue("链接");
+            cell.setCellStyle(style);
+            cell = row.createCell((short) 3);
+            cell.setCellValue("价格");
+            cell.setCellStyle(style);
+            cell = row.createCell((short) 4);
+            cell.setCellValue("发布日期");
+            cell.setCellStyle(style);
+            cell = row.createCell((short) 5);
+            cell.setCellValue("审核日期");
+            cell.setCellStyle(style);
+            cell = row.createCell((short) 6);
+            cell.setCellValue("状态");
+            cell.setCellStyle(style);
+            cell = row.createCell((short) 7);
+            cell.setCellValue("结算状态");
+            cell.setCellStyle(style);
+            cell = row.createCell((short) 8);
+            cell.setCellValue("备注");
+            cell.setCellStyle(style);
+            int i=1;
+            for (Article article : listArticle) {
+                row = sheet.createRow((int) i);
+                row.createCell((short) 0).setCellValue(article.getMediaName());
+                row.createCell((short) 1).setCellValue(article.getTitle());
+                //链接
+                //如果是已审核就是发布后的链接
+                String url=article.getUrl();
+                Integer status=article.getStatus();
+                String statusName="";
+                //已审核
+                if(status==0){
+                    statusName="待审核";
+                }else if(status==1){
+                    statusName="审核中";
+                    url=article.getVerifyUrl();
+                }else if(status==2) {
+                    statusName = "已审核";
+                }else if(status==3) {
+                    statusName = "已退稿";
+                }else if(status==4) {
+                    statusName = "已删除";
+                }
+                row.createCell((short) 2).setCellValue(url);
+                Long price=article.getCustomPrice();
+                if(typeParam.equals("2")){
+                    price=article.getCostPrice();
+                }
+                row.createCell((short)3).setCellValue(price);
+                row.createCell((short)4).setCellValue(DateUtils.formatDateTime(article.getCreateDate()));
+                row.createCell((short)5).setCellValue(article.getVerifyDate()==null?"":DateUtils.formatDateTime(article.getVerifyDate()));
+                row.createCell((short)6).setCellValue(statusName);
+                row.createCell((short)7).setCellValue(article.getVerifyStatus()==null?"未结算":"已结算");
+                row.createCell((short)9).setCellValue(article.getRemark());
+                i++;
+            }
+            String fileName = "文章列表.xls";
+            //处理中文文件名
+            rep.setCharacterEncoding("utf-8");
+            // 若想下载时自动填好文件名，则需要设置响应头的"Content-disposition"
+            rep.setHeader("Content-disposition", "attachment;filename=" + URLEncoder.encode(fileName, "UTF-8"));
+            rep.setCharacterEncoding("utf-8");
+            bos = new BufferedOutputStream(rep.getOutputStream());
+            rep.flushBuffer();
+            wb.write(bos);
+            bos.flush();
+        }catch (Exception e){
+            log.error("导出文章列表失败",e);
+        }finally {
+            try {
+                if(bos!=null){
+                    // bos.close();
                 }
                 wb.close();
             } catch (IOException e) {

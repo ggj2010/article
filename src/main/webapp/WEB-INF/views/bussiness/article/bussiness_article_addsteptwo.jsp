@@ -75,6 +75,15 @@
                             <span class="glyphicon  form-control-feedback" aria-hidden="true"></span>
                         </div>
                     </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label" for="remark1">备注</label>
+                        <div class="col-sm-8">
+                            <textarea class="form-control" maxlength="255"
+                                           id="remark1" rows="3" name="remark1">
+                                </textarea>
+                            <span class="glyphicon  form-control-feedback" aria-hidden="true"></span>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -148,6 +157,7 @@
                         articleInfo.type=$(article[i]).find("input[name='type"+(i+1)+"']:checked").val();
                         articleInfo.url=$(article[i]).find("input[name='url"+(i+1)+"']").val();
                         articleInfo.fileName="file"+(i+1);
+                        articleInfo.remark=$(article[i]).find("textarea[name='remark"+(i+1)+"']").val();
                         articleInfos.push(articleInfo);
                     }
                     var jsonArticleInfo=JSON.stringify(articleInfos);
@@ -234,6 +244,13 @@
         html+="<label class=\"col-sm-2 control-label\">原稿文件</label>";
         html+="<div class=\"col-sm-8\">";
         html+="<input type=\"file\" class=\"form-control\" name=\"file"+length+"\"readonly id=\"file"+length+"\" />";
+        html+="<span class=\"glyphicon  form-control-feedback\" aria-hidden=\"true\"></span>";
+        html+="</div>";
+        html+="</div>";
+        html+="<div class=\"form-group\">";
+        html+="<label class=\"col-sm-2 control-label\" for=\"remark"+length+"\">备注</label>";
+        html+="<div class=\"col-sm-8\">";
+        html+="<textarea class=\"form-control\" maxlength=\"255\" id=\"remark"+length+"\"  name=\"remark"+length+"\" rows=\"3\"></textarea>";
         html+="<span class=\"glyphicon  form-control-feedback\" aria-hidden=\"true\"></span>";
         html+="</div>";
         html+="</div>";

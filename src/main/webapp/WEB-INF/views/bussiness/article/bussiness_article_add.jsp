@@ -36,6 +36,12 @@
                         <th>报价</th>
                         <th>操作</th>
                     </table>
+                    <div class="alert alert-warning">
+                        <a href="#" class="close" data-dismiss="alert">
+                            &times;
+                        </a>
+                        合计：<strong id="countPrice"></strong>
+                    </div>
                     <a class="btn btn-danger btn-block" id="nexStep">③下一步</a>
                 </div>
             </div>
@@ -87,10 +93,12 @@
     function  appendChoose(id,html) {
         $("#"+id).remove();
         $("#appendTable").append(html);
+        getArticleInfo();
     }
     function  getArticleInfo() {
            var media=$("tr");
            var mediaInfos = [];
+            var countPrice=0;
            for (var i = 0; i < media.length; i++) {
                var mediaInfo = {};
                if(i==0){
@@ -99,11 +107,14 @@
                mediaInfo.id=$(media[i]).attr("id");
                mediaInfo.price=$(media[i]).find("input[type='text']").val();
                mediaInfos.push(mediaInfo);
+               countPrice=countPrice+parseInt(mediaInfo.price);
            }
-    return JSON.stringify(mediaInfos);
+        $("#countPrice").html(countPrice);
+     return JSON.stringify(mediaInfos);
     }
     function  deleteChoose(id) {
         $("#"+id).remove();
+        getArticleInfo();
     }
 
 </script>

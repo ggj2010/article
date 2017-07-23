@@ -17,6 +17,7 @@
     <result column="custom_price" jdbcType="DECIMAL" property="customPrice" />
     <result column="remark" jdbcType="VARCHAR" property="remark" />
     <result column="status" jdbcType="TINYINT" property="status" />
+    <result column="verify_status" jdbcType="TINYINT" property="verifyStatus" />
     <result column="flag" jdbcType="VARCHAR" property="flag" />
     <result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
     <result column="verify_date" jdbcType="TIMESTAMP" property="verifyDate" />
@@ -35,35 +36,53 @@
 
   <select id="findList" resultMap="BaseResultMap" parameterType="Article">
     select
-    <include refid="Base_Column_List"/>
-    from tb_article
+    a.*, c. STATUS AS verify_status
+    from tb_article a
+    LEFT JOIN
+    (
+    SELECT
+    b.article_id,
+    b. STATUS
+    FROM
+    tb_media_settlement b
+    WHERE
+    b.type = 1
+    AND b. STATUS = 1
+    ) c
+    on
+    a.id = c.article_id
     where
     <if test="userId != null and userId != ''">
-      user_id = #{userId,jdbcType=INTEGER} and
+      a.user_id = #{userId,jdbcType=INTEGER} and
     </if>
     <if test="customId != null and customId!=''">
-      custom_id = #{customId,jdbcType=VARCHAR} and
+      a.custom_id = #{customId,jdbcType=VARCHAR} and
     </if>
     <if test="editorId != null and editorId != ''">
-      editor_id = #{editorId,jdbcType=INTEGER},
+      a.editor_id = #{editorId,jdbcType=INTEGER} and
     </if>
     <if test="mediaId != null and mediaId!=''">
-      media_id = #{mediaId,jdbcType=VARCHAR} and
+      a.media_id = #{mediaId,jdbcType=VARCHAR} and
     </if>
     <if test="status != null">
-      status = #{status,jdbcType=INTEGER} and
+      a.status = #{status,jdbcType=INTEGER} and
     </if>
     <if test="title != null and title!=''">
-      title like  concat (#{title},'%') and
+      a.title like  concat (#{title},'%') and
     </if>
-
-    <if test="beginTime != null">
-      create_date<![CDATA[ >=  ]]> #{beginTime,jdbcType=TIMESTAMP} and
+    <if test='beginTimeStr != null and beginTimeStr != "" and timeType=="1" '>
+      a.create_date<![CDATA[ >=  ]]> #{beginTime,jdbcType=TIMESTAMP} and
     </if>
-    <if test="endTime != null">
-      verify_date <![CDATA[ <=  ]]>#{endTime,jdbcType=TIMESTAMP} and
+    <if test='endTimeStr != null and endTimeStr != "" and timeType=="1" '>
+      a.create_date <![CDATA[ <=  ]]>#{endTime,jdbcType=TIMESTAMP} and
     </if>
-    flag=#{flag} order by id desc
+    <if test='beginTimeStr != null and beginTimeStr != "" and timeType=="2" '>
+      a.verify_date<![CDATA[ >=  ]]> #{beginTime,jdbcType=TIMESTAMP} and
+    </if>
+    <if test='endTimeStr != null and endTimeStr != "" and timeType=="2" '>
+      a.verify_date <![CDATA[ <=  ]]>#{endTime,jdbcType=TIMESTAMP} and
+    </if>
+    a.flag=#{flag} order by a.id desc
   </select>
 
   <delete id="delete" parameterType="Article">

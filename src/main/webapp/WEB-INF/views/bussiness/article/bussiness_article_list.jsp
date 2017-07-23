@@ -17,9 +17,10 @@
         </shiro:hasPermission>
     </ul>
     <form:form id="articleForm" modelAttribute="article"
-               action="${path}/article/" method="post" class="form-inline well">
+               action="${path}/article?typeParam=${article.typeParam}" method="post" class="form-inline well">
         <input type="hidden" name="pageNum" id="pageNum" value="${pageInfo.pageNum}">
         <input type="hidden" name="pageSize" id="pageSize" value="${pageInfo.pageSize}">
+        <form:hidden path="typeParam"/>
         <c:if test="${article.typeParam==1|| article.typeParam==2 || article.typeParam==null }">
         <div class="form-group">
             <label for="customName">客户信息</label>
@@ -37,23 +38,32 @@
                 <form:options items="${articleStatusList}" itemLabel="name" itemValue="value"/>
             </form:select>
         </div>
+        <div class="form-group">
+            <label for="title">标题</label>
+            <form:input type="text" class="form-control" path="title" id="title"/>
+        </div>
+        <div class="form-group">
+            <label for="status">日期类型</label>
+            <form:select id="timeType" path="timeType" class="form-control">
+                <form:option value="" label="请选择"/>
+                <form:options items="${timeTypeList}" itemLabel="name" itemValue="value"/>
+            </form:select>
+        </div>
         <div class="form-group input-append date form_datetime">
-            <label for="beginTime">发布开始时间</label>
+            <label for="beginTime">发布时间</label>
                 <form:input type="text" class="form-control" path="beginTimeStr" id="beginTime"/>
                 <span class="add-on"><i class="icon-remove"></i></span>
                 <span class="add-on"><i class="icon-calendar"></i></span>
         </div>
         <div class="form-group input-append date form_datetime">
-            <label for="beginTime">发布结束时间</label>
+            <label for="beginTime">-</label>
             <form:input type="text" class="form-control" path="endTimeStr" id="endTime"/>
             <span class="add-on"><i class="icon-remove"></i></span>
             <span class="add-on"><i class="icon-calendar"></i></span>
         </div>
-        <div class="form-group">
-            <label for="title">标题</label>
-            <form:input type="text" class="form-control" path="title" id="title"/>
-        </div>
         <button type="submit" class="btn btn-info">查询</button>
+        <a type="button" id="exportExel" class="btn btn-info">导出</a>
+        <a type="button" onclick="location.reload();" class="btn btn-info">刷新</a>
     </form:form>
     <div class="panel panel-default">
         <div class="panel-heading">文章</div>
@@ -116,7 +126,14 @@
                                 </c:choose>
                             </td>
                             <td>${entity.customName}</td>
-                            <td>${entity.customPrice}</td>
+                            <c:choose>
+                                <c:when test="${article.typeParam==2}">
+                                    <td>${entity.costPrice}</td>
+                                </c:when>
+                                <c:otherwise>
+                                    <td>${entity.customPrice}</td>
+                                </c:otherwise>
+                            </c:choose>
                             <td><fmt:formatDate value="${entity.createDate}" pattern="yyyy-MM-dd HH:mm:ss"/></td>
                             <td><fmt:formatDate value="${entity.verifyDate}" pattern="yyyy-MM-dd HH:mm:ss"/></td>
                             <td title="${entity.remark}">${fn:substring(entity.remark, 0, 10)}</td>
@@ -136,7 +153,7 @@
                                                 class="glyphicon glyphicon-step-backward"></span></a>
                                         </shiro:hasPermission>
                                         <shiro:hasPermission name="bussiness:media:delete">
-                                        <a class="btn  btn-info" url="${path}/article/delete?id=${entity.id}"
+                                        <a class="btn  btn-info" url="${path}/article/delete?id=${entity.id}&typeParam=${article.typeParam}"
                                            data-toggle="tooltip" data-placement="top" title="删除"
                                            name="delete"><span
                                                 class="glyphicon glyphicon-trash"></span></a>
@@ -144,7 +161,7 @@
                                     </c:when>
                                     <c:when test="${entity.status==3}">
                                         <shiro:hasPermission name="bussiness:media:delete">
-                                        <a class="btn  btn-info" url="${path}/article/delete?id=${entity.id}"
+                                        <a class="btn  btn-info" url="${path}/article/delete?id=${entity.id}&typeParam=${article.typeParam}"
                                            data-toggle="tooltip" data-placement="top" title="删除"
                                            name="delete"><span
                                                 class="glyphicon glyphicon-trash"></span></a>
@@ -176,7 +193,7 @@
             <div class="modal-body">
                 <div class="container-fluid">
                     <div class="form-horizontal">
-                        <form action="${path}/article/verifysave" method="post" id="verifyForm">
+                        <form action="${path}/article/verifysave?typeParam=${article.typeParam}" method="post" id="verifyForm">
                             <div class="form-group">
                                 <label for="title" class="col-sm-2 control-label">稿件标题</label>
                                 <div class="col-sm-10">
@@ -229,17 +246,26 @@
                 $("#articleForm").submit();
             })
 
+            $("#exportExel").on("click",function(){
+                $("#articleForm").attr("action","${path}/article/export");
+                $("#articleForm").submit();
+                $("#articleForm").attr("action","${path}/article/");
+            })
+
             $(".form_datetime").datetimepicker({
                 language: 'zh-CN',
                 weekStart: 1,
                 todayBtn: 1,
-                autoclose: 1,
+                autoclose:true,
                 todayHighlight: 1,
+                timepicker:false,
+                minView:2,
+                maxView:4,
                 startView: 2,
-                forceParse: 0,
-                dateFormat: "yyyy-MM-dd HH:mm:ss",
-                clearBtn: true,
-                showMeridian: 1
+                showMeridian: 1,
+                format:'yyyy-mm-dd',
+                formatDate: "yyyy-mm-dd",
+                clearBtn: true
             });
 
             if (${not empty message }) {
@@ -263,10 +289,10 @@
     })
 
     function verifying(id) {
-        location.href = "${path}/article/verifying?id=" + id;
+        location.href = "${path}/article/verifying?id=" + id+"&typeParam=${article.typeParam}";
     }
     function back(id) {
-        location.href = "${path}/article/back?id=" + id;
+        location.href = "${path}/article/back?id=" + id+"&typeParam=${article.typeParam}";
     }
     function verify(name, id) {
         $("#articleTitleId").val(name);

@@ -26,11 +26,13 @@ public class Article extends BaseEntity {
 	private String verifyUrl;
 	//待审核、已审核、已退稿、已删除
 	private Integer status;
+	private Integer verifyStatus;
 	private String beginTime;
 	private String beginTimeStr;
 	private Date verifyDate;
 	private String endTime;
 	private String endTimeStr;
+	private String timeType;
 
 	public Date getBeginTime() {
 		return DateUtils.parseDate(beginTimeStr);
@@ -38,7 +40,7 @@ public class Article extends BaseEntity {
 
 
 	public Date getEndTime() {
-		return DateUtils.parseDate(endTimeStr);
+		return DateUtils.parseDate(endTimeStr+" 23:59:59");
 	}
 
 
