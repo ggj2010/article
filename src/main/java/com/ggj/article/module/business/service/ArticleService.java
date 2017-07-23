@@ -61,7 +61,7 @@ public class ArticleService extends CrudService<ArticleMapper, Article> {
                 customId = j.getString("customId");
                 customName = j.getString("customName");
                 //新的客户
-                if("0".equals(customId)){
+                if("0".equals(customId)&&userInfo.getUserType()==0){
                     UserInfo newUserInfo = new UserInfo();
                     newUserInfo.setUserName(customName);
                     userInfoMapper.insert(newUserInfo);
@@ -108,6 +108,7 @@ public class ArticleService extends CrudService<ArticleMapper, Article> {
                 }else {
                     //个人id
                     article.setUserId(userInfo.getCustomInfo().getCustomUserId());
+                    article.setCustomId(userInfo.getId());
                 }
                 article.setStatus(0);
                 article.setCreateDate(new Date());
