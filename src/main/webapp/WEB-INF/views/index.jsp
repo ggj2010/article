@@ -302,8 +302,7 @@
 <!-- 浏览器下载js脚本文件时候，不会启动其他下载任务，放在底部有助于页面加载速度 -->
 <script type="text/javascript" src="/js/require.js"></script>
 <!-- defre js的加载不会阻塞页面的渲染和资源的加载 -->
-<script type="text/javascript" src="/js/main.js" defer
-        async="true"></script>
+<script type="text/javascript" src="/js/main.js"></script>
 
 <script type="text/javascript">
     /*js的amd写法*/
@@ -316,17 +315,5 @@
             });
         });
     });
-    window.onload=function() {
-        require(['jquery'], function ($) {
-            require(['bootstrap', 'sweetalert', 'contabs', 'metisMenus', 'layer', 'Pace', 'slimscroll'], function () {
-                require(['base'], function () {
-                    $(function () {
-                        Pace.start({});
-                    });
-                });
-            });
-        });
-    }
-
 </script>
 </html>
