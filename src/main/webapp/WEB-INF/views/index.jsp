@@ -316,5 +316,17 @@
             });
         });
     });
+    window.onload=function() {
+        require(['jquery'], function ($) {
+            require(['bootstrap', 'sweetalert', 'contabs', 'metisMenus', 'layer', 'Pace', 'slimscroll'], function () {
+                require(['base'], function () {
+                    $(function () {
+                        Pace.start({});
+                    });
+                });
+            });
+        });
+    }
+
 </script>
 </html>

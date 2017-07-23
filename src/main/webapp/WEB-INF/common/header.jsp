@@ -66,6 +66,5 @@
 <!-- 浏览器下载js脚本文件时候，不会启动其他下载任务，放在底部有助于页面加载速度 -->
 <script type="text/javascript" src="${path}/js/require.js"></script>
 <!-- defre js的加载不会阻塞页面的渲染和资源的加载 -->
-<script type="text/javascript" src="${path}/js/main.js" defer
-	async="true"></script>
+<script type="text/javascript" src="${path}/js/main.js"></script>
 
