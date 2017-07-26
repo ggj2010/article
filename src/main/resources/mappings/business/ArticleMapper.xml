@@ -64,9 +64,15 @@
     <if test="mediaIdStr != null and mediaIdStr!=''">
       a.media_id in(#{mediaIdStr}) and
     </if>
-    <if test="status != null">
-      a.status = #{status,jdbcType=INTEGER} and
-    </if>
+    <choose>
+      <when test="status != null">
+        a.status = #{status,jdbcType=INTEGER} and
+      </when>
+      <otherwise>
+        a.status in (0,1) and
+      </otherwise>
+    </choose>
+
     <if test="title != null and title!=''">
       a.title like  concat (#{title},'%') and
     </if>

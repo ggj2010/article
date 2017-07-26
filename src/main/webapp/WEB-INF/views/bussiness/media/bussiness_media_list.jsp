@@ -54,7 +54,7 @@
 			<button type="submit" class="btn btn-info">查询</button>
 			<shiro:hasPermission name="bussiness:media:edit">
 			<div class="form-group">
-				<input type="file" class="form-control" name="meidaExelFile">
+				<input type="file" class="form-control" name="meidaExelFile" id="meidaExelFile">
 				<a type="button" id="importExel" class="btn btn-info">导入</a>
 				<a type="button" id="exportExel" class="btn btn-info">导出</a>
 			</div>
@@ -67,11 +67,13 @@
 					<table class="table table-hover  table-striped table-bordered">
 						<tr class="info">
 							<th>名称</th>
-							<shiro:hasPermission name="bussiness:media:edit">
+							<c:if test="${principal.userType==0}">
 							<th>金/银/铜价格</th>
 							<th>成本价格</th>
-							</shiro:hasPermission>
+							</c:if>
+							<c:if test="${principal.userType==1}">
 							<th>价格</th>
+							</c:if>
 							<th>收录类型</th>
 							<th>媒体类型</th>
 							<th>媒体区域</th>
@@ -84,13 +86,10 @@
 						</tr>
 						<c:forEach items="${pageInfo.list}" var="entity">
 							<tr>
-								<td title="${entity.name}">${fn:substring(entity.name, 0, 10)}</td>
-								<shiro:hasPermission name="bussiness:media:edit">
+								<td title="${entity.remark}">${entity.name}</td>
+								<c:if test="${principal.userType==0}">
 								<td>${entity.goldPrice}/${entity.silverPrice}/${entity.bronzePrice}</td>
 								<td>${entity.costPrice}</td>
-								</shiro:hasPermission>
-								<c:if test="${principal.userType==0}">
-									<td>${entity.bronzePrice}</td>
 								</c:if>
 								<c:if test="${principal.userType==1}">
 									<c:if test="${principal.level=='金牌'}">
@@ -150,7 +149,7 @@
 			})
 
 			$("#importExel").on("click",function(){
-				if($("#file").val()==null){
+				if($("#meidaExelFile").val()==""){
 					swal("导入文件不可以为空");
 				}else{
 					$("#mediaForm").attr("action","${path}/media/import");

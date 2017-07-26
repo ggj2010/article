@@ -58,7 +58,7 @@
 						</tr>
 						<c:forEach items="${pageInfo.list}" var="entity">
 							<tr>
-								<td>${entity.id}</td>
+								<td title="${entity.remark}">${entity.id}</td>
 								<td>${entity.name}</td>
 								<!--价格-->
 								<c:if test="${principal.userType==0}">
@@ -68,10 +68,10 @@
 									<c:if test="${principal.level=='金牌'}">
 									<td>${entity.goldPrice}</td>
 									</c:if>
-									<c:if test="${principal.level=='铜牌'}">
+									<c:if test="${principal.level=='银牌'}">
 									<td>${entity.silverPrice}</td>
 									</c:if>
-									<c:if test="${principal.level=='银牌'}">
+									<c:if test="${principal.level=='铜牌'}">
 									<td>${entity.bronzePrice}</td>
 									</c:if>
 								</c:if>
@@ -125,7 +125,7 @@
 				html+="<tr id=\""+id+"\">";
 				html+="<td>"+name+"</td>";
 				<c:if test="${principal.userType==0}">
-				html+="<td><input type=\"text\" value=\""+price+"\"><input type=\"hidden\" value=\""+id+"\"></td>";
+				html += "<td><input type=\"text\" value=\"" + price + "\" onchange=\"getArticleInfo()\"/><input type=\"hidden\" value=\"" + id + "\" /></td>";
 				</c:if>
 				<c:if test="${principal.userType==1}">
 				html+="<td><input type=\"text\" value=\""+price+"\" readonly><input type=\"hidden\" value=\""+id+"\"></td>";
@@ -134,6 +134,7 @@
 				html+="</tr>";
 				window.parent.appendChoose(id,html);
 			})
+
 
 			if(${not empty message }){
 				toastr.options = {

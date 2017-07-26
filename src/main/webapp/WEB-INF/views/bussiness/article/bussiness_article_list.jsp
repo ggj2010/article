@@ -74,7 +74,6 @@
                         <th>标题</th>
                         <th>媒体</th>
                         <th>状态</th>
-                        <th>客户</th>
                         <th>报价</th>
                         <th>发布时间</th>
                         <th>审核时间</th>
@@ -125,7 +124,6 @@
                                     </c:when>
                                 </c:choose>
                             </td>
-                            <td>${entity.customName}</td>
                             <c:choose>
                                 <c:when test="${article.typeParam=='2'}">
                                     <td>${entity.costPrice}</td>
@@ -138,8 +136,9 @@
                             <td><fmt:formatDate value="${entity.verifyDate}" pattern="yyyy-MM-dd HH:mm:ss"/></td>
                             <td title="${entity.remark}">${fn:substring(entity.remark, 0, 10)}</td>
                             <td>
+
                                 <c:choose>
-                                    <c:when test="${entity.status==0||entity.status==1}">
+                                    <c:when test="${entity.status==0}">
                                         <shiro:hasPermission name="bussiness:mediaEditor:edit">
                                         <a class="btn btn-info"
                                            href="javaScript:verify('${entity.title}','${entity.id}')"
@@ -157,6 +156,34 @@
                                            data-toggle="tooltip" data-placement="top" title="删除"
                                            name="delete"><span
                                                 class="glyphicon glyphicon-trash"></span></a>
+                                        </shiro:hasPermission>
+                                    </c:when>
+                                    <c:when test="${entity.status==1&& entity.editorId==userId}">
+                                        <shiro:hasPermission name="bussiness:mediaEditor:edit">
+                                        <a class="btn btn-info"
+                                           href="javaScript:verify('${entity.title}','${entity.id}')"
+                                           data-toggle="tooltip" data-placement="top" title="审核"><span
+                                                class="glyphicon glyphicon-user"></span> </a>
+
+                                        <a class="btn  btn-info"
+                                           href="javaScript:back('${entity.id}')"
+                                           data-toggle="tooltip" data-placement="top" title="退稿"
+                                           ><span
+                                                class="glyphicon glyphicon-step-backward"></span></a>
+                                        </shiro:hasPermission>
+                                        <shiro:hasPermission name="bussiness:media:delete">
+                                        <a class="btn  btn-info" url="${path}/article/delete?id=${entity.id}&typeParam=${article.typeParam}"
+                                           data-toggle="tooltip" data-placement="top" title="删除"
+                                           name="delete"><span
+                                                class="glyphicon glyphicon-trash"></span></a>
+                                        </shiro:hasPermission>
+                                    </c:when>
+                                    <c:when test="${entity.status==2&& entity.editorId==userId}">
+                                        <shiro:hasPermission name="bussiness:mediaEditor:edit">
+                                            <a class="btn btn-info"
+                                               href="javaScript:updateUrl('${entity.title}','${entity.id}','${entity.verifyUrl}')"
+                                               data-toggle="tooltip" data-placement="top" title="修改链接"><span
+                                                    class="glyphicon glyphicon-edit"></span> </a>
                                         </shiro:hasPermission>
                                     </c:when>
                                     <c:when test="${entity.status==3}">
@@ -297,6 +324,15 @@
     function verify(name, id) {
         $("#articleTitleId").val(name);
         $("#articleId").val(id);
+        $("#verifyUrl").val("");
+        $("#verifyModule").modal('show');
+    }
+
+    function updateUrl(name, id,url) {
+        $("#articleTitleId").val(name);
+        $("#articleId").val(id);
+        $("#verifyUrl").val(url);
+        $("#verifyForm").attr("action","${path}/article/updateurl?id=" + id+"&typeParam=${article.typeParam}")
         $("#verifyModule").modal('show');
     }
 </script>

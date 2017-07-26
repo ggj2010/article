@@ -159,4 +159,8 @@ public class ArticleService extends CrudService<ArticleMapper, Article> {
         article.setVerifyDate(new Date());
         dao.update(article);
     }
+    @Transactional(readOnly = false)
+    public void update(Article article) {
+        super.dao.update(article);
+    }
 }

@@ -168,23 +168,6 @@
                 }
             });
 
-            $("a[name='choose']").on("click", function () {
-                var id = $(this).parent().parent().children('td:eq(0)').html();
-                var name = $(this).parent().parent().children('td:eq(1)').html();
-                var price = $(this).parent().parent().children('td:eq(2)').html();
-                var html = "";
-                html += "<tr id=\"" + id + "\">";
-                html += "<td>" + name + "</td>";
-                <c:if test="${principal.userType==0}">
-                html += "<td><input type=\"text\" value=\"" + price + "\"><input type=\"hidden\" value=\"" + id + "\"></td>";
-                </c:if>
-                <c:if test="${principal.userType==1}">
-                html += "<td><input type=\"text\" value=\"" + price + "\" readonly><input type=\"hidden\" value=\"" + id + "\"></td>";
-                </c:if>
-                html += "<td><a class=\"btn btn-info\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"删除\" onclick='deleteChoose(\"" + id + "\")'><span class=\"glyphicon glyphicon-trash\"></span></td>";
-                html += "</tr>";
-                window.parent.appendChoose(id, html);
-            })
 
             if (${not empty message }) {
                 toastr.options = {

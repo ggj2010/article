@@ -7,17 +7,19 @@ import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.ggj.article.module.business.bean.Article;
-import org.apache.poi.hssf.usermodel.*;
-import org.apache.poi.ss.usermodel.*;
+import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang3.StringUtils;
+import org.apache.poi.hssf.usermodel.*;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+
+import com.ggj.article.module.business.bean.Article;
 import com.ggj.article.module.business.bean.Media;
 
 import lombok.extern.slf4j.Slf4j;
-
-import javax.servlet.http.HttpServletResponse;
-
-import static com.sun.tools.doclint.Entity.nu;
 
 /**
  * @author:gaoguangjin
@@ -42,35 +44,52 @@ public class ExelUtil {
                     if (r.getRowNum() < 1) {
                         continue;
                     }
-                    Media media = new Media();
-                    media.setName(r.getCell(0).getStringCellValue());
-                    media.setCollectionType(r.getCell(1) == null ? "" : r.getCell(1).getStringCellValue());
-                    media.setExampleUrl(r.getCell(2) == null ? "" : r.getCell(2).getStringCellValue());
-                    media.setMediaType(r.getCell(3) == null ? "" : r.getCell(3).getStringCellValue());
-                    media.setMediaRegion(r.getCell(4) == null ? "" : r.getCell(4).getStringCellValue());
-                    media.setPublishSpeed(r.getCell(6) == null ? "" : r.getCell(6).getStringCellValue());
-                    r.getCell(7).setCellType(Cell.CELL_TYPE_STRING);
-                    r.getCell(8).setCellType(Cell.CELL_TYPE_STRING);
-                    r.getCell(9).setCellType(Cell.CELL_TYPE_STRING);
-                    r.getCell(10).setCellType(Cell.CELL_TYPE_STRING);
-                    r.getCell(11).setCellType(Cell.CELL_TYPE_STRING);
-                    media.setBaiduSeo(Integer.parseInt(r.getCell(7) == null ? "0" : r.getCell(7).getStringCellValue()));
-                    media.setCostPrice(Long.parseLong(r.getCell(8) == null ? "0" : r.getCell(8).getStringCellValue()));
-                    media.setGoldPrice(Long.parseLong(r.getCell(9) == null ? "0" : r.getCell(9).getStringCellValue()));
-                    media.setSilverPrice(Long.parseLong(r.getCell(10) == null ? "0" : r.getCell(10).getStringCellValue()));
-                    media.setBronzePrice(Long.parseLong(r.getCell(11) == null ? "0" : r.getCell(11).getStringCellValue()));
-                    media.setRemark(r.getCell(14) == null ? "" : r.getCell(14).getStringCellValue());
-                    list.add(media);
+                    try {
+                        Media media = new Media();
+                        r.getCell(0).setCellType(Cell.CELL_TYPE_STRING);
+                        r.getCell(1).setCellType(Cell.CELL_TYPE_STRING);
+                        r.getCell(2).setCellType(Cell.CELL_TYPE_STRING);
+                        r.getCell(3).setCellType(Cell.CELL_TYPE_STRING);
+                        r.getCell(4).setCellType(Cell.CELL_TYPE_STRING);
+                        r.getCell(6).setCellType(Cell.CELL_TYPE_STRING);
+                        media.setName(r.getCell(0).getStringCellValue());
+                        media.setCollectionType(r.getCell(1) == null ? "" : r.getCell(1).getStringCellValue());
+                        media.setExampleUrl(r.getCell(2) == null ? "" : r.getCell(2).getStringCellValue());
+                        media.setMediaType(r.getCell(3) == null ? "" : r.getCell(3).getStringCellValue());
+                        media.setMediaRegion(r.getCell(4) == null ? "" : r.getCell(4).getStringCellValue());
+                        media.setPublishSpeed(r.getCell(6) == null ? "" : r.getCell(6).getStringCellValue());
+                        media.setBaiduSeo(Integer.parseInt(getIntCellValue(r.getCell(7))));
+                        media.setCostPrice(Long.parseLong(getIntCellValue(r.getCell(8))));
+                        media.setGoldPrice(Long.parseLong(getIntCellValue(r.getCell(9))));
+                        media.setSilverPrice(Long.parseLong(getIntCellValue(r.getCell(10))));
+                        media.setBronzePrice(Long.parseLong(getIntCellValue(r.getCell(11))));
+                        media.setRemark(r.getCell(14) == null ? "" : r.getCell(14).getStringCellValue());
+                        list.add(media);
+                    } catch (Exception e) {
+                        log.error("解析异常：" + e.getLocalizedMessage());
+                    }
                 }
                 i++;
             }
 
         } catch (Exception e) {
-            log.error("解析上次文件异常", e);
+            log.error("解析上传次文件异常", e);
         } finally {
             wb0.close();
         }
         return list;
+    }
+
+    private static String getIntCellValue(Cell cell) {
+        if(cell==null)
+            return "0";
+        cell.setCellType(Cell.CELL_TYPE_STRING);
+        String value = cell.getStringCellValue();
+        if (StringUtils.isEmpty(cell.getStringCellValue())) {
+            return "0";
+        } else {
+            return value;
+        }
     }
 
     public static void exportExel(List<Media> listMedia, HttpServletResponse rep) {
@@ -78,7 +97,7 @@ public class ExelUtil {
         HSSFWorkbook wb = new HSSFWorkbook();
         // 第二步，在webbook中添加一个sheet,对应Excel文件中的sheet
         HSSFSheet sheet = wb.createSheet("媒体列表");
-        BufferedOutputStream bos=null;
+        BufferedOutputStream bos = null;
         try {
             HSSFRow row = sheet.createRow((int) 0);
             // 第四步，创建单元格，并设置值表头 设置表头居中
@@ -118,23 +137,23 @@ public class ExelUtil {
             cell = row.createCell((short) 9);
             cell.setCellValue("备注");
             cell.setCellStyle(style);
-            cell = row.createCell((short)10);
+            cell = row.createCell((short) 10);
             cell.setCellValue("案例网址");
             cell.setCellStyle(style);
-            int i=1;
+            int i = 1;
             for (Media media : listMedia) {
                 row = sheet.createRow((int) i);
                 row.createCell((short) 0).setCellValue(media.getName());
                 row.createCell((short) 1).setCellValue(media.getGoldPrice());
                 row.createCell((short) 2).setCellValue(media.getSilverPrice());
-                row.createCell((short)3).setCellValue(media.getBronzePrice());
-                row.createCell((short)4).setCellValue(media.getCollectionType());
-                row.createCell((short)5).setCellValue(media.getMediaType());
-                row.createCell((short)6).setCellValue(media.getMediaRegion());
-                row.createCell((short)7).setCellValue(media.getPublishSpeed());
-                row.createCell((short)8).setCellValue(media.getBaiduSeo()==null?1:media.getBaiduSeo());
-                row.createCell((short)9).setCellValue(media.getRemark());
-                row.createCell((short)10).setCellValue(media.getExampleUrl());
+                row.createCell((short) 3).setCellValue(media.getBronzePrice());
+                row.createCell((short) 4).setCellValue(media.getCollectionType());
+                row.createCell((short) 5).setCellValue(media.getMediaType());
+                row.createCell((short) 6).setCellValue(media.getMediaRegion());
+                row.createCell((short) 7).setCellValue(media.getPublishSpeed());
+                row.createCell((short) 8).setCellValue(media.getBaiduSeo() == null ? 1 : media.getBaiduSeo());
+                row.createCell((short) 9).setCellValue(media.getRemark());
+                row.createCell((short) 10).setCellValue(media.getExampleUrl());
                 i++;
             }
             String fileName = "媒体列表.xls";
@@ -147,12 +166,12 @@ public class ExelUtil {
             rep.flushBuffer();
             wb.write(bos);
             bos.flush();
-        }catch (Exception e){
-            log.error("导出媒体列表失败",e);
-        }finally {
+        } catch (Exception e) {
+            log.error("导出媒体列表失败", e);
+        } finally {
             try {
-                if(bos!=null){
-                   // bos.close();
+                if (bos != null) {
+                    // bos.close();
                 }
                 wb.close();
             } catch (IOException e) {
@@ -166,7 +185,7 @@ public class ExelUtil {
         HSSFWorkbook wb = new HSSFWorkbook();
         // 第二步，在webbook中添加一个sheet,对应Excel文件中的sheet
         HSSFSheet sheet = wb.createSheet("媒体列表");
-        BufferedOutputStream bos=null;
+        BufferedOutputStream bos = null;
         try {
             HSSFRow row = sheet.createRow((int) 0);
             // 第四步，创建单元格，并设置值表头 设置表头居中
@@ -203,40 +222,40 @@ public class ExelUtil {
             cell = row.createCell((short) 8);
             cell.setCellValue("备注");
             cell.setCellStyle(style);
-            int i=1;
+            int i = 1;
             for (Article article : listArticle) {
                 row = sheet.createRow((int) i);
                 row.createCell((short) 0).setCellValue(article.getMediaName());
                 row.createCell((short) 1).setCellValue(article.getTitle());
                 //链接
                 //如果是已审核就是发布后的链接
-                String url=article.getUrl();
-                Integer status=article.getStatus();
-                String statusName="";
+                String url = article.getUrl();
+                Integer status = article.getStatus();
+                String statusName = "";
                 //已审核
-                if(status==0){
-                    statusName="待审核";
-                }else if(status==1){
-                    statusName="审核中";
-                    url=article.getVerifyUrl();
-                }else if(status==2) {
+                if (status == 0) {
+                    statusName = "待审核";
+                } else if (status == 1) {
+                    statusName = "审核中";
+                    url = article.getVerifyUrl();
+                } else if (status == 2) {
                     statusName = "已审核";
-                }else if(status==3) {
+                } else if (status == 3) {
                     statusName = "已退稿";
-                }else if(status==4) {
+                } else if (status == 4) {
                     statusName = "已删除";
                 }
                 row.createCell((short) 2).setCellValue(url);
-                Long price=article.getCustomPrice();
-                if(typeParam.equals("2")){
-                    price=article.getCostPrice();
+                Long price = article.getCustomPrice();
+                if (typeParam.equals("2")) {
+                    price = article.getCostPrice();
                 }
-                row.createCell((short)3).setCellValue(price);
-                row.createCell((short)4).setCellValue(DateUtils.formatDateTime(article.getCreateDate()));
-                row.createCell((short)5).setCellValue(article.getVerifyDate()==null?"":DateUtils.formatDateTime(article.getVerifyDate()));
-                row.createCell((short)6).setCellValue(statusName);
-                row.createCell((short)7).setCellValue(article.getVerifyStatus()==null?"未结算":"已结算");
-                row.createCell((short)9).setCellValue(article.getRemark());
+                row.createCell((short) 3).setCellValue(price);
+                row.createCell((short) 4).setCellValue(DateUtils.formatDateTime(article.getCreateDate()));
+                row.createCell((short) 5).setCellValue(article.getVerifyDate() == null ? "" : DateUtils.formatDateTime(article.getVerifyDate()));
+                row.createCell((short) 6).setCellValue(statusName);
+                row.createCell((short) 7).setCellValue(article.getVerifyStatus() == null ? "未结算" : "已结算");
+                row.createCell((short) 9).setCellValue(article.getRemark());
                 i++;
             }
             String fileName = "文章列表.xls";
@@ -249,11 +268,11 @@ public class ExelUtil {
             rep.flushBuffer();
             wb.write(bos);
             bos.flush();
-        }catch (Exception e){
-            log.error("导出文章列表失败",e);
-        }finally {
+        } catch (Exception e) {
+            log.error("导出文章列表失败", e);
+        } finally {
             try {
-                if(bos!=null){
+                if (bos != null) {
                     // bos.close();
                 }
                 wb.close();

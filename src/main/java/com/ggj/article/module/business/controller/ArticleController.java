@@ -86,6 +86,7 @@ public class ArticleController extends BaseController {
 		List<CustomUserInfo> customUserInfoList = customInfoService.getCustomUser(principal.getId());
 		model.addAttribute("customUserInfoList", customUserInfoList);
 		model.addAttribute("article", article);
+		model.addAttribute("userId",principal.getId());
 		model.addAttribute("articleStatusList", dictionaryTableService.findList(new DictionaryTable("article_status")));
 		model.addAttribute("timeTypeList", dictionaryTableService.findList(new DictionaryTable("time_type")));
 		return "bussiness/article/bussiness_article_list";
@@ -119,19 +120,18 @@ public class ArticleController extends BaseController {
 				article.setUserId(principal.getId());
 			} else if (typeParam.equals("2")) {
 				//待审核的所有编辑都可以看到
-				if(article.getStatus()==null||(article.getStatus()!=null&&article.getStatus()==0)){
-					article.setStatus(0);
-					Media media=new Media();
-					media.setUserId(principal.getId());
-					List<Media> mediaList=mediaService.findEditorList(media).getList();
-					List<String> idList=new ArrayList<String>();
-					if(mediaList!=null&&mediaList.size()>0){
-						for (Media m : mediaList) {
-							idList.add(m.getId()+"");
-						}
-					}
-					article.setMediaIdStr( StringUtils.join(idList,","));
-					article.setMediaIdStr( StringUtils.join(idList,","));
+				if(article.getStatus()==null||(article.getStatus()!=null&&(article.getStatus()==0||article.getStatus()==1))){
+					article.setStatus(null);
+//					Media media=new Media();
+//					media.setUserId(principal.getId());
+//					List<Media> mediaList=mediaService.findEditorList(media).getList();
+//					List<String> idList=new ArrayList<String>();
+//					if(mediaList!=null&&mediaList.size()>0){
+//						for (Media m : mediaList) {
+//							idList.add(m.getId()+"");
+//						}
+//					}
+					//article.setMediaIdStr( StringUtils.join(idList,","));
 				//已经审核的只有当前编辑的编辑才可以看到
 				}else {
 					article.setEditorId(principal.getId());
@@ -217,6 +217,7 @@ public class ArticleController extends BaseController {
 	public String verifying(Article article, RedirectAttributes redirectAttributes) {
 		try {
 			if (article != null && article.getId() != null) {
+				article.setEditorId(UserUtils.getPrincipal().getId());
 				articleService.verifying(article);
 				addMessage(redirectAttributes, "审核成功!");
 			}
@@ -226,7 +227,21 @@ public class ArticleController extends BaseController {
 		redirectAttributes.addAttribute("typeParam", article.getTypeParam());
 		return "redirect:/article/";
 	}
-	
+	@RequiresPermissions("bussiness:article:verify")
+	@RequestMapping(value = "/updateurl")
+	public String updateurl(Article article, RedirectAttributes redirectAttributes) {
+		try {
+			if (article != null && article.getId() != null) {
+				articleService.update(article);
+				addMessage(redirectAttributes, "审核成功!");
+			}
+		} catch (Exception e) {
+			log.error("审核稿件失败！" + e.getLocalizedMessage());
+		}
+		redirectAttributes.addAttribute("typeParam", article.getTypeParam());
+		return "redirect:/article/";
+	}
+
 	@RequiresPermissions("bussiness:article:verify")
 	@RequestMapping(value = "/back")
 	public String back(Article article, RedirectAttributes redirectAttributes) {
