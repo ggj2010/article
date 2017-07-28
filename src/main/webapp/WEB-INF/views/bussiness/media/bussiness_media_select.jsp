@@ -62,7 +62,7 @@
 								<td>${entity.name}</td>
 								<!--价格-->
 								<c:if test="${principal.userType==0}">
-									<td>${entity.bronzePrice}</td>
+									<td>${entity.silverPrice}</td>
 								</c:if>
 								<c:if test="${principal.userType==1}">
 									<c:if test="${principal.level=='金牌'}">

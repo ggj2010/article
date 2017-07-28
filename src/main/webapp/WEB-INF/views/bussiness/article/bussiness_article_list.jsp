@@ -192,11 +192,11 @@
                                                     class="glyphicon glyphicon-edit"></span> </a>
                                         </shiro:hasPermission>
                                     </c:when>
-                                    <c:when test="${entity.status==2&& entity.editorId==userId}">
+                                    <c:when test="${entity.status==2}">
                                             <a class="btn btn-info"
                                                href="${entity.verifyUrl}"
-                                               data-toggle="tooltip" data-placement="top" title="查看链接"><span
-                                                    class="glyphicon glyphicon-eye-open"  target="_blank"></span> </a>
+                                               data-toggle="tooltip" data-placement="top" title="查看链接"  target="_blank"><span
+                                                    class="glyphicon glyphicon-eye-open"></span> </a>
                                     </c:when>
                                     <c:when test="${entity.status==3}">
                                         <shiro:hasPermission name="bussiness:media:delete">
