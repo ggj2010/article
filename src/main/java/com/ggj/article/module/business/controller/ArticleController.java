@@ -205,6 +205,7 @@ public class ArticleController extends BaseController {
 	public String delete(Article article, RedirectAttributes redirectAttributes) {
 		try {
 			if (article != null && article.getId() != null) {
+				article.setStatus(4);
 				articleService.delete(article);
 				addMessage(redirectAttributes, "稿件删除成功!");
 			}

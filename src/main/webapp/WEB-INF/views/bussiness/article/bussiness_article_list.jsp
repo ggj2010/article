@@ -118,8 +118,11 @@
                                     <c:when test="${entity.status==1}">
                                         审核中
                                     </c:when>
-                                    <c:when test="${entity.status==2}">
-                                        已审核
+                                    <c:when test="${entity.status==2&&entity.verifyStatus!='1'}">
+                                        未结算
+                                    </c:when>
+                                    <c:when test="${entity.status==2&&entity.verifyStatus=='1'}">
+                                        已结算
                                     </c:when>
                                     <c:when test="${entity.status==3}">
                                         已退稿
@@ -157,7 +160,7 @@
                                            ><span
                                                 class="glyphicon glyphicon-step-backward"></span></a>
                                         </shiro:hasPermission>
-                                        <shiro:hasPermission name="bussiness:media:delete">
+                                        <shiro:hasPermission name="bussiness:article:delete">
                                         <a class="btn  btn-info" url="${path}/article/delete?id=${entity.id}&typeParam=${article.typeParam}"
                                            data-toggle="tooltip" data-placement="top" title="删除"
                                            name="delete"><span
@@ -177,7 +180,7 @@
                                            ><span
                                                 class="glyphicon glyphicon-step-backward"></span></a>
                                         </shiro:hasPermission>
-                                        <shiro:hasPermission name="bussiness:media:delete">
+                                        <shiro:hasPermission name="bussiness:article:delete">
                                         <a class="btn  btn-info" url="${path}/article/delete?id=${entity.id}&typeParam=${article.typeParam}"
                                            data-toggle="tooltip" data-placement="top" title="删除"
                                            name="delete"><span
@@ -191,6 +194,12 @@
                                                data-toggle="tooltip" data-placement="top" title="修改链接"><span
                                                     class="glyphicon glyphicon-edit"></span> </a>
                                         </shiro:hasPermission>
+                                        <shiro:hasPermission name="bussiness:article:delete">
+                                            <a class="btn  btn-info" url="${path}/article/delete?id=${entity.id}&typeParam=${article.typeParam}"
+                                               data-toggle="tooltip" data-placement="top" title="删除"
+                                               name="delete"><span
+                                                    class="glyphicon glyphicon-trash"></span></a>
+                                        </shiro:hasPermission>
                                     </c:when>
                                     <c:when test="${entity.status==2}">
                                             <a class="btn btn-info"
@@ -198,8 +207,8 @@
                                                data-toggle="tooltip" data-placement="top" title="查看链接"  target="_blank"><span
                                                     class="glyphicon glyphicon-eye-open"></span> </a>
                                     </c:when>
-                                    <c:when test="${entity.status==3}">
-                                        <shiro:hasPermission name="bussiness:media:delete">
+                                    <c:when test="${entity.status==3&&entity.editorId==userId}">
+                                        <shiro:hasPermission name="bussiness:article:delete">
                                         <a class="btn  btn-info" url="${path}/article/delete?id=${entity.id}&typeParam=${article.typeParam}"
                                            data-toggle="tooltip" data-placement="top" title="删除"
                                            name="delete"><span

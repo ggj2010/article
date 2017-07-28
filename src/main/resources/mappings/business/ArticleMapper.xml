@@ -92,9 +92,9 @@
     a.flag=#{flag} order by a.id desc
   </select>
 
-  <delete id="delete" parameterType="Article">
-    delete from tb_article  where id=#{id}
-  </delete>
+  <update id="delete" parameterType="Article">
+    update tb_article   set status = #{status,jdbcType=TINYINT} where id=#{id}
+  </update>
   <insert id="insert" parameterType="com.ggj.article.module.business.bean.Article">
     insert into tb_article (id, user_id, custom_id,
     media_id, media_name,title, custom_name,
