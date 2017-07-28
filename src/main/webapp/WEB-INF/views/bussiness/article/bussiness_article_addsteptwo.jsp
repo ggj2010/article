@@ -145,13 +145,19 @@
                         var articleInfo = {};
                         articleInfo.title=$(article[i]).find("input[name='title']").val();
                         if(i==0){
-                            var customType=$("input[name='custom']:checked").val();
-                            if(customType=="old"){
-                                articleInfo.customId=$(article[i]).find("select[name='customId']").val();
-                                articleInfo.customName=$(article[i]).find("option:selected").text();
-                            }else{
-                                articleInfo.customId="0";
-                                articleInfo.customName=$("#customName").val();
+                            var userType="${principal.userType}";
+                            if(userType=="0") {
+                                var customType = $("input[name='custom']:checked").val();
+                                if (customType == "old") {
+                                    articleInfo.customId = $(article[i]).find("select[name='customId']").val();
+                                    articleInfo.customName = $(article[i]).find("option:selected").text();
+                                } else {
+                                    articleInfo.customId = "0";
+                                    articleInfo.customName = $("#customName").val();
+                                }
+                            }else {
+                                articleInfo.customId = "${principal.id}";
+                                articleInfo.customName = "(客发)-${principal.name}";
                             }
                         }
                         articleInfo.type=$(article[i]).find("input[name='type"+(i+1)+"']:checked").val();

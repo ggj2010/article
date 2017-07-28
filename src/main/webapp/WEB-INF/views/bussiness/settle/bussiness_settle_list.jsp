@@ -56,8 +56,8 @@
                     </tr>
                     <c:forEach items="${pageInfo.list}" var="entity">
                         <tr <c:if test="${entity.status=='0'}">class="success"</c:if> <c:if test="${entity.status=='0'}">class="danger"</c:if>  >
-                            <td title="${entity.article.title}">${fn:substring(entity.article.title, 0, 10)}</td>
-                            <td title="${entity.article.mediaName}">${fn:substring(entity.article.mediaName, 0, 10)}</td>
+                            <td title="${entity.article.title}">${entity.article.title}</td>
+                            <td title="${entity.article.mediaName}">${entity.article.mediaName}</td>
                             <td>
                                 <c:if test="${entity.status=='0'}">
                                     未结算

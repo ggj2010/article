@@ -116,8 +116,10 @@ public class ArticleController extends BaseController {
 		}
 		String typeParam = article.getTypeParam();
 		if (StringUtils.isNotEmpty(typeParam)) {
+			//员工为1
 			if (typeParam.equals("1")) {
 				article.setUserId(principal.getId());
+				//编辑为2
 			} else if (typeParam.equals("2")) {
 				//待审核的所有编辑都可以看到
 				if(article.getStatus()==null||(article.getStatus()!=null&&(article.getStatus()==0||article.getStatus()==1))){
@@ -137,6 +139,7 @@ public class ArticleController extends BaseController {
 					article.setEditorId(principal.getId());
 				}
 			} else if (typeParam.equals("3")) {
+				//顾客为三
 				article.setCustomId(principal.getId());
 			}
 		}

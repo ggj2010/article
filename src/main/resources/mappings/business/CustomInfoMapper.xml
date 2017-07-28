@@ -74,7 +74,7 @@
     <if test="customStatus != null and customStatus != ''">
       a.custom_status =#{customStatus} and
     </if>
-    a.flag=#{flag} and b.flag=#{flag}
+    a.user_id = #{customUserId,jdbcType=INTEGER} and a.flag="0"and b.flag="0"
   </select>
   <update id="delete" parameterType="CustomInfo">
     update tb_custominfo set flag=#{flag} where id=#{id}

@@ -13,6 +13,7 @@
     <result column="article_type" jdbcType="TINYINT" property="articleType" />
     <result column="url" jdbcType="VARCHAR" property="url" />
     <result column="verify_url" jdbcType="VARCHAR" property="verifyUrl" />
+    <result column="refund_remark" jdbcType="VARCHAR" property="refundRemark" />
     <result column="cost_price" jdbcType="DECIMAL" property="costPrice" />
     <result column="custom_price" jdbcType="DECIMAL" property="customPrice" />
     <result column="remark" jdbcType="VARCHAR" property="remark" />
@@ -25,7 +26,7 @@
   </resultMap>
   <sql id="Base_Column_List">
     id, user_id, custom_id,editor_id, media_id,media_name, title, custom_name, article_type,cost_price, custom_price,  url,verify_url, remark,
-    status, flag, verify_date,create_date, create_user
+    status, flag, verify_date,create_date, create_user,refund_remark
   </sql>
   <select id="get" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select
@@ -69,7 +70,7 @@
         a.status = #{status,jdbcType=INTEGER} and
       </when>
       <otherwise>
-        a.status in (0,1) and
+        a.status in (0,1,2,3) and
       </otherwise>
     </choose>
 
@@ -141,6 +142,9 @@
       </if>
       <if test="verifyUrl != null and verifyUrl != ''">
         verify_url = #{verifyUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="refundRemark != null and refundRemark != ''">
+        refund_remark = #{refundRemark,jdbcType=VARCHAR},
       </if>
       <if test="remark != null and remark != ''">
         remark = #{remark,jdbcType=VARCHAR},

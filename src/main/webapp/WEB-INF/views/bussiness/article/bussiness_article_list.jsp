@@ -74,6 +74,7 @@
                         <th>标题</th>
                         <th>媒体</th>
                         <th>状态</th>
+                        <th>客户</th>
                         <th>报价</th>
                         <th>发布时间</th>
                         <th>审核时间</th>
@@ -98,13 +99,17 @@
                                 </c:choose>
                         "
                         >
-                            <td title="${entity.title}"><a href="<c:choose><c:when test="${entity.status==2}">${entity.verifyUrl}</c:when><c:otherwise>${entity.url}</c:otherwise>
-</c:choose>"                                            <shiro:hasPermission name="bussiness:mediaEditor:edit">
+                            <td title="${entity.title}"><a href="${entity.url}" <shiro:hasPermission name="bussiness:mediaEditor:edit">
                                                            <c:if test="${entity.status==0}">onclick="verifying(${entity.id})"</c:if>
                                 </shiro:hasPermission>
 
-                                                           target="_blank">${fn:substring(entity.title, 0, 10)}</a></td>
-                            <td title="${entity.mediaName}">${fn:substring(entity.mediaName, 0, 10)}</td>
+                                                           target="_blank">${entity.title}
+                                <c:if test="${entity.status==3}">
+                                    -(${entity.refundRemark})
+                                 </c:if>
+
+                            </a></td>
+                            <td title="${entity.mediaName}">${entity.mediaName}</td>
                             <td>
                                 <c:choose>
                                     <c:when test="${entity.status==0}">
@@ -124,6 +129,7 @@
                                     </c:when>
                                 </c:choose>
                             </td>
+                            <td>${entity.customName}</td>
                             <c:choose>
                                 <c:when test="${article.typeParam=='2'}">
                                     <td>${entity.costPrice}</td>
@@ -146,7 +152,7 @@
                                                 class="glyphicon glyphicon-user"></span> </a>
 
                                         <a class="btn  btn-info"
-                                           href="javaScript:back('${entity.id}')"
+                                           href="javaScript:back('${entity.title}','${entity.id}')"
                                            data-toggle="tooltip" data-placement="top" title="退稿"
                                            ><span
                                                 class="glyphicon glyphicon-step-backward"></span></a>
@@ -166,7 +172,7 @@
                                                 class="glyphicon glyphicon-user"></span> </a>
 
                                         <a class="btn  btn-info"
-                                           href="javaScript:back('${entity.id}')"
+                                           href="javaScript:back('${entity.title}','${entity.id}')"
                                            data-toggle="tooltip" data-placement="top" title="退稿"
                                            ><span
                                                 class="glyphicon glyphicon-step-backward"></span></a>
@@ -185,6 +191,12 @@
                                                data-toggle="tooltip" data-placement="top" title="修改链接"><span
                                                     class="glyphicon glyphicon-edit"></span> </a>
                                         </shiro:hasPermission>
+                                    </c:when>
+                                    <c:when test="${entity.status==2&& entity.editorId==userId}">
+                                            <a class="btn btn-info"
+                                               href="${entity.verifyUrl}"
+                                               data-toggle="tooltip" data-placement="top" title="查看链接"><span
+                                                    class="glyphicon glyphicon-eye-open"  target="_blank"></span> </a>
                                     </c:when>
                                     <c:when test="${entity.status==3}">
                                         <shiro:hasPermission name="bussiness:media:delete">
@@ -215,7 +227,7 @@
                 <button type="button" class="close" data-dismiss="modal">
                     <span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
                 </button>
-                <h4 class="modal-title">审核稿件</h4>
+                <h4 class="modal-title">稿件信息</h4>
             </div>
             <div class="modal-body">
                 <div class="container-fluid">
@@ -228,10 +240,17 @@
                                     <input type="hidden" class="form-control" name="id" id="articleId">
                                 </div>
                             </div>
-                            <div class="form-group">
+                            <div class="form-group" id="articleUrlDiv" >
                                 <label for="verifyUrl" class="col-sm-2 control-label">稿件地址</label>
                                 <div class="col-sm-10">
                                     <input type="text" class="form-control required" name="verifyUrl" id="verifyUrl">
+                                </div>
+                            </div>
+
+                            <div class="form-group" style="display: none" id="refundRemarkDiv">
+                                <label for="refundRemark" class="col-sm-2 control-label">退稿原因</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control required" name="refundRemark" id="refundRemark">
                                 </div>
                             </div>
                     </div>
@@ -318,8 +337,13 @@
     function verifying(id) {
         location.href = "${path}/article/verifying?id=" + id+"&typeParam=${article.typeParam}";
     }
-    function back(id) {
-        location.href = "${path}/article/back?id=" + id+"&typeParam=${article.typeParam}";
+    function back(name,id) {
+        $("#articleTitleId").val(name);
+        $("#articleUrlDiv").hide();
+        $("#refundRemarkDiv").show();
+        $("#articleId").val(id);
+        $("#verifyForm").attr("action","${path}/article/back?id=" + id+"&typeParam=${article.typeParam}")
+        $("#verifyModule").modal('show');
     }
     function verify(name, id) {
         $("#articleTitleId").val(name);
