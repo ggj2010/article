@@ -69,7 +69,9 @@
 							<th>名称</th>
 							<c:if test="${principal.userType==0}">
 							<th>金/银/铜价格</th>
-							<th>成本价格</th>
+							<shiro:hasPermission name="bussiness:media:edit">
+								<th>成本价格</th>
+							</shiro:hasPermission>
 							</c:if>
 							<c:if test="${principal.userType==1}">
 							<th>价格</th>
@@ -89,17 +91,19 @@
 								<td title="${entity.remark}">${entity.name}</td>
 								<c:if test="${principal.userType==0}">
 								<td>${entity.goldPrice}/${entity.silverPrice}/${entity.bronzePrice}</td>
-								<td>${entity.costPrice}</td>
+								<shiro:hasPermission name="bussiness:media:edit">
+									<td>${entity.costPrice}</td>
+								</shiro:hasPermission>
 								</c:if>
 								<c:if test="${principal.userType==1}">
 									<c:if test="${principal.level=='金牌'}">
 										<td>${entity.goldPrice}</td>
 									</c:if>
 									<c:if test="${principal.level=='铜牌'}">
-										<td>${entity.silverPrice}</td>
+										<td>${entity.bronzePrice}</td>
 									</c:if>
 									<c:if test="${principal.level=='银牌'}">
-										<td>${entity.bronzePrice}</td>
+										<td>${entity.silverPrice}</td>
 									</c:if>
 								</c:if>
 

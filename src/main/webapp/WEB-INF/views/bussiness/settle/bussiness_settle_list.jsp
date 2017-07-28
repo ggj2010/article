@@ -30,6 +30,7 @@
             </form:select>
         </div>
         <button type="submit" class="btn btn-info">查询</button>
+
         <a type="button" onclick="location.reload();" class="btn btn-info">刷新</a>
     </form:form>
     <div class="panel panel-default">

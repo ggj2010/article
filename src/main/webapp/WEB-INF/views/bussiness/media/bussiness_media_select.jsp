@@ -76,7 +76,7 @@
 									</c:if>
 								</c:if>
 								<%--<td>${entity.costPrice}</td>--%>
-								<td>${entity.collectionType}</td>
+								<td>${entity.collectionType}${principal.level}</td>
 								<td>${entity.mediaType}</td>
 								<td>${entity.mediaRegion}</td>
 								<td>${entity.publishSpeed}</td>
