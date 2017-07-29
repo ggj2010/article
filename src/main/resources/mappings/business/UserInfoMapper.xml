@@ -99,4 +99,14 @@
       salt = #{salt,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
+
+  <select id="findUserInfoList" resultMap="BaseResultMap"  parameterType="java.lang.Integer">
+    select a.id ,a.user_name
+    from tb_userinfo a
+    where
+    <if test="id != null">
+      a.id=#{id,jdbcType=INTEGER} and
+    </if>
+     a.flag="0" and a.user_type=0
+  </select>
 </mapper>

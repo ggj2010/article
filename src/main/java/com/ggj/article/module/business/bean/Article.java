@@ -11,9 +11,12 @@ import lombok.Setter;
 @Getter
 @Setter
 public class Article extends BaseEntity {
-	
+	//员工id
 	private Integer userId;
+	private String userName;
+	//顾客id
 	private Integer customId;
+	//员工id
 	private Integer editorId;
 	private Integer mediaId;
 	private String mediaIdStr;

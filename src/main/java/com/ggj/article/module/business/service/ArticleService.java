@@ -53,6 +53,8 @@ public class ArticleService extends CrudService<ArticleMapper, Article> {
         UserInfo userInfo= getPrincipal().getUserInfo();
         String customId="";
         String customName="";
+        String userName="";
+        Integer userId=0;
         for (Object o : articleJsonArray) {
             Article article = new Article();
             JSONObject j = (JSONObject) o;
@@ -104,10 +106,16 @@ public class ArticleService extends CrudService<ArticleMapper, Article> {
                 article.setCostPrice(costPrice);
                 article.setMediaName(media.getName());
                 if(userInfo.getUserType()==0) {
-                    article.setUserId(UserUtils.getPrincipal().getId());
+                    userId=UserUtils.getPrincipal().getId();
+                    userName=getUserName(userName,userId);
+                    article.setUserId(userId);
+                    article.setUserName(userName);
                 }else {
                     //个人id
-                    article.setUserId(userInfo.getCustomInfo().getCustomUserId());
+                    userId=userInfo.getCustomInfo().getCustomUserId();
+                    userName=getUserName(userName,userId);
+                    article.setUserName(userName);
+                    article.setUserId(userId);
                     article.setCustomId(userInfo.getId());
                 }
                 article.setStatus(0);
@@ -117,6 +125,14 @@ public class ArticleService extends CrudService<ArticleMapper, Article> {
         }
 
     }
+
+    private String getUserName(String userName, Integer userId) {
+        if(StringUtils.isEmpty(userName)){
+            return userInfoMapper.findUserInfoList(userId).get(0).getUserName();
+        }
+        return userName;
+    }
+
     @Transactional(readOnly = false)
     public void verifying(Article article) {
         article.setStatus(1);
@@ -162,5 +178,9 @@ public class ArticleService extends CrudService<ArticleMapper, Article> {
     @Transactional(readOnly = false)
     public void update(Article article) {
         super.dao.update(article);
+    }
+
+    public List<UserInfo> getUserInfo() {
+        return userInfoMapper.findUserInfoList(null);
     }
 }

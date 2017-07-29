@@ -255,7 +255,7 @@ public class ExelUtil {
                 row.createCell((short) 5).setCellValue(article.getVerifyDate() == null ? "" : DateUtils.formatDateTime(article.getVerifyDate()));
                 row.createCell((short) 6).setCellValue(statusName);
                 row.createCell((short) 7).setCellValue(article.getVerifyStatus() == null ? "未结算" : "已结算");
-                row.createCell((short) 9).setCellValue(article.getRemark());
+                row.createCell((short) 8).setCellValue(article.getRemark());
                 i++;
             }
             String fileName = "文章列表.xls";

@@ -21,12 +21,22 @@
         <input type="hidden" name="pageNum" id="pageNum" value="${pageInfo.pageNum}">
         <input type="hidden" name="pageSize" id="pageSize" value="${pageInfo.pageSize}">
         <form:hidden path="typeParam"/>
-        <c:if test="${article.typeParam=='1'|| article.typeParam=='2' || article.typeParam==null }">
+        <c:if test="${article.typeParam=='1'|| article.typeParam==null }">
         <div class="form-group">
             <label for="customName">客户信息</label>
             <form:select id="customName" path="customId" class="form-control">
                 <form:option value="" label="请选择"/>
                 <form:options items="${customUserInfoList}" itemValue="id"
+                              itemLabel="userName"/>
+            </form:select>
+        </div>
+        </c:if>
+        <c:if test="${article.typeParam=='2'|| article.typeParam==null }">
+        <div class="form-group">
+            <label for="userName">员工信息</label>
+            <form:select id="userName" path="userId" class="form-control">
+                <form:option value="" label="请选择"/>
+                <form:options items="${userInfoList}" itemValue="id"
                               itemLabel="userName"/>
             </form:select>
         </div>
@@ -74,7 +84,12 @@
                         <th>标题</th>
                         <th>媒体</th>
                         <th>状态</th>
+                        <c:if test="${article.typeParam=='1'|| article.typeParam==null }">
                         <th>客户</th>
+                        </c:if>
+                        <c:if test="${article.typeParam=='2'|| article.typeParam==null }">
+                        <th>员工</th>
+                        </c:if>
                         <th>报价</th>
                         <th>发布时间</th>
                         <th>审核时间</th>
@@ -132,7 +147,13 @@
                                     </c:when>
                                 </c:choose>
                             </td>
-                            <td>${entity.customName}</td>
+
+                            <c:if test="${article.typeParam=='1'|| article.typeParam==null }">
+                                <td>${entity.customName}</td>
+                            </c:if>
+                            <c:if test="${article.typeParam=='2'|| article.typeParam==null }">
+                                <td>${entity.userName}</td>
+                            </c:if>
                             <c:choose>
                                 <c:when test="${article.typeParam=='2'}">
                                     <td>${entity.costPrice}</td>

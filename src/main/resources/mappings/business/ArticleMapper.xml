@@ -8,6 +8,7 @@
     <result column="media_id" jdbcType="INTEGER" property="mediaId" />
     <result column="editor_id" jdbcType="INTEGER" property="editorId" />
     <result column="media_name" jdbcType="VARCHAR" property="mediaName" />
+    <result column="user_name" jdbcType="VARCHAR" property="userName" />
     <result column="title" jdbcType="VARCHAR" property="title" />
     <result column="custom_name" jdbcType="VARCHAR" property="customName" />
     <result column="article_type" jdbcType="TINYINT" property="articleType" />
@@ -66,6 +67,9 @@
       a.media_id in(#{mediaIdStr}) and
     </if>
     <choose>
+      <when test="status == 5">
+        a.status in (0,1) and
+      </when>
       <when test="status != null">
         a.status = #{status,jdbcType=INTEGER} and
       </when>
@@ -97,12 +101,12 @@
   </update>
   <insert id="insert" parameterType="com.ggj.article.module.business.bean.Article">
     insert into tb_article (id, user_id, custom_id,
-    media_id, media_name,title, custom_name,
+    media_id, media_name,user_name,title, custom_name,
     article_type,cost_price, custom_price,  url, remark,
     status, flag, create_date,
     create_user)
     values (#{id,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, #{customId,jdbcType=INTEGER},
-    #{mediaId,jdbcType=INTEGER},#{mediaName,jdbcType=VARCHAR}, #{title,jdbcType=VARCHAR}, #{customName,jdbcType=VARCHAR},
+    #{mediaId,jdbcType=INTEGER},#{mediaName,jdbcType=VARCHAR},#{userName,jdbcType=VARCHAR}, #{title,jdbcType=VARCHAR}, #{customName,jdbcType=VARCHAR},
     #{articleType,jdbcType=TINYINT}, #{costPrice,jdbcType=DECIMAL}, #{customPrice,jdbcType=DECIMAL},  #{url,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR},
     #{status,jdbcType=TINYINT}, #{flag,jdbcType=VARCHAR}, #{createDate,jdbcType=TIMESTAMP},
     #{createUser,jdbcType=VARCHAR})

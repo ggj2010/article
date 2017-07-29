@@ -5,7 +5,7 @@ import java.util.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.ggj.article.module.business.bean.Media;
+import com.ggj.article.module.business.bean.*;
 import com.ggj.article.module.business.service.MediaService;
 import com.ggj.article.module.common.utils.*;
 import org.apache.commons.lang3.StringUtils;
@@ -22,9 +22,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.aliyun.oss.model.PutObjectResult;
 import com.ggj.article.module.base.web.BaseController;
-import com.ggj.article.module.business.bean.Article;
-import com.ggj.article.module.business.bean.ArticleVO;
-import com.ggj.article.module.business.bean.CustomUserInfo;
 import com.ggj.article.module.business.service.ArticleService;
 import com.ggj.article.module.business.service.CustomInfoService;
 import com.ggj.article.module.common.shiro.authc.Principal;
@@ -79,7 +76,7 @@ public class ArticleController extends BaseController {
 	@RequestMapping(value = "")
 	public String list(Article article, HttpServletRequest request, HttpServletResponse rep, Model model) {
 		Principal principal = UserUtils.getPrincipal();
-		setArticleParam(article,principal);
+		setArticleParam(article,principal,model);
 		pageUtils.setPage(request, rep);
 		PageInfo<Article> pageInfo = articleService.findPage(article);
 		model.addAttribute("pageInfo", pageInfo);
@@ -98,7 +95,7 @@ public class ArticleController extends BaseController {
 	public String exportArticle(Article article, HttpServletRequest request, RedirectAttributes redirectAttributes, HttpServletResponse rep, Model model) {
 		try {
 			Principal principal = UserUtils.getPrincipal();
-			setArticleParam(article,principal);
+			setArticleParam(article,principal, model);
 			List<Article> listArticle=articleService.findList(article);
 			ExelUtil.exportArticleExel(listArticle,rep,article.getTypeParam());
 			addMessage(redirectAttributes, "媒体导出成功!");
@@ -109,7 +106,7 @@ public class ArticleController extends BaseController {
 		return null;
 	}
 
-	private void setArticleParam(Article article,Principal principal) {
+	private void setArticleParam(Article article, Principal principal, Model model) {
 		if (StringUtils.isEmpty(article.getTimeType())) {
 			if (StringUtils.isNotEmpty(article.getBeginTimeStr()) || StringUtils.isNotEmpty(article.getEndTimeStr()))
 				article.setTimeType("1");
@@ -123,21 +120,14 @@ public class ArticleController extends BaseController {
 			} else if (typeParam.equals("2")) {
 				//待审核的所有编辑都可以看到
 				if(article.getStatus()==null||(article.getStatus()!=null&&(article.getStatus()==0||article.getStatus()==1))){
-					article.setStatus(null);
-//					Media media=new Media();
-//					media.setUserId(principal.getId());
-//					List<Media> mediaList=mediaService.findEditorList(media).getList();
-//					List<String> idList=new ArrayList<String>();
-//					if(mediaList!=null&&mediaList.size()>0){
-//						for (Media m : mediaList) {
-//							idList.add(m.getId()+"");
-//						}
-//					}
-					//article.setMediaIdStr( StringUtils.join(idList,","));
+					//特殊处理
+					article.setStatus(5);
 				//已经审核的只有当前编辑的编辑才可以看到
 				}else {
 					article.setEditorId(principal.getId());
 				}
+				List<UserInfo> listUserInfo=articleService.getUserInfo();
+				model.addAttribute("userInfoList",listUserInfo);
 			} else if (typeParam.equals("3")) {
 				//顾客为三
 				article.setCustomId(principal.getId());
