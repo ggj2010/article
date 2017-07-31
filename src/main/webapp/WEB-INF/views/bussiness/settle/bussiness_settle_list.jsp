@@ -110,7 +110,7 @@
             <div class="modal-body">
                 <div class="container-fluid">
                     <div class="form-horizontal">
-                        <form action="${path}/settle/save" method="post" id="verifyForm">
+                        <form action="${path}/settle/save" method="post" id="settleForm">
                             <div class="form-group">
                                 <label for="articleTitleId" class="col-sm-2 control-label">结算</label>
                                 <div class="col-sm-10">
@@ -160,17 +160,17 @@
             $("select").chosen();
 
             $("a[name='type']").on("click", function () {
-                $('#mediaForm')[0].reset();
+                $('#settleForm')[0].reset();
                 $("#pageNum").val("1");
                 $("select[name='type']").val($(this).attr("value"));
-                $('#mediaForm').submit();
+                $('#settleForm').submit();
             })
 
             $('[data-toggle="tooltip"]').tooltip();//提示框启用
 
             $("a[name='pages']").on("click", function () {
                 $("input[name='pageNum']").val($(this).attr("value"));
-                $("#mediaForm").submit();
+                $("#settleForm").submit();
             })
 
             if (${not empty message }) {
