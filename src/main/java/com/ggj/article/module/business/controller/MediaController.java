@@ -87,7 +87,7 @@ public class MediaController extends BaseController {
         return "bussiness/media/bussiness_media_list";
     }
 
-    @RequiresPermissions("bussiness:media:edit")
+    @RequiresPermissions("bussiness:media:import")
     @RequestMapping(value = "import")
     public String importMedia(Media media,HttpServletRequest request, RedirectAttributes redirectAttributes, HttpServletResponse rep, Model model, @RequestParam("meidaExelFile") MultipartFile meidaExelFile) {
         if(meidaExelFile!=null){
@@ -106,7 +106,7 @@ public class MediaController extends BaseController {
         model.addAttribute("media", media);
         return "bussiness/media/bussiness_media_list";
     }
-    @RequiresPermissions("bussiness:media:edit")
+    @RequiresPermissions("bussiness:media:export")
     @RequestMapping(value = "export")
     public String exportMedia(Media media,HttpServletRequest request, RedirectAttributes redirectAttributes, HttpServletResponse rep, Model model) {
             try {

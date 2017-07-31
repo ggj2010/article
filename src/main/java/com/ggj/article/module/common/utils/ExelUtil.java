@@ -81,7 +81,7 @@ public class ExelUtil {
     }
 
     private static String getIntCellValue(Cell cell) {
-        if(cell==null)
+        if (cell == null)
             return "0";
         cell.setCellType(Cell.CELL_TYPE_STRING);
         String value = cell.getStringCellValue();
@@ -99,6 +99,7 @@ public class ExelUtil {
         HSSFSheet sheet = wb.createSheet("媒体列表");
         BufferedOutputStream bos = null;
         try {
+            Long type = UserUtils.getPrincipal().getUserType();
             HSSFRow row = sheet.createRow((int) 0);
             // 第四步，创建单元格，并设置值表头 设置表头居中
             HSSFCellStyle style = wb.createCellStyle();
@@ -110,50 +111,89 @@ public class ExelUtil {
             style.setFont(font);
             HSSFCell cell = row.createCell((short) 0);
             cell.setCellValue("名称");
-            cell = row.createCell((short) 1);
-            cell.setCellValue("金牌价");
-            cell.setCellStyle(style);
-            cell = row.createCell((short) 2);
-            cell.setCellValue("银牌价");
-            cell.setCellStyle(style);
-            cell = row.createCell((short) 3);
-            cell.setCellValue("铜牌价");
-            cell.setCellStyle(style);
-            cell = row.createCell((short) 4);
-            cell.setCellValue("收录类型");
-            cell.setCellStyle(style);
-            cell = row.createCell((short) 5);
-            cell.setCellValue("媒体类型");
-            cell.setCellStyle(style);
-            cell = row.createCell((short) 6);
-            cell.setCellValue("区域");
-            cell.setCellStyle(style);
-            cell = row.createCell((short) 7);
-            cell.setCellValue("发布速度");
-            cell.setCellStyle(style);
-            cell = row.createCell((short) 8);
-            cell.setCellValue("百度权重");
-            cell.setCellStyle(style);
-            cell = row.createCell((short) 9);
-            cell.setCellValue("备注");
-            cell.setCellStyle(style);
-            cell = row.createCell((short) 10);
-            cell.setCellValue("案例网址");
-            cell.setCellStyle(style);
+            if (type == 0) {
+                cell = row.createCell((short) 1);
+                cell.setCellValue("金牌价");
+                cell.setCellStyle(style);
+                cell = row.createCell((short) 2);
+                cell.setCellValue("银牌价");
+                cell.setCellStyle(style);
+                cell = row.createCell((short) 3);
+                cell.setCellValue("铜牌价");
+                cell.setCellStyle(style);
+                cell = row.createCell((short) 4);
+                cell.setCellValue("收录类型");
+                cell.setCellStyle(style);
+                cell = row.createCell((short) 5);
+                cell.setCellValue("媒体类型");
+                cell.setCellStyle(style);
+                cell = row.createCell((short) 6);
+                cell.setCellValue("区域");
+                cell.setCellStyle(style);
+                cell = row.createCell((short) 7);
+                cell.setCellValue("发布速度");
+                cell.setCellStyle(style);
+                cell = row.createCell((short) 8);
+                cell.setCellValue("百度权重");
+                cell.setCellStyle(style);
+                cell = row.createCell((short) 9);
+                cell.setCellValue("备注");
+                cell.setCellStyle(style);
+                cell = row.createCell((short) 10);
+                cell.setCellValue("案例网址");
+                cell.setCellStyle(style);
+            } else {
+                cell = row.createCell((short) 1);
+                cell.setCellValue("价格");
+                cell.setCellStyle(style);
+                cell = row.createCell((short) 2);
+                cell.setCellValue("收录类型");
+                cell.setCellStyle(style);
+                cell = row.createCell((short) 3);
+                cell.setCellValue("媒体类型");
+                cell.setCellStyle(style);
+                cell = row.createCell((short) 4);
+                cell.setCellValue("区域");
+                cell.setCellStyle(style);
+                cell = row.createCell((short) 5);
+                cell.setCellValue("发布速度");
+                cell.setCellStyle(style);
+                cell = row.createCell((short) 6);
+                cell.setCellValue("百度权重");
+                cell.setCellStyle(style);
+                cell = row.createCell((short) 7);
+                cell.setCellValue("备注");
+                cell.setCellStyle(style);
+                cell = row.createCell((short) 8);
+                cell.setCellValue("案例网址");
+                cell.setCellStyle(style);
+            }
             int i = 1;
             for (Media media : listMedia) {
                 row = sheet.createRow((int) i);
                 row.createCell((short) 0).setCellValue(media.getName());
-                row.createCell((short) 1).setCellValue(media.getGoldPrice());
-                row.createCell((short) 2).setCellValue(media.getSilverPrice());
-                row.createCell((short) 3).setCellValue(media.getBronzePrice());
-                row.createCell((short) 4).setCellValue(media.getCollectionType());
-                row.createCell((short) 5).setCellValue(media.getMediaType());
-                row.createCell((short) 6).setCellValue(media.getMediaRegion());
-                row.createCell((short) 7).setCellValue(media.getPublishSpeed());
-                row.createCell((short) 8).setCellValue(media.getBaiduSeo() == null ? 1 : media.getBaiduSeo());
-                row.createCell((short) 9).setCellValue(media.getRemark());
-                row.createCell((short) 10).setCellValue(media.getExampleUrl());
+                if (type == 0) {
+                    row.createCell((short) 1).setCellValue(media.getGoldPrice());
+                    row.createCell((short) 2).setCellValue(media.getSilverPrice());
+                    row.createCell((short) 3).setCellValue(media.getBronzePrice());
+                    row.createCell((short) 4).setCellValue(media.getCollectionType());
+                    row.createCell((short) 5).setCellValue(media.getMediaType());
+                    row.createCell((short) 6).setCellValue(media.getMediaRegion());
+                    row.createCell((short) 7).setCellValue(media.getPublishSpeed());
+                    row.createCell((short) 8).setCellValue(media.getBaiduSeo() == null ? 1 : media.getBaiduSeo());
+                    row.createCell((short) 9).setCellValue(media.getRemark());
+                    row.createCell((short) 10).setCellValue(media.getExampleUrl());
+                } else {
+                    Long price = getCustomPrice(media);
+                    row.createCell((short) 1).setCellValue(price);
+                    row.createCell((short) 2).setCellValue(media.getCollectionType());
+                    row.createCell((short) 3).setCellValue(media.getMediaType());
+                    row.createCell((short) 4).setCellValue(media.getMediaRegion());
+                    row.createCell((short) 5).setCellValue(media.getPublishSpeed());
+                    row.createCell((short) 6).setCellValue(media.getBaiduSeo() == null ? 1 : media.getBaiduSeo());
+                    row.createCell((short) 7).setCellValue(media.getRemark());
+                    row.createCell((short) 8).setCellValue(media.getExampleUrl());
+                }
                 i++;
             }
             String fileName = "媒体列表.xls";
@@ -178,6 +218,18 @@ public class ExelUtil {
                 e.printStackTrace();
             }
         }
+    }
+
+    private static Long getCustomPrice(Media media) {
+        String level = UserUtils.getPrincipal().getLevel();
+        if ("金牌".equals(level)) {
+            return media.getGoldPrice();
+        } else if ("银牌".equals(level)) {
+            return media.getSilverPrice();
+        } else if ("铜牌".equals(level)) {
+            return media.getBronzePrice();
+        }
+        return 0l;
     }
 
     public static void exportArticleExel(List<Article> listArticle, HttpServletResponse rep, String typeParam) {

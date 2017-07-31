@@ -52,13 +52,16 @@
 				<form:input type="text" class="form-control" path="name" id="name"/>
 			</div>
 			<button type="submit" class="btn btn-info">查询</button>
-			<shiro:hasPermission name="bussiness:media:edit">
+
 			<div class="form-group">
+			<shiro:hasPermission name="bussiness:media:import">
 				<input type="file" class="form-control" name="meidaExelFile" id="meidaExelFile">
 				<a type="button" id="importExel" class="btn btn-info">导入</a>
-				<a type="button" id="exportExel" class="btn btn-info">导出</a>
-			</div>
 			</shiro:hasPermission>
+			<shiro:hasPermission name="bussiness:media:export">
+				<a type="button" id="exportExel" class="btn btn-info">导出</a>
+			</shiro:hasPermission>
+			</div>
 		</form:form>
 		<div class="panel panel-default">
 			<div class="panel-heading">媒体</div>
@@ -68,10 +71,10 @@
 						<tr class="info">
 							<th>名称</th>
 							<c:if test="${principal.userType==0}">
-							<th>金/银/铜价格</th>
-							<shiro:hasPermission name="bussiness:media:edit">
+							<c:if test="${media.typeParam==1}">
+								<th>金/银/铜价格</th>
+							</c:if>
 								<th>成本价格</th>
-							</shiro:hasPermission>
 							</c:if>
 							<c:if test="${principal.userType==1}">
 							<th>价格</th>
@@ -90,10 +93,10 @@
 							<tr>
 								<td title="${entity.remark}">${entity.name}</td>
 								<c:if test="${principal.userType==0}">
-								<td>${entity.goldPrice}/${entity.silverPrice}/${entity.bronzePrice}</td>
-								<shiro:hasPermission name="bussiness:media:edit">
+									<c:if test="${media.typeParam==1}">
+									<td>${entity.goldPrice}/${entity.silverPrice}/${entity.bronzePrice}</td>
+									</c:if>
 									<td>${entity.costPrice}</td>
-								</shiro:hasPermission>
 								</c:if>
 								<c:if test="${principal.userType==1}">
 									<c:if test="${principal.level=='金牌'}">
