@@ -89,10 +89,10 @@
                         <th>标题</th>
                         <th>媒体</th>
                         <th>状态</th>
-                        <c:if test="${article.typeParam=='1'|| article.typeParam==null }">
+                        <c:if test="${article.typeParam=='1'|| article.typeParam=='' }">
                         <th>客户</th>
                         </c:if>
-                        <c:if test="${article.typeParam=='2'|| article.typeParam==null }">
+                        <c:if test="${article.typeParam=='2'|| article.typeParam=='' }">
                         <th>员工</th>
                         </c:if>
                         <th>报价</th>
@@ -156,10 +156,10 @@
                                 </c:choose>
                             </td>
 
-                            <c:if test="${article.typeParam=='1'|| article.typeParam==null }">
+                            <c:if test="${article.typeParam=='1'|| article.typeParam=='' }">
                                 <td>${entity.customName}</td>
                             </c:if>
-                            <c:if test="${article.typeParam=='2'|| article.typeParam==null }">
+                            <c:if test="${article.typeParam=='2'|| article.typeParam=='' }">
                                 <td>${entity.userName}</td>
                             </c:if>
                             <c:choose>
