@@ -5,9 +5,6 @@ import java.util.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.ggj.article.module.business.bean.*;
-import com.ggj.article.module.business.service.MediaService;
-import com.ggj.article.module.common.utils.*;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,9 +19,12 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.aliyun.oss.model.PutObjectResult;
 import com.ggj.article.module.base.web.BaseController;
+import com.ggj.article.module.business.bean.*;
 import com.ggj.article.module.business.service.ArticleService;
 import com.ggj.article.module.business.service.CustomInfoService;
+import com.ggj.article.module.business.service.MediaService;
 import com.ggj.article.module.common.shiro.authc.Principal;
+import com.ggj.article.module.common.utils.*;
 import com.ggj.article.module.sys.entity.DictionaryTable;
 import com.ggj.article.module.sys.service.DictionaryTableService;
 import com.github.pagehelper.PageInfo;
@@ -56,7 +56,7 @@ public class ArticleController extends BaseController {
 	
 	@Autowired
 	private DictionaryTableService dictionaryTableService;
-
+	
 	@Autowired
 	private MediaService mediaService;
 	
@@ -76,36 +76,36 @@ public class ArticleController extends BaseController {
 	@RequestMapping(value = "")
 	public String list(Article article, HttpServletRequest request, HttpServletResponse rep, Model model) {
 		Principal principal = UserUtils.getPrincipal();
-		setArticleParam(article,principal,model);
+		setArticleParam(article, principal, model);
 		pageUtils.setPage(request, rep);
 		PageInfo<Article> pageInfo = articleService.findPage(article);
 		model.addAttribute("pageInfo", pageInfo);
 		List<CustomUserInfo> customUserInfoList = customInfoService.getCustomUser(principal.getId());
 		model.addAttribute("customUserInfoList", customUserInfoList);
 		model.addAttribute("article", article);
-		model.addAttribute("userId",principal.getId());
+		model.addAttribute("userId", principal.getId());
 		model.addAttribute("articleStatusList", dictionaryTableService.findList(new DictionaryTable("article_status")));
 		model.addAttribute("timeTypeList", dictionaryTableService.findList(new DictionaryTable("time_type")));
 		return "bussiness/article/bussiness_article_list";
 	}
-
-
+	
 	@RequiresPermissions("bussiness:article:view")
 	@RequestMapping(value = "export")
-	public String exportArticle(Article article, HttpServletRequest request, RedirectAttributes redirectAttributes, HttpServletResponse rep, Model model) {
+	public String exportArticle(Article article, HttpServletRequest request, RedirectAttributes redirectAttributes,
+		HttpServletResponse rep, Model model) {
 		try {
 			Principal principal = UserUtils.getPrincipal();
-			setArticleParam(article,principal, model);
-			List<Article> listArticle=articleService.findList(article);
-			ExelUtil.exportArticleExel(listArticle,rep,article.getTypeParam());
+			setArticleParam(article, principal, model);
+			List<Article> listArticle = articleService.findList(article);
+			ExelUtil.exportArticleExel(listArticle, rep, article.getTypeParam());
 			addMessage(redirectAttributes, "媒体导出成功!");
 		} catch (Exception e) {
-			log.error("导入表格异常",e);
+			log.error("导入表格异常", e);
 			addMessage(redirectAttributes, "导出表格异常!");
 		}
 		return null;
 	}
-
+	
 	private void setArticleParam(Article article, Principal principal, Model model) {
 		if (StringUtils.isEmpty(article.getTimeType())) {
 			if (StringUtils.isNotEmpty(article.getBeginTimeStr()) || StringUtils.isNotEmpty(article.getEndTimeStr()))
@@ -113,42 +113,44 @@ public class ArticleController extends BaseController {
 		}
 		String typeParam = article.getTypeParam();
 		if (StringUtils.isNotEmpty(typeParam)) {
-			//员工为1
+			// 员工为1
 			if (typeParam.equals("1")) {
 				article.setUserId(principal.getId());
-				//编辑为2
+				// 编辑为2
 			} else if (typeParam.equals("2")) {
-				//待审核的所有编辑都可以看到
-				if(article.getStatus()==null||(article.getStatus()!=null&&(article.getStatus()==0||article.getStatus()==1))){
-					//特殊处理
+				// 待审核的所有编辑都可以看到
+				if (article.getStatus() == null
+						|| (article.getStatus() != null && (article.getStatus() == 0 || article.getStatus() == 1))) {
+					// 特殊处理
 					article.setStatus(5);
-					Media media=new Media();
+					Media media = new Media();
 					media.setUserId(principal.getId());
-					List<Media> mediaList=mediaService.findAllEditorList(media);
-					List<String> idList=new ArrayList<String>();
-					if(mediaList!=null&&mediaList.size()>0){
-						for (Media m : mediaList) {
-							idList.add(m.getId()+"");
+					List<Media> mediaList = mediaService.findAllEditorList(media);
+					List<String> idList = new ArrayList<String>();
+					if (mediaList != null && mediaList.size() > 0) {
+						for(Media m : mediaList) {
+							idList.add(m.getId() + "");
 						}
 					}
-					article.setMediaIdStr(idList);
-				//已经审核的只有当前编辑的编辑才可以看到
-				}else {
+					if (idList.size() > 0) {
+						article.setMediaIdStr(idList);
+					}
+					// 已经审核的只有当前编辑的编辑才可以看到
+				} else {
 					article.setEditorId(principal.getId());
 				}
-				List<UserInfo> listUserInfo=articleService.getUserInfo();
-				model.addAttribute("userInfoList",listUserInfo);
+				List<UserInfo> listUserInfo = articleService.getUserInfo();
+				model.addAttribute("userInfoList", listUserInfo);
 			} else if (typeParam.equals("3")) {
-				//顾客为三
+				// 顾客为三
 				article.setCustomId(principal.getId());
 			}
-		}else{
-			List<UserInfo> listUserInfo=articleService.getUserInfo();
-			model.addAttribute("userInfoList",listUserInfo);
+		} else {
+			List<UserInfo> listUserInfo = articleService.getUserInfo();
+			model.addAttribute("userInfoList", listUserInfo);
 		}
 	}
-
-
+	
 	@RequiresPermissions("bussiness:article:view")
 	@RequestMapping(value = "form")
 	public String form(Article article, Model model) {
@@ -234,6 +236,7 @@ public class ArticleController extends BaseController {
 		redirectAttributes.addAttribute("typeParam", article.getTypeParam());
 		return "redirect:/article/";
 	}
+	
 	@RequiresPermissions("bussiness:article:verify")
 	@RequestMapping(value = "/updateurl")
 	public String updateurl(Article article, RedirectAttributes redirectAttributes) {
@@ -248,7 +251,7 @@ public class ArticleController extends BaseController {
 		redirectAttributes.addAttribute("typeParam", article.getTypeParam());
 		return "redirect:/article/";
 	}
-
+	
 	@RequiresPermissions("bussiness:article:verify")
 	@RequestMapping(value = "/back")
 	public String back(Article article, RedirectAttributes redirectAttributes) {
@@ -279,6 +282,4 @@ public class ArticleController extends BaseController {
 		redirectAttributes.addAttribute("typeParam", article.getTypeParam());
 		return "redirect:/article/";
 	}
-
-
 }

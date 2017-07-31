@@ -177,78 +177,67 @@
                                 <c:choose>
                                     <c:when test="${entity.status==0}">
                                         <shiro:hasPermission name="bussiness:mediaEditor:edit">
-                                        <a class="btn btn-info"
+                                        <a
                                            href="javaScript:verify('${entity.title}','${entity.id}')"
-                                           data-toggle="tooltip" data-placement="top" title="审核"><span
-                                                class="glyphicon glyphicon-user"></span> </a>
+                                           data-toggle="tooltip" data-placement="top" title="审核">审核 </a>
 
-                                        <a class="btn  btn-info"
+                                        <a
                                            href="javaScript:back('${entity.title}','${entity.id}')"
                                            data-toggle="tooltip" data-placement="top" title="退稿"
-                                           ><span
-                                                class="glyphicon glyphicon-step-backward"></span></a>
+                                           >退稿</a>
                                         </shiro:hasPermission>
                                         <shiro:hasPermission name="bussiness:article:delete">
-                                        <a class="btn  btn-info" url="${path}/article/delete?id=${entity.id}&typeParam=${article.typeParam}"
+                                        <a  url="${path}/article/delete?id=${entity.id}&typeParam=${article.typeParam}"
                                            data-toggle="tooltip" data-placement="top" title="删除"
-                                           name="delete"><span
-                                                class="glyphicon glyphicon-trash"></span></a>
+                                           name="delete">删除</a>
                                         </shiro:hasPermission>
                                     </c:when>
                                     <c:when test="${entity.status==1&& entity.editorId==userId}">
                                         <shiro:hasPermission name="bussiness:mediaEditor:edit">
-                                        <a class="btn btn-info"
+                                        <a
                                            href="javaScript:verify('${entity.title}','${entity.id}')"
-                                           data-toggle="tooltip" data-placement="top" title="审核"><span
-                                                class="glyphicon glyphicon-user"></span> </a>
+                                           data-toggle="tooltip" data-placement="top" title="审核">审核 </a>
 
-                                        <a class="btn  btn-info"
+                                        <a
                                            href="javaScript:back('${entity.title}','${entity.id}')"
                                            data-toggle="tooltip" data-placement="top" title="退稿"
-                                           ><span
-                                                class="glyphicon glyphicon-step-backward"></span></a>
+                                           >退稿</a>
                                         </shiro:hasPermission>
                                         <shiro:hasPermission name="bussiness:article:delete">
-                                        <a class="btn  btn-info" url="${path}/article/delete?id=${entity.id}&typeParam=${article.typeParam}"
+                                        <a  url="${path}/article/delete?id=${entity.id}&typeParam=${article.typeParam}"
                                            data-toggle="tooltip" data-placement="top" title="删除"
-                                           name="delete"><span
-                                                class="glyphicon glyphicon-trash"></span></a>
+                                           name="delete">删除</a>
                                         </shiro:hasPermission>
                                     </c:when>
                                     <c:when test="${entity.status==2&& entity.editorId==userId}">
                                         <shiro:hasPermission name="bussiness:mediaEditor:edit">
-                                            <a class="btn btn-info"
+                                            <a
                                                href="javaScript:updateUrl('${entity.title}','${entity.id}','${entity.verifyUrl}')"
-                                               data-toggle="tooltip" data-placement="top" title="修改链接"><span
-                                                    class="glyphicon glyphicon-edit"></span> </a>
+                                               data-toggle="tooltip" data-placement="top" title="修改链接">修改链接</a>
                                         </shiro:hasPermission>
                                         <shiro:hasPermission name="bussiness:article:delete">
-                                            <a class="btn  btn-info" url="${path}/article/delete?id=${entity.id}&typeParam=${article.typeParam}"
+                                            <a  url="${path}/article/delete?id=${entity.id}&typeParam=${article.typeParam}"
                                                data-toggle="tooltip" data-placement="top" title="删除"
-                                               name="delete"><span
-                                                    class="glyphicon glyphicon-trash"></span></a>
+                                               name="delete">删除</a>
                                         </shiro:hasPermission>
                                     </c:when>
                                     <c:when test="${entity.status==2}">
-                                            <a class="btn btn-info"
+                                            <a
                                                href="${entity.verifyUrl}"
-                                               data-toggle="tooltip" data-placement="top" title="查看链接"  target="_blank"><span
-                                                    class="glyphicon glyphicon-eye-open"></span> </a>
+                                               data-toggle="tooltip" data-placement="top" title="查看链接"  target="_blank">查看链接</a>
                                     </c:when>
                                     <c:when test="${entity.status==3&&entity.editorId==userId}">
                                         <shiro:hasPermission name="bussiness:article:delete">
-                                        <a class="btn  btn-info" url="${path}/article/delete?id=${entity.id}&typeParam=${article.typeParam}"
+                                        <a  url="${path}/article/delete?id=${entity.id}&typeParam=${article.typeParam}"
                                            data-toggle="tooltip" data-placement="top" title="删除"
-                                           name="delete"><span
-                                                class="glyphicon glyphicon-trash"></span></a>
+                                           name="delete">删除</a>
                                         </shiro:hasPermission>
                                     </c:when>
                                     <c:when test="${entity.status==3&&(article.typeParam=='1'||article.typeParam=='3')}">
                                         <shiro:hasPermission name="bussiness:article:delete">
-                                        <a class="btn  btn-info" url="${path}/article/delete?id=${entity.id}&typeParam=${article.typeParam}"
+                                        <a  url="${path}/article/delete?id=${entity.id}&typeParam=${article.typeParam}"
                                            data-toggle="tooltip" data-placement="top" title="删除"
-                                           name="delete"><span
-                                                class="glyphicon glyphicon-trash"></span></a>
+                                           name="delete">删除</a>
                                         </shiro:hasPermission>
                                     </c:when>
                                 </c:choose>
