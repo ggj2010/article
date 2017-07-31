@@ -63,8 +63,15 @@
     <if test="editorId != null and editorId != ''">
       a.editor_id = #{editorId,jdbcType=INTEGER} and
     </if>
-    <if test="mediaIdStr != null and mediaIdStr!=''">
-      a.media_id in(#{mediaIdStr}) and
+    <if test="mediaName != null and mediaName != ''">
+      a.media_name  like concat ('%',#{mediaName},'%') and
+    </if>
+    <if test="mediaIdStr != null">
+      a.media_id in
+      <foreach item="item" index="index" collection="mediaIdStr" open="(" separator="," close=")">
+        #{item}
+      </foreach>
+      and
     </if>
     <choose>
       <when test="status == 5">

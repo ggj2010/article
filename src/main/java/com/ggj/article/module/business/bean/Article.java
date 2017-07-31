@@ -1,6 +1,7 @@
 package com.ggj.article.module.business.bean;
 
 import java.util.Date;
+import java.util.List;
 
 import com.ggj.article.module.common.persistence.BaseEntity;
 
@@ -19,7 +20,7 @@ public class Article extends BaseEntity {
 	//员工id
 	private Integer editorId;
 	private Integer mediaId;
-	private String mediaIdStr;
+	private List<String>  mediaIdStr;
 	private String mediaName;
 	private String title;
 	private String customName;

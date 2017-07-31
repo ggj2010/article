@@ -131,7 +131,7 @@ public class ArticleController extends BaseController {
 							idList.add(m.getId()+"");
 						}
 					}
-					article.setMediaIdStr( StringUtils.join(idList,","));
+					article.setMediaIdStr(idList);
 				//已经审核的只有当前编辑的编辑才可以看到
 				}else {
 					article.setEditorId(principal.getId());
@@ -142,6 +142,9 @@ public class ArticleController extends BaseController {
 				//顾客为三
 				article.setCustomId(principal.getId());
 			}
+		}else{
+			List<UserInfo> listUserInfo=articleService.getUserInfo();
+			model.addAttribute("userInfoList",listUserInfo);
 		}
 	}
 

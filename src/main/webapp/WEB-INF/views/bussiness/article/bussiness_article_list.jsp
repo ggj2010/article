@@ -21,7 +21,7 @@
         <input type="hidden" name="pageNum" id="pageNum" value="${pageInfo.pageNum}">
         <input type="hidden" name="pageSize" id="pageSize" value="${pageInfo.pageSize}">
         <form:hidden path="typeParam"/>
-        <c:if test="${article.typeParam=='1'|| article.typeParam==null }">
+        <c:if test="${article.typeParam=='1'}">
         <div class="form-group">
             <label for="customName">客户信息</label>
             <form:select id="customName" path="customId" class="form-control">
@@ -31,7 +31,7 @@
             </form:select>
         </div>
         </c:if>
-        <c:if test="${article.typeParam=='2'|| article.typeParam==null }">
+        <c:if test="${article.typeParam=='2'|| article.typeParam=='' }">
         <div class="form-group">
             <label for="userName">员工信息</label>
             <form:select id="userName" path="userId" class="form-control">
@@ -51,6 +51,10 @@
         <div class="form-group">
             <label for="title">标题</label>
             <form:input type="text" class="form-control" path="title" id="title"/>
+        </div>
+        <div class="form-group">
+            <label for="mediaName">媒体名称</label>
+            <form:input type="text" class="form-control" path="mediaName" id="mediaName"/>
         </div>
         <div class="form-group">
             <label for="status">日期类型</label>
