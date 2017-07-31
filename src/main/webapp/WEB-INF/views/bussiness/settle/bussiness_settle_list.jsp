@@ -30,7 +30,6 @@
             </form:select>
         </div>
         <button type="submit" class="btn btn-info">查询</button>
-
         <a type="button" onclick="location.reload();" class="btn btn-info">刷新</a>
     </form:form>
     <div class="panel panel-default">
@@ -42,12 +41,12 @@
                         <th>标题</th>
                         <th>媒体</th>
                         <th>状态</th>
-                        <c:if test="${mediaSettleMent.bussinnessType=='2'}">
+                        <c:if test="${mediaSettleMent.bussinnessType=='2'&&mediaSettleMent.type=='2'}">
                             <th>客户</th>
-                            <th>价格</th>
+                            <th>报价</th>
                         </c:if>
-                        <c:if test="${mediaSettleMent.type=='3'}">
-                            <th>价格</th>
+                        <c:if test="${mediaSettleMent.bussinnessType=='2'&&mediaSettleMent.type=='3'}">
+                            <th>成本价格</th>
                         </c:if>
                         <th>结算价格</th>
                         <th>备注</th>
@@ -67,20 +66,20 @@
                                     已结算
                                 </c:if>
                             </td>
-                            <c:if test="${mediaSettleMent.bussinnessType=='2'}">
+                            <c:if test="${mediaSettleMent.bussinnessType=='2'&&mediaSettleMent.type=='2'}">
                             <td>${entity.article.customName}</td>
                             <td>${entity.article.customPrice}</td>
                             </c:if>
-                            <td>${entity.price}</td>
-                            <c:if test="${mediaSettleMent.type=='3'}">
+                            <c:if test="${mediaSettleMent.bussinnessType=='2'&&mediaSettleMent.type=='3'}">
                                 <td>${entity.article.costPrice}</td>
                             </c:if>
+                            <td>${entity.price}</td>
                             <td title="${entity.remark}">${fn:substring(entity.remark, 0, 10)}</td>
                             <c:if test="${mediaSettleMent.bussinnessType=='2'}">
                                 <td>
                                     <shiro:hasPermission name="bussiness:settle:form">
                                         <c:if test="${entity.status=='0'}">
-                                        <a class="btn btn-info" href="javaScript:settleView('${entity.id}','${entity.type}','${entity.article.title}','${entity.article.costPrice}','${entity.article.customPrice}')" data-toggle="tooltip" data-placement="top" title="结算" ><span class="glyphicon glyphicon-edit"></span> </a>
+                                        <a  href="javaScript:settleView('${entity.id}','${entity.type}','${entity.article.title}','${entity.article.costPrice}','${entity.article.customPrice}')" data-toggle="tooltip" data-placement="top" title="结算" >结算 </a>
                                         </c:if>
                                         <c:if test="${entity.status=='1'}">
                                             无

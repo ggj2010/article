@@ -21,6 +21,7 @@
         <input type="hidden" name="pageNum" id="pageNum" value="${pageInfo.pageNum}">
         <input type="hidden" name="pageSize" id="pageSize" value="${pageInfo.pageSize}">
         <form:hidden path="typeParam"/>
+        <a type="button" onclick="location.reload();" class="btn btn-info">刷新</a>
         <c:if test="${article.typeParam=='1'}">
         <div class="form-group">
             <label for="customName">客户信息</label>
@@ -76,8 +77,8 @@
             <span class="add-on"><i class="icon-calendar"></i></span>
         </div>
         <button type="submit" class="btn btn-info">查询</button>
-        <a type="button" id="exportExel" class="btn btn-info">导出</a>
-        <a type="button" onclick="location.reload();" class="btn btn-info">刷新</a>
+        <a  id="exportExel" class="btn btn-danger">导出</a>
+
     </form:form>
     <div class="panel panel-default">
         <div class="panel-heading">文章</div>
@@ -115,7 +116,7 @@
                                     <c:when test="${entity.status==2&&entity.verifyStatus=='1'}">
                                         warning
                                     </c:when>
-                                    <c:when test="${entity.status==3}">
+                                   <c:when test="${entity.status==3}">
                                         danger
                                     </c:when>
                                 </c:choose>

@@ -26,7 +26,7 @@ public class ExelUtilTest  extends BaseTest{
     protected ArticleMapper articleMapper;
     @Autowired
     protected MediaSettleMentMapper mediaSettleMentMapper;
-    @Test
+    //@Test
     public void importArticle() throws Exception {
         List<Article> list = ExelUtil.importArticle(new FileInputStream(new File("c:杨敏47.xls")), 47);
 //        List<Article> list = ExelUtil.importArticle(new FileInputStream(new File("c:苏时48.xls")), 48);

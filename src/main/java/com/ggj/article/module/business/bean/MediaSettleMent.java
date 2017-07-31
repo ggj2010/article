@@ -14,6 +14,7 @@ public class MediaSettleMent extends BaseEntity {
 	private String type;
 	private String bussinnessType;
 	private long price;
+	private long customPrice;
 	private String status;
 	private Article article;
 
