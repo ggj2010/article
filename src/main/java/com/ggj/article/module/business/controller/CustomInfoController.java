@@ -7,6 +7,7 @@ import javax.validation.Valid;
 import com.ggj.article.module.business.bean.CustomUserInfo;
 import com.ggj.article.module.common.utils.UserUtils;
 import com.ggj.article.module.sys.entity.DictionaryTable;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -122,6 +123,9 @@ public class CustomInfoController extends BaseController {
 				addMessage(redirectAttributes, e.getMessage());
 			}
 		}
+		if(StringUtils.isNotEmpty(customInfo.getFormUrl())){
+			return "redirect:/customInfo/"+customInfo.getFormUrl();
+		}
 		return "redirect:/customInfo/";
 	}
 
@@ -135,6 +139,9 @@ public class CustomInfoController extends BaseController {
 			}
 		} catch (Exception e) {
 			log.error("删除员工失败！" + e.getLocalizedMessage());
+		}
+		if(StringUtils.isNotEmpty(customInfo.getFormUrl())){
+			return "redirect:/customInfo/"+customInfo.getFormUrl();
 		}
 		return "redirect:/customInfo/";
 	}

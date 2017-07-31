@@ -69,6 +69,8 @@ public class ArticleService extends CrudService<ArticleMapper, Article> {
                     userInfoMapper.insert(newUserInfo);
                     CustomInfo customInfos=new CustomInfo();
                     customInfos.setUserId(newUserInfo.getId());
+                    //非会员
+                    customInfos.setCustomStatus(0l);
                     customInfoMapper.insert(customInfos);
 
                     CustomUserInfo customUserInfo = new CustomUserInfo();

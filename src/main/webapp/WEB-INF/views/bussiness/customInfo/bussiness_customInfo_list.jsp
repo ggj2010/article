@@ -17,7 +17,7 @@
 			</shiro:hasPermission>
 			<shiro:hasPermission name="bussiness:customInfo:edit">
 				<li>
-					<a href="${path}/customInfo/form">客户${not empty
+					<a href="${path}/customInfo/form?formUrl=${formUrl}">客户${not empty
 						entity.id?'修改':'添加'}</a>
 				</li>
 			</shiro:hasPermission>
@@ -25,6 +25,7 @@
 		<form:form id="customInfoForm" modelAttribute="customInfo"
 			action="${path}/customInfo/${formUrl}" method="post" class="form-inline well">
 			 <input type="hidden" name="pageNum" id="pageNum" value="${pageInfo.pageNum}">
+			 <input type="hidden" name="formUrl" id="formUrl" value="${formUrl}">
 			 <input type="hidden" name="pageSize" id="pageSize"  value="${pageInfo.pageSize}">
 			<div class="form-group">
 				<label for="userName">客户名称</label>
@@ -70,8 +71,8 @@
 									<shiro:hasPermission name="bussiness:customInfo:verify">
 									<a class="btn btn-info" href="${path}/customInfo/verify/view?id=${entity.id}"  data-toggle="tooltip" data-placement="top" title="审核与授权" ><span class="glyphicon glyphicon-user"></span> </a>
 									</shiro:hasPermission>
-									<a class="btn btn-info" href="${path}/customInfo/form?id=${entity.id}"  data-toggle="tooltip" data-placement="top" title="修改" ><span class="glyphicon glyphicon-edit"></span> </a>
-									<a class="btn  btn-info" url="${path}/customInfo/delete?id=${entity.id}" data-toggle="tooltip" data-placement="top" title="删除" name="delete" ><span class="glyphicon glyphicon-trash"></span></a>
+									<a class="btn btn-info" href="${path}/customInfo/form?id=${entity.id}&formUrl=${formUrl}"  data-toggle="tooltip" data-placement="top" title="修改" ><span class="glyphicon glyphicon-edit"></span> </a>
+									<a class="btn  btn-info" url="${path}/customInfo/delete?id=${entity.id}&formUrl=${formUrl}" data-toggle="tooltip" data-placement="top" title="删除" name="delete" ><span class="glyphicon glyphicon-trash"></span></a>
 								</td>
 							</tr>
 						</c:forEach>

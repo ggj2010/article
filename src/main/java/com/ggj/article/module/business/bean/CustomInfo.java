@@ -8,7 +8,7 @@ import lombok.Setter;
 public class CustomInfo extends UserInfo {
     private Integer userId;
 
-    private Integer qqNumber;
+    private String qqNumber;
 
     private String level;
 
@@ -17,6 +17,8 @@ public class CustomInfo extends UserInfo {
 
     // 0 申请中，1已开通
     private Long customStatus;
+    //参数用到
+    private String formUrl;
 
     public CustomInfo(Integer customUserId) {
         this.customUserId = customUserId;

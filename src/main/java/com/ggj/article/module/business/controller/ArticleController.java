@@ -122,6 +122,16 @@ public class ArticleController extends BaseController {
 				if(article.getStatus()==null||(article.getStatus()!=null&&(article.getStatus()==0||article.getStatus()==1))){
 					//特殊处理
 					article.setStatus(5);
+					Media media=new Media();
+					media.setUserId(principal.getId());
+					List<Media> mediaList=mediaService.findAllEditorList(media);
+					List<String> idList=new ArrayList<String>();
+					if(mediaList!=null&&mediaList.size()>0){
+						for (Media m : mediaList) {
+							idList.add(m.getId()+"");
+						}
+					}
+					article.setMediaIdStr( StringUtils.join(idList,","));
 				//已经审核的只有当前编辑的编辑才可以看到
 				}else {
 					article.setEditorId(principal.getId());
@@ -241,6 +251,7 @@ public class ArticleController extends BaseController {
 	public String back(Article article, RedirectAttributes redirectAttributes) {
 		try {
 			if (article != null && article.getId() != null) {
+				article.setEditorId(UserUtils.getPrincipal().getId());
 				articleService.back(article);
 				addMessage(redirectAttributes, "回退成功!");
 			}

@@ -11,7 +11,7 @@
 	<ul class="nav nav-tabs">
 		<shiro:hasPermission name="bussiness:customInfo:view">
 			<li>
-				<a href="${path}/customInfo/">客户列表</a>
+				<a href="${path}/customInfo/${customInfo.formUrl}">客户列表</a>
 			</li>
 		</shiro:hasPermission>
 		<shiro:hasPermission name="bussiness:customInfo:edit">
@@ -28,6 +28,7 @@
 				   action="${path}/customInfo/save" method="post"
 				   cssClass="form-horizontal">
 			<form:hidden path="id"/>
+			<form:hidden path="formUrl"/>
 			<form:hidden path="customUserId"/>
 			<div class="form-group">
 				<label class="col-sm-2 control-label" for="loginName">登录名称</label>

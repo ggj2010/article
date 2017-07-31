@@ -66,6 +66,7 @@ public class CustomInfoService extends CrudService<CustomInfoMapper, CustomInfo>
             customUserInfo.setCreateDate(new Date());
             customUserInfoMapperMapper.insert(customUserInfo);
         } else {
+            userInfo.setId(customInfo.getUserId());
             userInfoMapper.update(userInfo);
             dao.update(customInfo);
         }

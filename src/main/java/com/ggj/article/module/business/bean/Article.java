@@ -28,7 +28,7 @@ public class Article extends BaseEntity {
 	private long customPrice;
 	private String url;
 	private String verifyUrl;
-	//0待审核、2已审核、3已退稿、4已删除
+	//0待审核、1、审核中、2已审核、3已退稿、4已删除
 	private Integer status;
 	private String refundRemark;
 	private Integer verifyStatus;

@@ -5,7 +5,7 @@
     <id column="id" jdbcType="INTEGER" property="id" />
     <result column="user_id" jdbcType="INTEGER" property="userId" />
     <result column="custom_user_id" jdbcType="INTEGER" property="customUserId" />
-    <result column="qq_number" jdbcType="INTEGER" property="qqNumber" />
+    <result column="qq_number" jdbcType="VARCHAR" property="qqNumber" />
     <result column="user_type" jdbcType="INTEGER" property="userType" />
     <result column="level" jdbcType="VARCHAR" property="level" />
     <result column="flag" jdbcType="VARCHAR" property="flag" />
@@ -20,7 +20,7 @@
   <resultMap id="RoleMap" type="com.ggj.article.module.business.bean.CustomInfo">
     <id column="id" jdbcType="INTEGER" property="id" />
     <result column="user_id" jdbcType="INTEGER" property="userId" />
-    <result column="qq_number" jdbcType="INTEGER" property="qqNumber" />
+    <result column="qq_number" jdbcType="VARCHAR" property="qqNumber" />
     <result column="level" jdbcType="VARCHAR" property="level" />
     <result column="flag" jdbcType="VARCHAR" property="flag" />
     <result column="create_user" jdbcType="VARCHAR" property="createUser" />
@@ -75,9 +75,9 @@
       a.custom_status =#{customStatus} and
     </if>
     <if test="customUserId != null and customUserId != ''">
-      a.user_id = #{customUserId,jdbcType=INTEGER}
+      a.user_id = #{customUserId,jdbcType=INTEGER}  and
     </if>
-    and a.flag="0"and b.flag="0"
+    a.flag="0"and b.flag="0"
   </select>
   <update id="delete" parameterType="CustomInfo">
     update tb_custominfo set flag=#{flag} where id=#{id}
@@ -87,7 +87,7 @@
       level, flag,
       create_user, create_date, custom_status
       )
-    values (#{id,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, #{qqNumber,jdbcType=INTEGER}, 
+    values (#{id,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, #{qqNumber,jdbcType=VARCHAR},
        #{level,jdbcType=VARCHAR}, #{flag,jdbcType=VARCHAR},
       #{createUser,jdbcType=VARCHAR}, #{createDate,jdbcType=TIMESTAMP}, #{customStatus,jdbcType=BIGINT}
       )
@@ -95,7 +95,7 @@
   <update id="update" parameterType="com.ggj.article.module.business.bean.CustomInfo">
     update tb_custominfo
     set user_id = #{userId,jdbcType=INTEGER},
-      qq_number = #{qqNumber,jdbcType=INTEGER},
+      qq_number = #{qqNumber,jdbcType=VARCHAR},
       level = #{level,jdbcType=VARCHAR},
       flag = #{flag,jdbcType=VARCHAR},
       create_user = #{createUser,jdbcType=VARCHAR},

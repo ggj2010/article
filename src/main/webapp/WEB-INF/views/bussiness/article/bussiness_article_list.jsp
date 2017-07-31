@@ -236,6 +236,14 @@
                                                 class="glyphicon glyphicon-trash"></span></a>
                                         </shiro:hasPermission>
                                     </c:when>
+                                    <c:when test="${entity.status==3&&(article.typeParam=='1'||article.typeParam=='3')}">
+                                        <shiro:hasPermission name="bussiness:article:delete">
+                                        <a class="btn  btn-info" url="${path}/article/delete?id=${entity.id}&typeParam=${article.typeParam}"
+                                           data-toggle="tooltip" data-placement="top" title="删除"
+                                           name="delete"><span
+                                                class="glyphicon glyphicon-trash"></span></a>
+                                        </shiro:hasPermission>
+                                    </c:when>
                                 </c:choose>
                             </td>
                         </tr>

@@ -34,6 +34,9 @@ public class MediaService extends CrudService<MediaMapper, Media> {
     public PageInfo<Media> findEditorList(Media media) {
         return new PageInfo<Media>(dao.findEditorList(media));
     }
+    public List<Media> findAllEditorList(Media media) {
+        return  dao.findEditorList(media);
+    }
     @Transactional(readOnly = false)
     public void saveImport(InputStream inputStream) throws Exception {
         List<Media> lists = ExelUtil.importMediExel(inputStream);
