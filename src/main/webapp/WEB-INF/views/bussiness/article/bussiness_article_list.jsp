@@ -100,13 +100,16 @@
                         <tr class="
                         <c:choose>
                                     <c:when test="${entity.status==0}">
-                                        warning
+                                        info
                                     </c:when>
                                     <c:when test="${entity.status==1}">
-                                       success
+                                       info
                                     </c:when>
-                                    <c:when test="${entity.status==2}">
-                                       success
+                                    <c:when test="${entity.status==2&&entity.verifyStatus!='1'}">
+                                        success
+                                    </c:when>
+                                    <c:when test="${entity.status==2&&entity.verifyStatus=='1'}">
+                                        warning
                                     </c:when>
                                     <c:when test="${entity.status==3}">
                                         danger

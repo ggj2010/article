@@ -21,6 +21,7 @@ import com.ggj.article.module.business.bean.Media;
 
 import lombok.extern.slf4j.Slf4j;
 
+
 /**
  * @author:gaoguangjin
  * @date 2017/6/25 12:52
@@ -65,6 +66,53 @@ public class ExelUtil {
                         media.setBronzePrice(Long.parseLong(getIntCellValue(r.getCell(11))));
                         media.setRemark(r.getCell(14) == null ? "" : r.getCell(14).getStringCellValue());
                         list.add(media);
+                    } catch (Exception e) {
+                        log.error("解析异常：" + e.getLocalizedMessage());
+                    }
+                }
+                i++;
+            }
+
+        } catch (Exception e) {
+            log.error("解析上传次文件异常", e);
+        } finally {
+            wb0.close();
+        }
+        return list;
+    }
+    public static List<Article> importArticle(InputStream fileInputStream,Integer userId) throws Exception {
+        Workbook wb0 = null;
+        List<Article> list = new ArrayList<Article>();
+        try {
+            wb0 = new HSSFWorkbook(fileInputStream);
+            // 获取Excel文档中的第一个表单
+            Sheet sht0 = wb0.getSheetAt(0);
+            // 对Sheet中的每一行进行迭代
+            int i = 0;
+            for (Row r : sht0) {
+                // 去除第一行
+                if (i > 0) {
+                    // 去除空行
+                    if (r.getRowNum() < 1) {
+                        continue;
+                    }
+                    try {
+                        Article article = new Article();
+                        r.getCell(0).setCellType(Cell.CELL_TYPE_STRING);
+                        r.getCell(1).setCellType(Cell.CELL_TYPE_STRING);
+                        r.getCell(2).setCellType(Cell.CELL_TYPE_STRING);
+                        r.getCell(3).setCellType(Cell.CELL_TYPE_STRING);
+                        r.getCell(4).setCellType(Cell.CELL_TYPE_STRING);
+                        r.getCell(5).setCellType(Cell.CELL_TYPE_STRING);
+                        list.add(article);
+                        article.setMediaName(r.getCell(0).getStringCellValue());
+                        article.setTitle(r.getCell(1).getStringCellValue());
+                        article.setVerifyUrl(r.getCell(2).getStringCellValue());
+                        article.setCustomPrice(Long.parseLong(getIntCellValue(r.getCell(3))));
+                        article.setCreateDate(DateUtils.parseDate(r.getCell(4).getStringCellValue()));
+                        article.setVerifyDate(DateUtils.parseDate(r.getCell(5).getStringCellValue()));
+                        article.setStatus(2);
+                        article.setCustomId(userId);
                     } catch (Exception e) {
                         log.error("解析异常：" + e.getLocalizedMessage());
                     }
@@ -289,8 +337,8 @@ public class ExelUtil {
                     statusName = "待审核";
                 } else if (status == 1) {
                     statusName = "审核中";
-                    url = article.getVerifyUrl();
                 } else if (status == 2) {
+                    url = article.getVerifyUrl();
                     statusName = "已审核";
                 } else if (status == 3) {
                     statusName = "已退稿";

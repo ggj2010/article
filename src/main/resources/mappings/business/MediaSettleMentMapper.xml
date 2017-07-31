@@ -126,4 +126,14 @@
       remark = #{remark,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
+
+
+  <insert id="saveBatchSettle" parameterType="java.util.List">
+    insert into tb_media_settlement (article_id,type,status,flag)
+    <foreach collection="list" item="settle" separator=" union all ">
+      select
+      #{settle.articleId},#{settle.type},#{settle.status} ,#{settle.flag}
+    from dual
+    </foreach>
+  </insert>
 </mapper>

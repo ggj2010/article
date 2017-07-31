@@ -79,7 +79,7 @@
     </choose>
 
     <if test="title != null and title!=''">
-      a.title like  concat (#{title},'%') and
+      a.title like  concat ('%',#{title},'%') and
     </if>
     <if test='beginTimeStr != null and beginTimeStr != "" and timeType=="1" '>
       a.create_date<![CDATA[ >=  ]]> #{beginTime,jdbcType=TIMESTAMP} and
@@ -111,6 +111,21 @@
     #{status,jdbcType=TINYINT}, #{flag,jdbcType=VARCHAR}, #{createDate,jdbcType=TIMESTAMP},
     #{createUser,jdbcType=VARCHAR})
   </insert>
+
+  <insert id="saveBatchArticle" parameterType="java.util.List" useGeneratedKeys="true" keyProperty="id">
+    insert into tb_article (custom_id,
+     media_name,title, custom_name,
+     custom_price,  verify_url,
+    status, flag, create_date,
+    verify_date)
+    <foreach collection="list" item="article" separator=" union all ">
+      select
+      #{article.customId},#{article.mediaName},#{article.title},#{article.customName},
+      #{article.customPrice},#{article.verifyUrl},#{article.status},#{article.flag},
+      #{article.createDate},#{article.verifyDate} from dual
+    </foreach>
+  </insert>
+
   <update id="update" parameterType="com.ggj.article.module.business.bean.Article">
     update tb_article
     <trim prefix="set" suffixOverrides=",">

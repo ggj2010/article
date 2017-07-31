@@ -63,7 +63,7 @@ public class MediaSettleController extends BaseController {
         if(mediaSettleMent.getBussinnessType().equals("2")) {
             article.setUserId(UserUtils.getPrincipal().getId());
         }else{
-            article.setCustomId(UserUtils.getPrincipal().getUserInfo().getCustomInfo().getId());
+            article.setCustomId(UserUtils.getPrincipal().getId());
         }
         mediaSettleMent.setType("1");
         mediaSettleMent.setArticle(article);
