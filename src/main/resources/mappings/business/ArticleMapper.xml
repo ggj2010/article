@@ -81,7 +81,7 @@
         a.status = #{status,jdbcType=INTEGER} and
       </when>
       <otherwise>
-        a.status in (0,1,2,3,4) and
+        a.status in (0,1,2,3) and
       </otherwise>
     </choose>
 
