@@ -64,7 +64,7 @@ public class ShiroConfiguration {
 	public SystemAuthorizingRealm getSystemAuthorizingRealm() {
 		SystemAuthorizingRealm sar = new SystemAuthorizingRealm();
 		sar.setCachingEnabled(true);
-		sar.setAuthenticationCachingEnabled(true);
+		sar.setAuthenticationCachingEnabled(false);
 		sar.setAuthenticationCacheName("authenticationCache");
 		sar.setAuthorizationCachingEnabled(true);
 		sar.setAuthorizationCacheName("authorizationCache");
