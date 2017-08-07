@@ -41,7 +41,7 @@
                             </label>
                             <form:select id="customInfo" path="customId" class="form-control">
                                 <form:option value="" label="请选择"/>
-                                <form:options items="${customUserInfoList}" itemValue="id"
+                                <form:options items="${customUserInfoList}" itemValue="userId"
                                               itemLabel="userName" />
                             </form:select>
                             <input class="form-control" maxlength="255" autocomplete="off" id="customName"  type="hidden"/>

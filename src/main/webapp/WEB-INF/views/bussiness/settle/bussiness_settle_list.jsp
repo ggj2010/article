@@ -29,8 +29,39 @@
                 <form:options items="${articleStatusList}" itemLabel="name" itemValue="value"/>
             </form:select>
         </div>
+        <c:if test="${mediaSettleMent.bussinnessType=='2'}">
+            <c:if test="${formUrl=='custom'}">
+                <div class="form-group">
+                    <label for="userName">
+                        客户信息
+                    </label>
+                    <form:select id="userName" path="article.customId" class="form-control">
+                        <form:option value="" label="请选择"/>
+                        <form:options items="${customUserInfoList}" itemValue="userId"
+                                      itemLabel="userName"/>
+                    </form:select>
+                </div>
+            </c:if>
+            <c:if test="${formUrl=='editor'||formUrl=='user'}">
+            <div class="form-group">
+                <label for="userName">
+                ${formUrl=='editor'?'编辑信息':'员工信息'}
+                </label>
+                <form:select id="userName" path="article.userId" class="form-control">
+                    <form:option value="" label="请选择"/>
+                    <form:options items="${userInfoList}" itemValue="id"
+                                  itemLabel="userName"/>
+                </form:select>
+            </div>
+            </c:if>
+        </c:if>
         <button type="submit" class="btn btn-info">查询</button>
         <a type="button" onclick="location.reload();" class="btn btn-info">刷新</a>
+        <shiro:hasPermission name="bussiness:settle:form">
+            <c:if test="${mediaSettleMent.bussinnessType==2}">
+             <a type="button" onclick="settleMore()" class="btn btn-danger">批量审核</a>
+            </c:if>
+        </shiro:hasPermission>
     </form:form>
     <div class="panel panel-default">
         <div class="panel-heading">结算列表</div>
@@ -38,14 +69,23 @@
             <div class="table-responsive">
                 <table class="table table-hover  table-striped table-bordered">
                     <tr class="info">
+                        <th></th>
+                        <c:if test="${mediaSettleMent.bussinnessType==2}">
+                        <th><input type="checkbox" name="settleRadio" id="choseAll"> </th>
+                        </c:if>
                         <th>标题</th>
                         <th>媒体</th>
                         <th>状态</th>
-                        <c:if test="${mediaSettleMent.bussinnessType=='2'&&mediaSettleMent.type=='2'}">
-                            <th>客户</th>
+                        <c:if test="${mediaSettleMent.bussinnessType=='2'&&formUrl=='user'}">
+                            <th>员工</th>
                             <th>报价</th>
                         </c:if>
-                        <c:if test="${mediaSettleMent.bussinnessType=='2'&&mediaSettleMent.type=='3'}">
+                        <c:if test="${mediaSettleMent.bussinnessType=='2'&&formUrl=='custom'}">
+                            <th>顾客</th>
+                            <th>报价</th>
+                        </c:if>
+                        <c:if test="${mediaSettleMent.bussinnessType=='2'&&formUrl=='editor'}">
+                            <th>编辑</th>
                             <th>成本价格</th>
                         </c:if>
                         <th>结算价格</th>
@@ -54,8 +94,17 @@
                             <th>操作</th>
                         </c:if>
                     </tr>
-                    <c:forEach items="${pageInfo.list}" var="entity">
-                        <tr <c:if test="${entity.status=='0'}">class="success"</c:if> <c:if test="${entity.status=='0'}">class="danger"</c:if>  >
+                    <c:forEach items="${pageInfo.list}" var="entity" varStatus="status">
+                        <tr <c:if test="${entity.status=='0'}">class="success"</c:if> <c:if test="${entity.status=='1'}">class="danger"</c:if>  >
+                            <td>${status.count}</td>
+                            <c:if test="${mediaSettleMent.bussinnessType==2}">
+                            <c:if test="${entity.status=='0'}">
+                                <td entityId="${entity.id}" type="${entity.type}"><input type="checkbox" name="settleRadio-${status.count}"></td>
+                            </c:if>
+                            <c:if test="${entity.status=='1'}">
+                                <td></td>
+                            </c:if>
+                            </c:if>
                             <td title="${entity.article.title}">${entity.article.title}</td>
                             <td title="${entity.article.mediaName}">${entity.article.mediaName}</td>
                             <td>
@@ -66,12 +115,17 @@
                                     已结算
                                 </c:if>
                             </td>
-                            <c:if test="${mediaSettleMent.bussinnessType=='2'&&mediaSettleMent.type=='2'}">
-                            <td>${entity.article.customName}</td>
-                            <td>${entity.article.customPrice}</td>
+                            <c:if test="${mediaSettleMent.bussinnessType=='2'&&formUrl=='user'}">
+                                <td>${entity.article.userName}</td>
+                                <td class="settleCustomPrice">${entity.article.customPrice}</td>
                             </c:if>
-                            <c:if test="${mediaSettleMent.bussinnessType=='2'&&mediaSettleMent.type=='3'}">
-                                <td>${entity.article.costPrice}</td>
+                            <c:if test="${mediaSettleMent.bussinnessType=='2'&&formUrl=='custom'}">
+                                <td>${entity.article.customName}</td>
+                                <td class="settleCustomPrice">${entity.article.customPrice}</td>
+                            </c:if>
+                            <c:if test="${mediaSettleMent.bussinnessType=='2'&&formUrl=='editor'}">
+                                <td>${entity.article.editorName}</td>
+                                <td class="settleCostPrice">${entity.article.costPrice}</td>
                             </c:if>
                             <td>${entity.price}</td>
                             <td title="${entity.remark}">${fn:substring(entity.remark, 0, 10)}</td>
@@ -79,11 +133,8 @@
                                 <td>
                                     <shiro:hasPermission name="bussiness:settle:form">
                                         <c:if test="${entity.status=='0'}">
-                                        <a  href="javaScript:settleView('${entity.id}','${entity.type}','${entity.article.title}','${entity.article.costPrice}','${entity.article.customPrice}')" data-toggle="tooltip" data-placement="top" title="结算" >结算 </a>
+                                        <a  href="javaScript:settleView('${entity.id}','${entity.type}','${entity.article.title}','${entity.article.costPrice}','${entity.article.customPrice}')" data-toggle="tooltip" data-placement="top" title="结算" >结算</a>
                                         </c:if>
-                                        <c:if test="${entity.status=='1'}">
-                                            无
-                                         </c:if>
                                     </shiro:hasPermission>
                                 </td>
                             </c:if>
@@ -109,9 +160,9 @@
             <div class="modal-body">
                 <div class="container-fluid">
                     <div class="form-horizontal">
-                        <form action="${path}/settle/save" method="post" id="settleForm">
+                        <form action="${path}/settle/save" method="post" >
                             <div class="form-group">
-                                <label for="articleTitleId" class="col-sm-2 control-label">结算</label>
+                                <label for="articleTitleId" class="col-sm-2 control-label">文章标题</label>
                                 <div class="col-sm-10">
                                     <input type="text" class="form-control" readonly="readonly" id="articleTitleId">
                                     <input type="hidden" class="form-control" name="id" id="settlementId">
@@ -135,7 +186,62 @@
                             <div class="form-group">
                                 <label class="col-sm-2 control-label" for="remark">备注</label>
                                 <div class="col-sm-8">
-										<textarea name="remark"  maxlength="255" rows="3" id="remark"></textarea>
+										<textarea name="remark"  class="form-control" maxlength="255" rows="3" id="remark"></textarea>
+                                    <span class="glyphicon  form-control-feedback" aria-hidden="true"></span>
+                                </div>
+                            </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                    <button type="submit" class="btn btn-primary">保存</button>
+                </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="moreSettleModule" tabindex="-1"
+     aria-labelledby="uploadModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">
+                    <span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
+                </button>
+                <h4 class="modal-title">批量结算</h4>
+            </div>
+            <div class="modal-body">
+                <div class="container-fluid">
+                    <div class="form-horizontal">
+                        <form action="${path}/settle/moresave" method="post" >
+                            <div class="form-group">
+                                <label for="articleTitleId" class="col-sm-2 control-label">稿件数量</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" readonly="readonly" id="articleNum">
+                                    <input type="hidden" id="settleArticleIds" name="settleArticleIds">
+                                    <input type="hidden" class="form-control" name="type" id="settleType">
+                                    <input type="hidden" class="form-control" name="formUrl" value="${formUrl}?bussinnessType=${mediaSettleMent.bussinnessType}" >
+                                    <input type="hidden" class="form-control" id="priceStr" name="priceStr">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="priceId" class="col-sm-2 control-label">应付价格</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" readonly="readonly" id="morePrice">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="realPayPrice" class="col-sm-2 control-label">实付价格</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control"  id="moreRealPayPrice"
+                                           name="price" readonly="readonly" >
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label" for="remark">备注</label>
+                                <div class="col-sm-8">
+										<textarea name="remark"  class="form-control" maxlength="255" rows="3"></textarea>
                                     <span class="glyphicon  form-control-feedback" aria-hidden="true"></span>
                                 </div>
                             </div>
@@ -185,8 +291,56 @@
                 }
                 toastr.success("${message}");
             }
+
+
+            $("#choseAll").on("click",function(){
+                var checked=$(this).prop("checked")
+                if(checked==true){
+                    $("input[type='checkbox']").each(function () {
+                        $(this).prop("checked",true);
+                    })
+                }else{
+                    $("input[type='checkbox']").each(function () {
+                        $(this).prop("checked",false);
+                    })
+                }
+            })
         })
     })
+    //结算多个
+    function settleMore(){
+        var sum=0;
+        var sumPrice=0;
+        var priceStr="";
+        var settlePrice=0;
+        var ids="";
+        var type=""
+        $("input[type='checkbox']").each(function () {
+            var checked=$(this).prop("checked")
+            if(checked==true) {
+                sum+=1;
+                if(${formUrl=='editor'}) {
+                     settlePrice = $(this).parent().parent().children(".settleCostPrice").html();
+                }else {
+                     settlePrice = $(this).parent().parent().children(".settleCustomPrice").html();
+                }
+                if(settlePrice!=null){
+                    ids=$(this).parent().attr("entityId")+","+ids;
+                    type=$(this).parent().attr("type");
+                    priceStr=settlePrice+","+priceStr;
+                    sumPrice+=parseInt(settlePrice);
+                }
+            }
+        })
+        $("#articleNum").val(sum);
+        $("#morePrice").val(sumPrice);
+        $("#settleArticleIds").val(ids);
+        $("#settleType").val(type);
+        $("#priceStr").val(priceStr);
+        $("#moreRealPayPrice").val(sumPrice);
+        $("#moreSettleModule").modal('show');
+    }
+
 
 	function settleView(id,type,title,price,customPrice) {
 		$("#settlementId").val(id);
@@ -198,7 +352,6 @@
 		}else{
 			$("#priceId").val(customPrice);
 		}
-
         $("#verifyModule").modal('show');
     }
 </script>

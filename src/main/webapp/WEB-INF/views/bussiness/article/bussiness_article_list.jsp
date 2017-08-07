@@ -27,7 +27,7 @@
             <label for="customName">客户信息</label>
             <form:select id="customName" path="customId" class="form-control">
                 <form:option value="" label="请选择"/>
-                <form:options items="${customUserInfoList}" itemValue="id"
+                <form:options items="${customUserInfoList}" itemValue="userId"
                               itemLabel="userName"/>
             </form:select>
         </div>

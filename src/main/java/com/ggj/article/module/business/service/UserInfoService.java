@@ -3,6 +3,7 @@ package com.ggj.article.module.business.service;
 import java.util.Date;
 import java.util.List;
 
+import com.ggj.article.module.common.utils.UserUtils;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.shiro.crypto.hash.SimpleHash;
 import org.apache.shiro.util.ByteSource;
@@ -79,5 +80,15 @@ public class UserInfoService extends CrudService<UserInfoMapper, UserInfo> {
 
 	public UserInfo getMedia(UserInfo userInfo) {
 		return dao.getMedia(userInfo.getId());
+	}
+
+	public void updatePassword(String password) {
+		UserInfo userInfo = UserUtils.getPrincipal().getUserInfo();
+		String salt = IdGen.getSalt("");
+		String enyCrptPassword = new SimpleHash(GlobalConstants.HASH_ALGORITHM_NMAE, password,
+				ByteSource.Util.bytes(salt), GlobalConstants.HASH_ITERATIONS).toHex();
+		userInfo.setPassword(enyCrptPassword);
+		userInfo.setSalt(salt);
+		dao.update(userInfo);
 	}
 }

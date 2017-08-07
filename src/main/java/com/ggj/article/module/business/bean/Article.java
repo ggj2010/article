@@ -19,6 +19,7 @@ public class Article extends BaseEntity {
 	private Integer customId;
 	//员工id
 	private Integer editorId;
+	private String editorName;
 	private Integer mediaId;
 	private List<String>  mediaIdStr;
 	private String mediaName;

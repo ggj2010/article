@@ -148,6 +148,7 @@ public class ArticleService extends CrudService<ArticleMapper, Article> {
         article.setStatus(2);
         //编辑者id
         article.setEditorId(getPrincipal().getId());
+        article.setEditorName(getPrincipal().getName());
         article.setVerifyDate(new Date());
         dao.update(article);
 

@@ -27,4 +27,9 @@ public class BaseController {
 	public String bizException(UnauthorizedException e, HttpServletRequest request, Model model) {
 		return "error/unauthorizedExceptions";
 	}
+	@ExceptionHandler({Exception.class})
+	public String exception(Exception e, HttpServletRequest request, Model model) {
+		model.addAttribute("exception",e);
+		return "error/500";
+	}
 }

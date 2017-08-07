@@ -17,6 +17,9 @@
       <result column="editor_id" jdbcType="INTEGER" property="editorId" />
       <result column="custom_name" jdbcType="VARCHAR" property="customName" />
       <result column="media_name" jdbcType="VARCHAR" property="mediaName" />
+      <!--username用来存编辑的姓名-->
+      <result column="user_name" jdbcType="VARCHAR" property="userName" />
+      <result column="editor_name" jdbcType="VARCHAR" property="editorName" />
       <result column="title" jdbcType="VARCHAR" property="title" />
       <result column="cost_price" jdbcType="DECIMAL" property="costPrice" />
       <result column="custom_price" jdbcType="DECIMAL" property="customPrice" />
@@ -24,7 +27,7 @@
   </resultMap>
   <sql id="Base_Column_List">
     a.*,b.user_id as'user_id',b.custom_id as'custom_id',b.editor_id as'editor_id',b.media_name as'media_name',b.custom_name as'custom_name'
-    ,b.title as 'title',b.cost_price as 'cost_price',b.custom_price as'custom_price'
+    ,b.title as 'title',b.cost_price as 'cost_price',b.custom_price as'custom_price',b.user_name as'user_name',b.editor_name as'editor_name'
   </sql>
   <sql id="Inner_jonid_Column">
     INNER JOIN  tb_article b on a.article_id = b.id
@@ -40,7 +43,7 @@
     <include refid="Base_Column_List" />
     from tb_media_settlement a
     <include refid="Inner_jonid_Column"/>
-    where  a.flag="0" and b.status="2"
+    where  a.flag="0" and b.status=2
     <if test="articleId!=null and articleId!=''">
     and a.article_id=#{articleId}
     </if>
@@ -59,6 +62,7 @@
     <if test="article.customId!=null and article.customId!=''">
     and b.custom_id=#{article.customId}
     </if>
+    order by a.id desc
   </select>
   <delete id="delete" parameterType="MediaSettleMent">
     delete from tb_media_settlement  where article_id=#{articleId}

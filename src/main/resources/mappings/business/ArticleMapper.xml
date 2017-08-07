@@ -154,6 +154,9 @@
       <if test="customName != null and customName != ''">
         custom_name = #{customName,jdbcType=VARCHAR},
       </if>
+      <if test="editorName != null and editorName != ''">
+        editor_name = #{editorName,jdbcType=VARCHAR},
+      </if>
       <if test="articleType != null and articleType != ''">
         article_type = #{articleType,jdbcType=TINYINT},
       </if>

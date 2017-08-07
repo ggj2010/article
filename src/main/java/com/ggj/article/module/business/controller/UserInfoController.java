@@ -5,6 +5,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.apache.shiro.authz.annotation.RequiresUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -101,7 +102,19 @@ public class UserInfoController extends BaseController {
 		model.addAttribute("customLevelList", dictionaryTableService.getValueList(new DictionaryTable("custom_level")));
 		return "bussiness/customInfo/bussiness_customInfo_form";
 	}
-	
+	@RequiresUser
+	@RequestMapping(value = "changepwd")
+	public String changePassWord(UserInfo userInfo, Model model) {
+		return "bussiness/userInfo/bussiness_userInfo_changepwd";
+	}
+	@RequiresUser
+	@RequestMapping(value = "changepwd/save")
+	public String changePassword(String password, Model model) {
+		userInfoService.updatePassword(password);
+		model.addAttribute("message", "密码修改成功!");
+		return "bussiness/userInfo/bussiness_userInfo_changepwd";
+	}
+
 	@RequiresPermissions("bussiness:userInfo:edit")
 	@RequestMapping(value = "save")
 	public String save(@Valid UserInfo userInfo, BindingResult result, RedirectAttributes redirectAttributes) {

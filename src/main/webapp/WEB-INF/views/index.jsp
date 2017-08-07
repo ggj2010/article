@@ -66,8 +66,16 @@
                             class="font-bold">欢迎您，${userName}</strong></span>
 							</span>
                     </a>
+                        <ul class="dropdown-menu animated fadeInRight m-t-xs">
+                            <li><a class="J_menuItem" href="${path}/userInfo/changepwd">修改密码</a>
+                            </li>
+                            <li class="divider"></li>
+                            <li><a href="${path}/logout">安全退出</a>
+                            </li>
+                        </ul>
+
                     </div>
-                    <div class="logo-element">RCJH
+                    <div class="logo-element">JCJH
                     </div>
                 </li>
         <c:forEach items="${menuList}" var="menu" varStatus="idxStatus">
@@ -91,71 +99,7 @@
                 </li>
             </c:if>
         </c:forEach>
-              <%--  <li>
-                    <a href="">
-                        <i class="fa fa-home"></i>
-                        <span class="nav-label">系统设置</span>
-                        <span class="fa arrow"></span>
-                    </a>
-                    <ul class="nav nav-second-level">
-                        <li><a class="J_menuItem" href="${path}/sys/dict">数据字典</a></li>
-                        <li><a class="J_menuItem" href="${path}/sys/menu">菜单管理</a></li>
-                        <li><a class="J_menuItem" href="${path}/sys/role">角色管理</a></li>
-                        <li><a class="J_menuItem" href="${path}/userInfo">员工管理</a></li>
-                        <li><a class="J_menuItem" href="${path}/customInfo/">客户管理</a></li>
-                        <li><a class="J_menuItem" href="${path}/customInfo/user">员工客户管理</a></li>
-                        </li>
-                    </ul>
-                </li>
 
-                <li>
-                    <a href="">
-                        <i class="fa fa-home"></i>
-                        <span class="nav-label">媒体</span>
-                        <span class="fa arrow"></span>
-                    </a>
-                    <ul class="nav nav-second-level">
-                        <li>
-                            <a class="J_menuItem" href="${path}/media">媒体管理</a>
-                        </li>
-                        <li>
-                            <a class="J_menuItem" href="${path}/article">稿件管理</a>
-                        </li>
-                        <li>
-                            <a class="J_menuItem" href="${path}/article/add">在线发稿</a>
-                        </li>
-                        <li>
-                            <a class="J_menuItem" href="${path}/media/editor/list">我的媒体</a>
-                        </li>
-                    </ul>
-                </li>
-                <li>
-                    <a href="">
-                        <i class="fa fa-home"></i>
-                        <span class="nav-label">财务</span>
-                        <span class="fa arrow"></span>
-                    </a>
-                    <ul class="nav nav-second-level">
-                        <li>
-                            <a class="J_menuItem" href="${path}/settle/custom?bussinnessType=2">客户结算</a>
-                        </li>
-                        <li>
-                            <a class="J_menuItem" href="${path}/settle/custom?bussinnessType=1">结算</a>
-                        </li>
-                        <li>
-                            <a class="J_menuItem" href="${path}/settle/user?bussinnessType=1">员工结算</a>
-                        </li>
-                        <li>
-                            <a class="J_menuItem" href="${path}/settle/user?bussinnessType=2">系统员工结算</a>
-                        </li>
-                        <li>
-                            <a class="J_menuItem" href="${path}/settle/editor?bussinnessType=1">编辑结算</a>
-                        </li>
-                        <li>
-                            <a class="J_menuItem" href="${path}/settle/editor?bussinnessType=2">系统编辑结算</a>
-                        </li>
-                    </ul>
-                </li>--%>
             </ul>
         </div>
     </nav>
@@ -205,7 +149,9 @@
             <iframe class="J_iframe" name="iframe0" width="100%" height="100%" seamless src="${path}"></iframe>
         </div>
         <div class="footer">
-            <div class="pull-right"><strong>Copyright</strong> 郑州佳辰景行文化传播 © 2017
+            <div class="pull-left"><strong>Copyright</strong> 郑州佳辰景行文化传播 © 2016~2017
+            </div>
+            <div class="pull-right"><strong>技术支持:18638217959</strong>
             </div>
         </div>
     </div>
