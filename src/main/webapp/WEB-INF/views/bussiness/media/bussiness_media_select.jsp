@@ -54,6 +54,7 @@
 							<th>发布速度</th>
 							<th>百度权重</th>
 							<th>案例网址</th>
+							<th>备注</th>
 							<th>操作</th>
 						</tr>
 						<c:forEach items="${pageInfo.list}" var="entity">
@@ -84,6 +85,8 @@
 								<td>
 									<a name="type" href="${entity.exampleUrl}" data-toggle="tooltip"
 									   data-placement="top" target="_blank">查看</a>
+								</td>
+								<td>${entity.remark}
 								</td>
 								<td>
 									<a class="btn btn-info" href="javascript:void(0);" name="choose" data-toggle="tooltip" data-placement="top" title="选择" ><span class="glyphicon glyphicon-plus-sign"></span> </a>

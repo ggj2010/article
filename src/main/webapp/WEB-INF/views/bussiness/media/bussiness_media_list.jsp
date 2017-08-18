@@ -85,6 +85,7 @@
 							<th>发布速度</th>
 							<th>百度权重</th>
 							<th>案例网址</th>
+							<th>备注</th>
 							<shiro:hasPermission name="bussiness:media:edit">
 							<th>操作</th>
 							</shiro:hasPermission>
@@ -118,6 +119,8 @@
 								<td>
 									<a name="type" href="${entity.exampleUrl}" data-toggle="tooltip"
 									   data-placement="top" target="_blank">查看</a>
+								</td>
+								<td>${entity.remark}
 								</td>
 								<shiro:hasPermission name="bussiness:media:edit">
 								<td>
