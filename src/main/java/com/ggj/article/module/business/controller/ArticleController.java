@@ -13,6 +13,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -80,7 +81,7 @@ public class ArticleController extends BaseController {
 		pageUtils.setPage(request, rep);
 		PageInfo<Article> pageInfo = articleService.findPage(article);
 		model.addAttribute("pageInfo", pageInfo);
-		List<CustomUserInfo> customUserInfoList = customInfoService.getCustomUser(principal.getId());
+		List<CustomUserInfo> customUserInfoList = customInfoService.getCustomUser(new CustomUserInfo(UserUtils.getPrincipal().getId()));
 		model.addAttribute("customUserInfoList", customUserInfoList);
 		model.addAttribute("article", article);
 		model.addAttribute("userId", principal.getId());
@@ -168,7 +169,7 @@ public class ArticleController extends BaseController {
 	@RequestMapping(value = "addsteptwo")
 	public String addStepTwo(Article article, Model model) {
 		Principal principal = UserUtils.getPrincipal();
-		List<CustomUserInfo> customUserInfoList = customInfoService.getCustomUser(principal.getId());
+		List<CustomUserInfo> customUserInfoList = customInfoService.getCustomUser(new CustomUserInfo(UserUtils.getPrincipal().getId()));
 		model.addAttribute("customUserInfoList", customUserInfoList);
 		model.addAttribute("article", article);
 		model.addAttribute("principal", principal);
@@ -281,5 +282,11 @@ public class ArticleController extends BaseController {
 		}
 		redirectAttributes.addAttribute("typeParam", article.getTypeParam());
 		return "redirect:/article/";
+	}
+
+	@ResponseBody
+	@RequestMapping("/ajax/getCustomInfoList")
+	public List<CustomUserInfo> getCustomInfoList(String name){
+		return customInfoService.getCustomUser(new CustomUserInfo(UserUtils.getPrincipal().getId(),name));
 	}
 }

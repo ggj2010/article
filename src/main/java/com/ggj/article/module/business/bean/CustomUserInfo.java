@@ -12,6 +12,7 @@ public class CustomUserInfo extends BaseEntity {
     private Integer customId;
     //绑定人的id
     private Integer userId;
+    private String userName;
     private Integer customStatus;
     private CustomInfo customInfo;
 
@@ -20,5 +21,10 @@ public class CustomUserInfo extends BaseEntity {
     }
 
     public CustomUserInfo() {
+    }
+
+    public CustomUserInfo(int userId, String userName) {
+        this.userId = userId;
+        this.userName=userName;
     }
 }

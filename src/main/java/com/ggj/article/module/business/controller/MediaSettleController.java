@@ -69,7 +69,7 @@ public class MediaSettleController extends BaseController {
 		}
 		if (mediaSettleMent.getBussinnessType().equals("2")) {
 			mediaSettleMent.getArticle().setUserId(UserUtils.getPrincipal().getId());
-			List<CustomUserInfo> customUserInfoList = customInfoService.getCustomUser(UserUtils.getPrincipal().getId());
+			List<CustomUserInfo> customUserInfoList = customInfoService.getCustomUser(new CustomUserInfo(UserUtils.getPrincipal().getId()));
 			model.addAttribute("customUserInfoList", customUserInfoList);
 		} else {
 			mediaSettleMent.getArticle().setCustomId(UserUtils.getPrincipal().getId());

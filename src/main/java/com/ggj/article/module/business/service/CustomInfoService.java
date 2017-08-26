@@ -109,7 +109,7 @@ public class CustomInfoService extends CrudService<CustomInfoMapper, CustomInfo>
         return dao.getRole(id);
     }
 
-    public List<CustomUserInfo> getCustomUser(int userId) {
-        return customUserInfoMapperMapper.findList(new CustomUserInfo(userId));
+    public List<CustomUserInfo> getCustomUser(CustomUserInfo customUserInfo) {
+        return customUserInfoMapperMapper.findList(customUserInfo);
     }
 }

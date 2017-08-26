@@ -72,7 +72,7 @@ public class CustomInfoController extends BaseController {
 	@RequestMapping(value = "user")
 	public String listUserCustom(CustomInfo customInfo, HttpServletRequest request, HttpServletResponse rep, Model model) {
 		pageUtils.setPage(request, rep);
-		PageInfo<CustomUserInfo> pageInfo =new PageInfo<CustomUserInfo>(customInfoService.getCustomUser(UserUtils.getPrincipal().getId()));
+		PageInfo<CustomUserInfo> pageInfo =new PageInfo<CustomUserInfo>(customInfoService.getCustomUser(new CustomUserInfo(UserUtils.getPrincipal().getId())));
 		model.addAttribute("pageInfo", pageInfo);
 		model.addAttribute("customInfo", customInfo);
 		model.addAttribute("formUrl", "user");

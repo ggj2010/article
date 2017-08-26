@@ -33,19 +33,19 @@
                     <div class="form-group">
                         <label class="col-sm-2 control-label">客户信息</label>
                         <div class="col-sm-8">
-                            <label class="radio-inline">
-                                <input type="radio" class="required" maxlength="255" autocomplete="off" name="custom" value="old" checked="true" />老客户
-                            </label>
-                            <label class="radio-inline">
-                                <input type="radio" class="required" maxlength="255" autocomplete="off" name="custom"  value="new"  />新客户
-                            </label>
-                            <form:select id="customInfo" path="customId" class="form-control">
-                                <form:option value="" label="请选择"/>
-                                <form:options items="${customUserInfoList}" itemValue="userId"
-                                              itemLabel="userName" />
-                            </form:select>
-                            <input class="form-control" maxlength="255" autocomplete="off" id="customName"  type="hidden"/>
-                            <span class="glyphicon  form-control-feedback" aria-hidden="true"></span>
+                            <div class="input-group">
+                                <input class="form-control required" id="customNameId" maxlength="255" />
+                                <input class="form-control required" id="customId" maxlength="255" type="hidden" />
+                                <span class="glyphicon  form-control-feedback"
+                                      aria-hidden="true"></span>
+                                <div class="input-group-btn">
+                                    <button type="button" class="btn btn-default dropdown-toggle"
+                                            data-toggle="dropdown">
+                                        <span class="caret"></span>
+                                    </button>
+                                    <ul class="dropdown-menu dropdown-menu-right" role="menu"></ul>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     </c:if>
@@ -103,7 +103,7 @@
 
 <script type="text/javascript">
     require(['jquery', 'bootstrap', 'jqueryValidateMessages'], function ($) {
-        require(['Chosen', 'toastr', 'sys'], function () {
+        require(['Chosen', 'toastr', 'suggest','sys'], function () {
             //选择框赋值
             $("select").chosen();
             $("#customInfo_chosen").css("width","100px");
@@ -120,22 +120,43 @@
                 $("input[name='pageNum']").val($(this).attr("value"));
                 $("#mediaForm").submit();
             })
-            $("#accordion").on("click",'input[type=\'radio\']', function () {
-                //1就是稿件
-              if($(this).val()==1){
-                  $("#file"+$(this).attr("seq")).removeAttr("readonly");
-                  $("#url"+$(this).attr("seq")).attr("readonly","true");
-              }else if($(this).val()==2){
-                  $("#file"+$(this).attr("seq")).attr("readonly","true");
-                  $("#url"+$(this).attr("seq")).removeAttr("readonly");
-              }else if($(this).val()=='new'){
-                  $("#customInfo_chosen").hide();
-                  $("#customName").attr("type","text");
-              }else if($(this).val()=='old'){
-                  $("#customName").attr("type","hidden");
-                  $("#customInfo_chosen").show();
-              }
-            })
+
+
+            var taobaoBsSuggest = $("#customNameId").bsSuggest({
+                indexId: 1,             //data.value 的第几个数据，作为input输入框的内容
+                indexKey: 0,            //data.value 的第几个数据，作为input输入框的内容
+                allowNoKeyword: false,  //是否允许无关键字时请求数据。为 false 则无输入时不执行过滤请求
+                multiWord: true,        //以分隔符号分割的多关键字支持
+                separator: ",",         //多关键字支持时的分隔符，默认为空格
+                getDataMethod: "url",   //获取数据的方式，总是从 URL 获取
+                showHeader: true,       //显示多个字段的表头
+                showBtn: false,
+                effectiveFieldsAlias:{userName: "客户名称"},
+                url: '${path}/article/ajax/getCustomInfoList?name=', /*优先从url ajax 请求 json 帮助数据，注意最后一个参数为关键字请求参数*/
+                //jsonp: 'callback',               //如果从 url 获取数据，并且需要跨域，则该参数必须设置
+                processData: function(json){     // url 获取数据时，对数据的处理，作为 getData 的回调函数
+                    var i, len, data = {value: []};
+                    len = json.length;
+                    if(len>0) {
+                        for (i = 0; i < len; i++) {
+                            data.value.push({
+                                "userName": json[i].userName,
+                                "userId": json[i].userId
+                            });
+                        }
+                    }
+                    $("#customId").val("0");
+                    console.log(data);
+                    return data;
+                }
+
+
+            }).on('onSetSelectValue', function (e, keyword) {
+                $("#customNameId").val(keyword.key);
+                $("#customId").val(keyword.id);
+            });
+
+
 
             $("#entityForm").validate({
                 submitHandler: function (form) {
@@ -147,14 +168,8 @@
                         if(i==0){
                             var userType="${principal.userType}";
                             if(userType=="0") {
-                                var customType = $("input[name='custom']:checked").val();
-                                if (customType == "old") {
-                                    articleInfo.customId = $(article[i]).find("select[name='customId']").val();
-                                    articleInfo.customName = $(article[i]).find("option:selected").text();
-                                } else {
-                                    articleInfo.customId = "0";
-                                    articleInfo.customName = $("#customName").val();
-                                }
+                                articleInfo.customId = $("#customId").val();
+                                articleInfo.customName = $("#customNameId").val();
                             }else {
                                 articleInfo.customId = "${principal.id}";
                                 articleInfo.customName = "(客发)-${principal.name}";
