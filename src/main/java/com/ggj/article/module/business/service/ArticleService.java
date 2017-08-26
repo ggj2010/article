@@ -72,14 +72,14 @@ public class ArticleService extends CrudService<ArticleMapper, Article> {
                     //非会员
                     customInfos.setCustomStatus(0l);
                     customInfoMapper.insert(customInfos);
-
+                    customId=newUserInfo.getId()+"";
                     CustomUserInfo customUserInfo = new CustomUserInfo();
                     customUserInfo.setCustomId(customInfos.getId());
                     //创建人id
                     customUserInfo.setUserId(UserUtils.getPrincipal().getId());
                     customUserInfo.setCreateDate(new Date());
                     customUserInfoMapperMapper.insert(customUserInfo);
-                    customId=customInfos.getId()+"";
+
                 }
 
             }
