@@ -42,25 +42,25 @@ import lombok.extern.slf4j.Slf4j;
 @RequestMapping("article")
 @Slf4j
 public class ArticleController extends BaseController {
-	
+
 	@Autowired
 	AliyunUtil aliyunUtil;
-	
+
 	@Autowired
 	private PageUtils pageUtils;
-	
+
 	@Autowired
 	private ArticleService articleService;
-	
+
 	@Autowired
 	private CustomInfoService customInfoService;
-	
+
 	@Autowired
 	private DictionaryTableService dictionaryTableService;
-	
+
 	@Autowired
 	private MediaService mediaService;
-	
+
 	@ModelAttribute
 	public Article get(@RequestParam(required = false) Integer id) {
 		Article article = null;
@@ -72,7 +72,7 @@ public class ArticleController extends BaseController {
 		}
 		return article;
 	}
-	
+
 	@RequiresPermissions("bussiness:article:view")
 	@RequestMapping(value = "")
 	public String list(Article article, HttpServletRequest request, HttpServletResponse rep, Model model) {
@@ -89,7 +89,7 @@ public class ArticleController extends BaseController {
 		model.addAttribute("timeTypeList", dictionaryTableService.findList(new DictionaryTable("time_type")));
 		return "bussiness/article/bussiness_article_list";
 	}
-	
+
 	@RequiresPermissions("bussiness:article:view")
 	@RequestMapping(value = "export")
 	public String exportArticle(Article article, HttpServletRequest request, RedirectAttributes redirectAttributes,
@@ -106,7 +106,7 @@ public class ArticleController extends BaseController {
 		}
 		return null;
 	}
-	
+
 	private void setArticleParam(Article article, Principal principal, Model model) {
 		if (StringUtils.isEmpty(article.getTimeType())) {
 			if (StringUtils.isNotEmpty(article.getBeginTimeStr()) || StringUtils.isNotEmpty(article.getEndTimeStr()))
@@ -151,20 +151,20 @@ public class ArticleController extends BaseController {
 			model.addAttribute("userInfoList", listUserInfo);
 		}
 	}
-	
+
 	@RequiresPermissions("bussiness:article:view")
 	@RequestMapping(value = "form")
 	public String form(Article article, Model model) {
 		model.addAttribute("article", article);
 		return "bussiness/article/bussiness_article_form";
 	}
-	
+
 	@RequiresPermissions("bussiness:article:add")
 	@RequestMapping(value = "add")
 	public String add(Article article, Model model) {
 		return "bussiness/article/bussiness_article_add";
 	}
-	
+
 	@RequiresPermissions("bussiness:article:add")
 	@RequestMapping(value = "addsteptwo")
 	public String addStepTwo(Article article, Model model) {
@@ -175,7 +175,7 @@ public class ArticleController extends BaseController {
 		model.addAttribute("principal", principal);
 		return "bussiness/article/bussiness_article_addsteptwo";
 	}
-	
+
 	@RequiresPermissions("bussiness:article:edit")
 	@RequestMapping(value = "save")
 	public String save(ArticleVO articleVO, HttpServletRequest request, RedirectAttributes redirectAttributes) {
@@ -190,8 +190,11 @@ public class ArticleController extends BaseController {
 					if (StringUtils.isNotEmpty(multipartFile.getOriginalFilename())) {
 						String key = "file/" + IdGen.uuid() + multipartFile.getOriginalFilename();
 						try {
+							long beginTime=System.currentTimeMillis();
 							PutObjectResult putObjectResult = aliyunUtil.putObject(null, key,
 									multipartFile.getInputStream());
+							long endTime=System.currentTimeMillis();
+							log.info("上传文件size{},耗时{}",multipartFile.getSize(),(endTime-beginTime)+"ms");
 							fileUrlMap.put(fileName,
 									aliyunUtil.getEndpoint() + "/" + aliyunUtil.getBucket() + "/" + key);
 						} catch (Exception e) {
@@ -205,7 +208,7 @@ public class ArticleController extends BaseController {
 		addMessage(redirectAttributes, "稿件保存成功!");
 		return "redirect:/article/addsteptwo";
 	}
-	
+
 	@RequiresPermissions("bussiness:article:delete")
 	@RequestMapping(value = "/delete")
 	public String delete(Article article, RedirectAttributes redirectAttributes) {
@@ -221,7 +224,7 @@ public class ArticleController extends BaseController {
 		redirectAttributes.addAttribute("typeParam", article.getTypeParam());
 		return "redirect:/article/";
 	}
-	
+
 	@RequiresPermissions("bussiness:article:verify")
 	@RequestMapping(value = "/verifying")
 	public String verifying(Article article, RedirectAttributes redirectAttributes) {
@@ -237,7 +240,7 @@ public class ArticleController extends BaseController {
 		redirectAttributes.addAttribute("typeParam", article.getTypeParam());
 		return "redirect:/article/";
 	}
-	
+
 	@RequiresPermissions("bussiness:article:verify")
 	@RequestMapping(value = "/updateurl")
 	public String updateurl(Article article, RedirectAttributes redirectAttributes) {
@@ -252,7 +255,7 @@ public class ArticleController extends BaseController {
 		redirectAttributes.addAttribute("typeParam", article.getTypeParam());
 		return "redirect:/article/";
 	}
-	
+
 	@RequiresPermissions("bussiness:article:verify")
 	@RequestMapping(value = "/back")
 	public String back(Article article, RedirectAttributes redirectAttributes) {
@@ -268,7 +271,7 @@ public class ArticleController extends BaseController {
 		redirectAttributes.addAttribute("typeParam", article.getTypeParam());
 		return "redirect:/article/";
 	}
-	
+
 	@RequiresPermissions("bussiness:article:verify")
 	@RequestMapping(value = "/verifysave")
 	public String verifysave(Article article, RedirectAttributes redirectAttributes) {
