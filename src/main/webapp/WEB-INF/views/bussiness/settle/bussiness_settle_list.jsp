@@ -29,8 +29,8 @@
                 <form:options items="${articleStatusList}" itemLabel="name" itemValue="value"/>
             </form:select>
         </div>
-        <c:if test="${mediaSettleMent.bussinnessType=='2'}">
-            <c:if test="${formUrl=='custom'}">
+        <c:if test="${mediaSettleMent.bussinnessType=='2'||mediaSettleMent.bussinnessType=='3'}">
+            <c:if test="${formUrl=='custom'&&mediaSettleMent.bussinnessType!='3'}">
                 <div class="form-group">
                     <label for="userName">
                         客户信息
@@ -42,7 +42,7 @@
                     </form:select>
                 </div>
             </c:if>
-            <c:if test="${formUrl=='editor'||formUrl=='user'}">
+            <c:if test="${formUrl=='editor'||formUrl=='user'||mediaSettleMent.bussinnessType=='3'}">
             <div class="form-group">
                 <label for="userName">
                 ${formUrl=='editor'?'编辑信息':'员工信息'}
@@ -80,7 +80,7 @@
                             <th>员工</th>
                             <th>报价</th>
                         </c:if>
-                        <c:if test="${mediaSettleMent.bussinnessType=='2'&&formUrl=='custom'}">
+                        <c:if test="${(mediaSettleMent.bussinnessType=='2'||mediaSettleMent.bussinnessType=='3')&&formUrl=='custom'}">
                             <th>顾客</th>
                             <th>报价</th>
                         </c:if>
@@ -119,7 +119,7 @@
                                 <td>${entity.article.userName}</td>
                                 <td class="settleCustomPrice">${entity.article.customPrice}</td>
                             </c:if>
-                            <c:if test="${mediaSettleMent.bussinnessType=='2'&&formUrl=='custom'}">
+                            <c:if test="${(mediaSettleMent.bussinnessType=='2'||mediaSettleMent.bussinnessType=='3')&&formUrl=='custom'}">
                                 <td>${entity.article.customName}</td>
                                 <td class="settleCustomPrice">${entity.article.customPrice}</td>
                             </c:if>
