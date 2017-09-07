@@ -332,7 +332,7 @@
                 }
             }
         })
-        $("#articleNum").val(sum);
+        $("#articleNum").val(sum-1);
         $("#morePrice").val(sumPrice);
         $("#settleArticleIds").val(ids);
         $("#settleType").val(type);
