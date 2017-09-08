@@ -83,6 +83,7 @@ public class MediaSettleController extends BaseController {
         PageInfo<MediaSettleMent> pageInfo = mediaSettleMentService.findPage(mediaSettleMent);
         model.addAttribute("pageInfo", pageInfo);
         model.addAttribute("articleStatusList", dictionaryTableService.findList(new DictionaryTable("settle_status")));
+        model.addAttribute("timeTypeList", dictionaryTableService.findList(new DictionaryTable("time_type")));
         model.addAttribute("MediaSettleMent", mediaSettleMent);
         model.addAttribute("formUrl", "custom");
         return "bussiness/settle/bussiness_settle_list";
@@ -115,6 +116,7 @@ public class MediaSettleController extends BaseController {
         PageInfo<MediaSettleMent> pageInfo = mediaSettleMentService.findPage(mediaSettleMent);
         model.addAttribute("pageInfo", pageInfo);
         model.addAttribute("articleStatusList", dictionaryTableService.findList(new DictionaryTable("settle_status")));
+        model.addAttribute("timeTypeList", dictionaryTableService.findList(new DictionaryTable("time_type")));
         model.addAttribute("MediaSettleMent", mediaSettleMent);
         if (mediaSettleMent.getBussinnessType().equals("2")) {
             List<UserInfo> listUserInfo = articleService.getUserInfo();
@@ -155,6 +157,7 @@ public class MediaSettleController extends BaseController {
         PageInfo<MediaSettleMent> pageInfo = mediaSettleMentService.findPage(mediaSettleMent);
         model.addAttribute("pageInfo", pageInfo);
         model.addAttribute("articleStatusList", dictionaryTableService.findList(new DictionaryTable("settle_status")));
+        model.addAttribute("timeTypeList", dictionaryTableService.findList(new DictionaryTable("time_type")));
         model.addAttribute("MediaSettleMent", mediaSettleMent);
         model.addAttribute("formUrl", "editor");
         if (mediaSettleMent.getBussinnessType().equals("2")) {

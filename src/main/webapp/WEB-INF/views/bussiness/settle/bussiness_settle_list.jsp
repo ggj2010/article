@@ -55,6 +55,25 @@
             </div>
             </c:if>
         </c:if>
+        <div class="form-group">
+            <label for="status">日期类型</label>
+            <form:select id="timeType" path="article.timeType" class="form-control">
+                <form:option value="" label="请选择"/>
+                <form:options items="${timeTypeList}" itemLabel="name" itemValue="value"/>
+            </form:select>
+        </div>
+        <div class="form-group input-append date form_datetime">
+            <label for="beginTime">发布时间</label>
+            <form:input type="text" class="form-control" path="article.beginTimeStr" id="beginTime"/>
+            <span class="add-on"><i class="icon-remove"></i></span>
+            <span class="add-on"><i class="icon-calendar"></i></span>
+        </div>
+        <div class="form-group input-append date form_datetime">
+            <label for="beginTime">-</label>
+            <form:input type="text" class="form-control" path="article.endTimeStr" id="endTime"/>
+            <span class="add-on"><i class="icon-remove"></i></span>
+            <span class="add-on"><i class="icon-calendar"></i></span>
+        </div>
         <button type="submit" class="btn btn-info">查询</button>
         <a type="button" onclick="location.reload();" class="btn btn-info">刷新</a>
         <shiro:hasPermission name="bussiness:settle:form">
@@ -259,8 +278,8 @@
 </body>
 
 <script type="text/javascript">
-    require(['jquery', 'bootstrap', 'jqueryValidateMessages'], function ($) {
-        require(['Chosen', 'toastr', 'sys'], function () {
+    require(['jquery', 'bootstrap', 'datetimepicker','jqueryValidateMessages'], function ($) {
+        require(['Chosen', 'toastr', 'datetimepickerzh','sys'], function () {
             //选择框赋值
             $("select").chosen();
 
@@ -270,6 +289,22 @@
                 $("select[name='type']").val($(this).attr("value"));
                 $('#settleForm').submit();
             })
+
+            $(".form_datetime").datetimepicker({
+                language: 'zh-CN',
+                weekStart: 1,
+                todayBtn: 1,
+                autoclose:true,
+                todayHighlight: 1,
+                timepicker:false,
+                minView:2,
+                maxView:4,
+                startView: 2,
+                showMeridian: 1,
+                format:'yyyy-mm-dd',
+                formatDate: "yyyy-mm-dd",
+                clearBtn: true
+            });
 
             $('[data-toggle="tooltip"]').tooltip();//提示框启用
 

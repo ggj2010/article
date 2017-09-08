@@ -50,7 +50,7 @@
     <if test="status!=null and status!=''">
     and a.status=#{status}
     </if>
-    <if test="type!=null and type!=''">
+    <if test='type!=null and type!=""'>
     and a.type=#{type}
     </if>
     <if test="article!=null and article.userId!=null and article.userId!=''">
@@ -61,6 +61,21 @@
     </if>
     <if test="article.customId!=null and article.customId!=''">
     and b.custom_id=#{article.customId}
+    </if>
+    <if test='type!=null and type!="" and type=="2"'>
+      and a.article_id in ( select c.article_id  from tb_media_settlement c where c.type=1 and c.status=1)
+    </if>
+    <if test='article.beginTimeStr != null and article.beginTimeStr != "" and article.timeType=="1" '>
+      and b.create_date<![CDATA[ >=  ]]> #{article.beginTime,jdbcType=TIMESTAMP}
+    </if>
+    <if test='article.endTimeStr != null and article.endTimeStr != "" and article.timeType=="1" '>
+      and b.create_date <![CDATA[ <=  ]]>#{article.endTime,jdbcType=TIMESTAMP}
+    </if>
+    <if test='article.beginTimeStr != null and article.beginTimeStr != "" and article.timeType=="2" '>
+      and b.verify_date<![CDATA[ >=  ]]> #{article.beginTime,jdbcType=TIMESTAMP}
+    </if>
+    <if test='article.endTimeStr != null and article.endTimeStr != "" and article.timeType=="2" '>
+      and b.verify_date <![CDATA[ <=  ]]>#{article.endTime,jdbcType=TIMESTAMP}
     </if>
     order by a.id desc
   </select>
