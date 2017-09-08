@@ -108,6 +108,8 @@
                             <th>成本价格</th>
                         </c:if>
                         <th>结算价格</th>
+                        <th>发布时间</th>
+                        <th>审核时间</th>
                         <th>备注</th>
                         <c:if test="${mediaSettleMent.bussinnessType=='2'}">
                             <th>操作</th>
@@ -147,6 +149,8 @@
                                 <td class="settleCostPrice">${entity.article.costPrice}</td>
                             </c:if>
                             <td>${entity.price}</td>
+                            <td><fmt:formatDate value="${entity.article.createDate}" pattern="yyyy-MM-dd HH:mm:ss"/></td>
+                            <td><fmt:formatDate value="${entity.article.verifyDate}" pattern="yyyy-MM-dd HH:mm:ss"/></td>
                             <td title="${entity.remark}">${fn:substring(entity.remark, 0, 10)}</td>
                             <c:if test="${mediaSettleMent.bussinnessType=='2'}">
                                 <td>

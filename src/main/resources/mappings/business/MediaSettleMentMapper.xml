@@ -9,7 +9,6 @@
     <result column="status" jdbcType="VARCHAR" property="status" />
     <result column="remark" jdbcType="VARCHAR" property="remark" />
     <result column="flag" jdbcType="VARCHAR" property="flag" />
-    <result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
     <result column="create_user" jdbcType="VARCHAR" property="createUser" />
     <association property="article" javaType="article">
       <result column="user_id" jdbcType="INTEGER" property="userId" />
@@ -23,12 +22,15 @@
       <result column="title" jdbcType="VARCHAR" property="title" />
       <result column="cost_price" jdbcType="DECIMAL" property="costPrice" />
       <result column="custom_price" jdbcType="DECIMAL" property="customPrice" />
+      <result column="verify_date" jdbcType="TIMESTAMP" property="verifyDate" />
+      <result column="create_date2" jdbcType="TIMESTAMP" property="createDate" />
     </association>
   </resultMap>
   <sql id="Base_Column_List">
     a.*,b.user_id as'user_id',b.custom_id as'custom_id',b.editor_id as'editor_id',b.media_name as'media_name',b.custom_name as'custom_name'
     ,b.title as 'title',b.cost_price as 'cost_price',b.custom_price as'custom_price',b.user_name as'user_name',b.editor_name as'editor_name'
-  </sql>
+    ,b.verify_date as'verify_date',b.create_date as 'create_date2'
+</sql>
   <sql id="Inner_jonid_Column">
     INNER JOIN  tb_article b on a.article_id = b.id
   </sql>
