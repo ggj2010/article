@@ -4,7 +4,7 @@
 <script>
 	function setPageSize(number) {
 		$("#pageSize").val(number);
-		$('form').submit();
+		$('form')[0].submit();
 	}
 </script>
 

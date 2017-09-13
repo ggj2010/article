@@ -187,6 +187,8 @@
                             <div class="form-group">
                                 <label for="articleTitleId" class="col-sm-2 control-label">文章标题</label>
                                 <div class="col-sm-10">
+                                    <input type="hidden" name="pageNum"  value="${pageInfo.pageNum}">
+                                    <input type="hidden" name="pageSize"  value="${pageInfo.pageSize}">
                                     <input type="text" class="form-control" readonly="readonly" id="articleTitleId">
                                     <input type="hidden" class="form-control" name="id" id="settlementId">
                                     <input type="hidden" class="form-control" name="type" id="typeId">
@@ -241,6 +243,8 @@
                             <div class="form-group">
                                 <label for="articleTitleId" class="col-sm-2 control-label">稿件数量</label>
                                 <div class="col-sm-10">
+                                    <input type="hidden" name="pageNum"  value="${pageInfo.pageNum}">
+                                    <input type="hidden" name="pageSize"  value="${pageInfo.pageSize}">
                                     <input type="text" class="form-control" readonly="readonly" id="articleNum">
                                     <input type="hidden" id="settleArticleIds" name="settleArticleIds">
                                     <input type="hidden" class="form-control" name="type" id="settleType">

@@ -169,19 +169,21 @@ public class MediaSettleController extends BaseController {
 
     @RequiresPermissions("bussiness:settle:edit")
     @RequestMapping(value = "save")
-    public String save(MediaSettleMent mediaSettleMent, RedirectAttributes redirectAttributes, String formUrl) {
+    public String save(MediaSettleMent mediaSettleMent, HttpServletRequest request,RedirectAttributes redirectAttributes, String formUrl) {
         try {
             mediaSettleMentService.save(mediaSettleMent);
             addMessage(redirectAttributes, "结算成功!");
         } catch (Exception e) {
             log.error("结算失败！" + e.getLocalizedMessage());
         }
+        redirectAttributes.addAttribute("pageNum",request.getParameter("pageNum"));
+        redirectAttributes.addAttribute("pageSize",request.getParameter("pageSize"));
         return "redirect:/settle/" + formUrl;
     }
 
     @RequiresPermissions("bussiness:settle:edit")
     @RequestMapping(value = "/moresave")
-    public String moresave(MediaSettleMentVO mediaSettleMentVO, RedirectAttributes redirectAttributes) {
+    public String moresave(MediaSettleMentVO mediaSettleMentVO,HttpServletRequest request, RedirectAttributes redirectAttributes) {
         try {
             if (mediaSettleMentVO != null) {
                 String settleArticleIds = mediaSettleMentVO.getSettleArticleIds();
@@ -205,6 +207,8 @@ public class MediaSettleController extends BaseController {
         } catch (Exception e) {
             log.error("结算失败！" + e.getLocalizedMessage());
         }
+        redirectAttributes.addAttribute("pageNum",request.getParameter("pageNum"));
+        redirectAttributes.addAttribute("pageSize",request.getParameter("pageSize"));
         return "redirect:/settle/" + mediaSettleMentVO.getFormUrl();
     }
 }
