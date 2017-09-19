@@ -178,12 +178,24 @@ public class MediaSettleController extends BaseController {
         }
         redirectAttributes.addAttribute("pageNum",request.getParameter("pageNum"));
         redirectAttributes.addAttribute("pageSize",request.getParameter("pageSize"));
+
+        if(mediaSettleMent!=null){
+            if(mediaSettleMent.getArticle()!=null){
+                Article article = mediaSettleMent.getArticle();
+                redirectAttributes.addAttribute("article.customId",article.getCustomId());
+                redirectAttributes.addAttribute("article.beginTimeStr",article.getBeginTimeStr());
+                redirectAttributes.addAttribute("article.endTimeStr",article.getEndTimeStr());
+                redirectAttributes.addAttribute("article.timeType",article.getTimeType());
+                redirectAttributes.addAttribute("status","0");
+            }
+        }
+
         return "redirect:/settle/" + formUrl;
     }
 
     @RequiresPermissions("bussiness:settle:edit")
     @RequestMapping(value = "/moresave")
-    public String moresave(MediaSettleMentVO mediaSettleMentVO,HttpServletRequest request, RedirectAttributes redirectAttributes) {
+    public String moresave(MediaSettleMentVO mediaSettleMentVO,HttpServletRequest request, RedirectAttributes redirectAttributes,MediaSettleMent mediaSettleMent) {
         try {
             if (mediaSettleMentVO != null) {
                 String settleArticleIds = mediaSettleMentVO.getSettleArticleIds();
@@ -194,12 +206,12 @@ public class MediaSettleController extends BaseController {
                     String[] idArray = settleArticleIds.split("\\,");
                     String[] priceArray = priceStr.split("\\,");
                     for (int i = 0; i < idArray.length; i++) {
-                        MediaSettleMent mediaSettleMent = new MediaSettleMent();
-                        mediaSettleMent.setType(mediaSettleMentVO.getType());
-                        mediaSettleMent.setPrice(Integer.parseInt(priceArray[i]));
-                        mediaSettleMent.setId(Integer.parseInt(idArray[i]));
-                        mediaSettleMent.setRemark(mediaSettleMentVO.getRemark());
-                        mediaSettleMentService.save(mediaSettleMent);
+                        MediaSettleMent msm = new MediaSettleMent();
+                        msm.setType(mediaSettleMentVO.getType());
+                        msm.setPrice(Integer.parseInt(priceArray[i]));
+                        msm.setId(Integer.parseInt(idArray[i]));
+                        msm.setRemark(mediaSettleMentVO.getRemark());
+                        mediaSettleMentService.save(msm);
                     }
                 }
             }
@@ -207,8 +219,16 @@ public class MediaSettleController extends BaseController {
         } catch (Exception e) {
             log.error("结算失败！" + e.getLocalizedMessage());
         }
-        redirectAttributes.addAttribute("pageNum",request.getParameter("pageNum"));
-        redirectAttributes.addAttribute("pageSize",request.getParameter("pageSize"));
+        if(mediaSettleMent!=null){
+            if(mediaSettleMent.getArticle()!=null){
+                Article article = mediaSettleMent.getArticle();
+                redirectAttributes.addAttribute("article.customId",article.getCustomId());
+                redirectAttributes.addAttribute("article.beginTimeStr",article.getBeginTimeStr());
+                redirectAttributes.addAttribute("article.endTimeStr",article.getEndTimeStr());
+                redirectAttributes.addAttribute("article.timeType",article.getTimeType());
+                redirectAttributes.addAttribute("status","0");
+            }
+        }
         return "redirect:/settle/" + mediaSettleMentVO.getFormUrl();
     }
 }
