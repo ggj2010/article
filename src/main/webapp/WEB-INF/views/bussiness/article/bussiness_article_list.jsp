@@ -86,6 +86,7 @@
             <div class="table-responsive">
                 <table class="table table-hover  table-striped table-bordered">
                     <tr class="info">
+                        <th>序号</th>
                         <th>标题</th>
                         <th>媒体</th>
                         <th>状态</th>
@@ -101,7 +102,7 @@
                         <th>备注</th>
                         <th>操作</th>
                     </tr>
-                    <c:forEach items="${pageInfo.list}" var="entity">
+                    <c:forEach items="${pageInfo.list}" var="entity" varStatus="status">
                         <tr class="
                         <c:choose>
                                     <c:when test="${entity.status==0}">
@@ -122,6 +123,7 @@
                                 </c:choose>
                         "
                         >
+                            <td>${status.index + 1}</td>
                             <td title="${entity.title}"><a href="${entity.url}" <shiro:hasPermission name="bussiness:mediaEditor:edit">
                                                            <c:if test="${entity.status==0}">onclick="verifying(${entity.id})"</c:if>
                                 </shiro:hasPermission>

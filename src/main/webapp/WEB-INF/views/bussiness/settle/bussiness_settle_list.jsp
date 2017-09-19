@@ -75,7 +75,6 @@
                 <span class="add-on"><i class="icon-remove"></i></span>
                 <span class="add-on"><i class="icon-calendar"></i></span>
             </div>
-        </div>
         <button type="submit" class="btn btn-info">查询</button>
         <a type="button" onclick="location.reload();" class="btn btn-info">刷新</a>
         <shiro:hasPermission name="bussiness:settle:form">
@@ -83,6 +82,7 @@
                 <a type="button" onclick="settleMore()" class="btn btn-danger">批量审核</a>
             </c:if>
         </shiro:hasPermission>
+        </div>
     </form:form>
     <div class="panel panel-default">
         <div class="panel-heading">结算列表</div>
