@@ -85,7 +85,22 @@
         </div>
     </form:form>
     <div class="panel panel-default">
-        <div class="panel-heading">结算列表</div>
+        <div class="panel-heading">结算列表
+            <div class="pull-right">
+                <button class="btn btn-xs btn-danger" type="button">
+                    总数量 <span class="badge">${totalSize}</span>
+                </button>
+                <button class="btn btn-xs btn-danger" type="button">
+                    已结算 <span class="badge">${settleSize}</span>
+                </button>
+                <button class="btn btn-xs btn-danger" type="button">
+                    总金额 <span class="badge">${totalPrice}</span>
+                </button>
+                <button class="btn btn-xs btn-danger" type="button">
+                    总结算金额 <span class="badge">${settlePrice}</span>
+                </button>
+            </div>
+        </div>
         <div class="panel-body">
             <div class="table-responsive">
                 <table class="table table-hover  table-striped table-bordered">
@@ -101,12 +116,16 @@
                             <th>员工</th>
                             <th>报价</th>
                         </c:if>
-                        <c:if test="${(mediaSettleMent.bussinnessType=='2'||mediaSettleMent.bussinnessType=='3')&&formUrl=='custom'}">
+                        <c:if test="${(mediaSettleMent.bussinnessType=='2'||mediaSettleMent.bussinnessType=='1')&&formUrl=='custom'}">
+                        <c:if test="${mediaSettleMent.bussinnessType=='2'}">
                             <th>顾客</th>
+                        </c:if>
                             <th>报价</th>
                         </c:if>
-                        <c:if test="${mediaSettleMent.bussinnessType=='2'&&formUrl=='editor'}">
+                        <c:if test="${(mediaSettleMent.bussinnessType=='2'||mediaSettleMent.bussinnessType=='1')&&formUrl=='editor'}">
+                        <c:if test="${mediaSettleMent.bussinnessType=='2'}">
                             <th>编辑</th>
+                        </c:if>
                             <th>成本价格</th>
                         </c:if>
                         <th>结算价格</th>
@@ -146,12 +165,16 @@
                                 <td>${entity.article.userName}</td>
                                 <td class="settleCustomPrice">${entity.article.customPrice}</td>
                             </c:if>
-                            <c:if test="${(mediaSettleMent.bussinnessType=='2'||mediaSettleMent.bussinnessType=='3')&&formUrl=='custom'}">
+                            <c:if test="${(mediaSettleMent.bussinnessType=='2'||mediaSettleMent.bussinnessType=='1')&&formUrl=='custom'}">
+                                <c:if test="${mediaSettleMent.bussinnessType=='2'}">
                                 <td>${entity.article.customName}</td>
+                                 </c:if>
                                 <td class="settleCustomPrice">${entity.article.customPrice}</td>
                             </c:if>
-                            <c:if test="${mediaSettleMent.bussinnessType=='2'&&formUrl=='editor'}">
+                            <c:if test="${(mediaSettleMent.bussinnessType=='2'||mediaSettleMent.bussinnessType=='1')&&formUrl=='editor'}">
+                            <c:if test="${mediaSettleMent.bussinnessType=='2'}">
                                 <td>${entity.article.editorName}</td>
+                            </c:if>
                                 <td class="settleCostPrice">${entity.article.costPrice}</td>
                             </c:if>
                             <td>${entity.price}</td>

@@ -21,11 +21,10 @@
         <input type="hidden" name="pageNum" id="pageNum" value="${pageInfo.pageNum}">
         <input type="hidden" name="pageSize" id="pageSize" value="${pageInfo.pageSize}">
         <form:hidden path="typeParam"/>
-        <a type="button" onclick="location.reload();" class="btn btn-info">刷新</a>
         <c:if test="${article.typeParam=='1'}">
         <div class="form-group">
             <label for="customName">客户信息</label>
-            <form:select id="customName" path="customId" class="form-control">
+            <form:select id="customName" path="customId" class="">
                 <form:option value="" label="请选择"/>
                 <form:options items="${customUserInfoList}" itemValue="userId"
                               itemLabel="userName"/>
@@ -35,7 +34,7 @@
         <c:if test="${article.typeParam=='2'|| article.typeParam=='' }">
         <div class="form-group">
             <label for="userName">员工信息</label>
-            <form:select id="userName" path="userId" class="form-control">
+            <form:select id="userName" path="userId" class="">
                 <form:option value="" label="请选择"/>
                 <form:options items="${userInfoList}" itemValue="id"
                               itemLabel="userName"/>
@@ -44,41 +43,43 @@
         </c:if>
         <div class="form-group">
             <label for="status">状态</label>
-            <form:select id="status" path="status" class="form-control">
+            <form:select id="status" path="status" class="">
                 <form:option value="" label="请选择"/>
                 <form:options items="${articleStatusList}" itemLabel="name" itemValue="value"/>
             </form:select>
         </div>
         <div class="form-group">
             <label for="title">标题</label>
-            <form:input type="text" class="form-control" path="title" id="title"/>
+            <form:input type="text" class="" path="title" id="title"/>
         </div>
         <div class="form-group">
             <label for="mediaName">媒体名称</label>
-            <form:input type="text" class="form-control" path="mediaName" id="mediaName"/>
+            <form:input type="text" class="" path="mediaName" id="mediaName"/>
         </div>
         <div class="form-group">
             <label for="status">日期类型</label>
-            <form:select id="timeType" path="timeType" class="form-control">
+            <form:select id="timeType" path="timeType" class="">
                 <form:option value="" label="请选择"/>
                 <form:options items="${timeTypeList}" itemLabel="name" itemValue="value"/>
             </form:select>
         </div>
         <div class="form-group input-append date form_datetime">
             <label for="beginTime">发布时间</label>
-                <form:input type="text" class="form-control" path="beginTimeStr" id="beginTime"/>
+                <form:input type="text" class="" path="beginTimeStr" id="beginTime"/>
                 <span class="add-on"><i class="icon-remove"></i></span>
                 <span class="add-on"><i class="icon-calendar"></i></span>
         </div>
         <div class="form-group input-append date form_datetime">
             <label for="beginTime">-</label>
-            <form:input type="text" class="form-control" path="endTimeStr" id="endTime"/>
+            <form:input type="text" class="" path="endTimeStr" id="endTime"/>
             <span class="add-on"><i class="icon-remove"></i></span>
             <span class="add-on"><i class="icon-calendar"></i></span>
         </div>
-        <button type="submit" class="btn btn-info">查询</button>
-        <a  id="exportExel" class="btn btn-danger">导出</a>
-
+        <div class="form-group">
+        <button type="submit" class="btn btn-xs btn-primary">查询</button>
+        <button  id="exportExel" class="btn btn-xs btn-info">导出</button>
+        <button type="button" onclick="location.reload();" class="btn btn-xs btn-danger">刷新</button>
+        </div>
     </form:form>
     <div class="panel panel-default">
         <div class="panel-heading">文章</div>

@@ -2,7 +2,9 @@ package com.ggj.article.module.common.crud;
 
 import java.util.List;
 
+import com.ggj.article.module.business.bean.MediaSettleMentCount;
 import com.ggj.article.module.common.persistence.BaseEntity;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,7 +17,7 @@ import com.github.pagehelper.PageInfo;
  * @author gaoguangjin
  * @Date 2015-9-24 下午5:24:45
  */
-
+@Slf4j
 @Transactional(readOnly = true)
 public abstract class CrudService<D extends CrudDao<T>, T extends BaseEntity> {
 	
@@ -54,7 +56,9 @@ public abstract class CrudService<D extends CrudDao<T>, T extends BaseEntity> {
 	 * @return
 	 */
 	public PageInfo<T> findPage(T entity) {
+		long beginTime=System.currentTimeMillis();
 		List<T> list = dao.findList(entity);
+		log.info("findPage耗时：{}", (System.currentTimeMillis()-beginTime)+"ms");
 		return new PageInfo<T>(list);
 	}
 	

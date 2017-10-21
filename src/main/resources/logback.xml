@@ -42,7 +42,7 @@
         </encoder>
     </appender>
     <logger name="logging.level.org.springframework.web" level="INFO"/>
-    <logger name="com.ggj.article" level="DEBUG"/>
+    <logger name="com.ggj.article" level="INFO"/>
     <root level="INFO">
         <appender-ref ref="asyncLogFile"/>
     </root>
