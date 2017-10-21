@@ -188,28 +188,31 @@
         )as c
         where b.article_id = c.id and
         <!--员工-客户或者员工-系统统计-->
-        <if test='article!=null and article.userId!=null  and article.userId!="" and bussinnessType=="2"'>
-            b.type=1
-        </if>
-        <if test='article!=null and article.userId!=null  and article.userId!="" and bussinnessType=="1"'>
-            b.type=2
-        </if>
-        <!--编辑统计-->
-        <if test="article.editorId!=null and article.editorId!=''">
-            b.type=3
-        </if>
-        <!--客户统计-->
-        <if test="article.customId!=null and article.customId!=''">
-            b.type=1
-        </if>
-        <if test='type!=null and type!="" and article.userId==null and (type=="2" or type=="3") and bussinnessType=="2" '>
-            b.type=#{type}
-        </if>
-        <if test='type!=null and type!="" and article.userId==null  and bussinnessType=="3" '>
-            b.type=#{type}
-        </if>
+        <choose>
+            <when test='article!=null and article.userId!=null  and article.userId!="" and bussinnessType=="2"'>
+                b.type=1
+            </when>
+            <when test='article!=null and article.userId!=null  and article.userId!="" and bussinnessType=="1"'>
+                b.type=2
+            </when>
+            <!--编辑统计-->
+            <when test="article.editorId!=null and article.editorId!=''">
+                b.type=3
+            </when>
+            <!--客户统计-->
+            <when test="article.customId!=null and article.customId!=''">
+                b.type=1
+            </when>
+            <when test='type!=null and type!="" and article.userId==null and (type=="2" or type=="3") and bussinnessType=="2" '>
+                b.type=#{type}
+            </when>
+            <when test='type!=null and type!="" and article.userId==null  and bussinnessType=="3" '>
+                b.type=#{type}
+            </when>
+            <when test='type!=null and type!="" and article.userId!=null  and bussinnessType=="3" '>
+                b.type=#{type}
+            </when>
+        </choose>
         group by b.`status`
     </select>
-
-
 </mapper>
