@@ -87,17 +87,23 @@
     <div class="panel panel-default">
         <div class="panel-heading">结算列表
             <div class="pull-right">
-                <button class="btn btn-xs btn-danger" type="button">
+                <button class="btn btn-xs btn-info" type="button">
                     总数量 <span class="badge">${totalSize}</span>
                 </button>
-                <button class="btn btn-xs btn-danger" type="button">
+                <button class="btn btn-xs btn-info" type="button">
                     已结算 <span class="badge">${settleSize}</span>
                 </button>
                 <button class="btn btn-xs btn-danger" type="button">
+                    未结算 <span class="badge">${totalSize-settleSize}</span>
+                </button>
+                <button class="btn btn-xs btn-info" type="button">
                     总金额 <span class="badge">${totalPrice}</span>
                 </button>
+                <button class="btn btn-xs btn-info" type="button">
+                    已结算金额 <span class="badge">${settlePrice}</span>
+                </button>
                 <button class="btn btn-xs btn-danger" type="button">
-                    总结算金额 <span class="badge">${settlePrice}</span>
+                    未结算金额 <span class="badge">${totalPrice-settlePrice}</span>
                 </button>
             </div>
         </div>

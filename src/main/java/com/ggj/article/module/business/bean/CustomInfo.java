@@ -20,6 +20,7 @@ public class CustomInfo extends UserInfo {
     //参数用到
     private String formUrl;
 
+
     public CustomInfo(Integer customUserId) {
         this.customUserId = customUserId;
     }

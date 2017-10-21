@@ -28,6 +28,15 @@
             b.user_name LIKE  concat ('%',#{userName},'%') and
         </if>
          a.user_id = #{userId,jdbcType=INTEGER} and a.flag="0"and b.flag="0"
+        <if test="isSettle != null and isSettle != ''">
+        and c.user_id in(
+        select  distinct(a.custom_id) from tb_article a where a.user_id =#{userId,jdbcType=INTEGER} and a.id in(
+        select e.article_id from tb_media_settlement e where e.type=1 and e.status=0
+        )
+        )
+        </if>
+
+
     </select>
 
     <delete id="delete" parameterType="CustomUserInfo">

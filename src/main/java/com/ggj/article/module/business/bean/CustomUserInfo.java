@@ -15,7 +15,8 @@ public class CustomUserInfo extends BaseEntity {
     private String userName;
     private Integer customStatus;
     private CustomInfo customInfo;
-
+    //是否只查询结算的
+    private String isSettle;
     public CustomUserInfo(int userId) {
         this.userId = userId;
     }
@@ -26,5 +27,11 @@ public class CustomUserInfo extends BaseEntity {
     public CustomUserInfo(int userId, String userName) {
         this.userId = userId;
         this.userName=userName;
+    }
+    public CustomUserInfo(int userId, Boolean isSettle) {
+        this.userId = userId;
+        if(isSettle) {
+            this.isSettle = "true";
+        }
     }
 }

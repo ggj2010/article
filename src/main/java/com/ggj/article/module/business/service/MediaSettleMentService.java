@@ -36,10 +36,11 @@ public class MediaSettleMentService extends CrudService<MediaSettleMentMapper, M
 
     public void settleStatistics(Model model, MediaSettleMent mediaSettleMent) {
         int totalSize = 0;
-        int settleSize = 0;
         long totalPrice = 0;
+        int settleSize = 0;
         long settlePrice = 0;
         boolean isCostPrice = false;
+
         if (mediaSettleMent.getArticle() != null) {
             Article article = mediaSettleMent.getArticle();
             //编辑结算

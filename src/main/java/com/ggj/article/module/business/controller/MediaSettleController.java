@@ -77,7 +77,11 @@ public class MediaSettleController extends BaseController {
         }
         if (mediaSettleMent.getBussinnessType().equals("2")) {
             mediaSettleMent.getArticle().setUserId(UserUtils.getPrincipal().getId());
-            List<CustomUserInfo> customUserInfoList = customInfoService.getCustomUser(new CustomUserInfo(UserUtils.getPrincipal().getId()));
+            List<CustomUserInfo> customUserInfoList = customInfoService.getCustomUser(new CustomUserInfo(UserUtils.getPrincipal().getId(),true));
+            //默认未结算
+            if(StringUtils.isEmpty(mediaSettleMent.getStatus())){
+                mediaSettleMent.setStatus("0");
+            }
             model.addAttribute("customUserInfoList", customUserInfoList);
         } else if (mediaSettleMent.getBussinnessType().equals("3")) {
             List<UserInfo> listUserInfo = articleService.getUserInfo();
