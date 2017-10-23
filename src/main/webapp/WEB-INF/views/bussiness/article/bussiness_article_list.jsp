@@ -333,7 +333,9 @@
             $("#exportExel").on("click",function(){
                 $("#articleForm").attr("action","${path}/article/export");
                 $("#articleForm").submit();
-                $("#articleForm").attr("action","${path}/article/");
+                setTimeout(function(){
+                    $("#articleForm").attr("action","${path}/article/");
+                },1000)
             })
 
             $(".form_datetime").datetimepicker({
