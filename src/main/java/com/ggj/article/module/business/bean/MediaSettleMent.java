@@ -16,7 +16,10 @@ public class MediaSettleMent extends BaseEntity implements Serializable{
 //	1、客户结算2、员工结算、3、编辑结算
 	private String type;
 	private String bussinnessType;
+	//结算价格
 	private long price;
+	//原价
+	private long originalPrice;
 	private long customPrice;
 	private String status;
 	private Article article;

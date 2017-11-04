@@ -19,6 +19,7 @@
     <result column="custom_price" jdbcType="DECIMAL" property="customPrice" />
     <result column="remark" jdbcType="VARCHAR" property="remark" />
     <result column="status" jdbcType="TINYINT" property="status" />
+    <result column="approve_status" jdbcType="TINYINT" property="approveStatus" />
     <result column="verify_status" jdbcType="TINYINT" property="verifyStatus" />
     <result column="flag" jdbcType="VARCHAR" property="flag" />
     <result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
@@ -180,6 +181,9 @@
       </if>
       <if test="status != null">
         status = #{status,jdbcType=TINYINT},
+      </if>
+      <if test="approveStatus != null">
+        approve_status = #{approveStatus,jdbcType=TINYINT},
       </if>
       <if test="flag != null and flag != ''">
         flag = #{flag,jdbcType=VARCHAR},

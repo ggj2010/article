@@ -32,6 +32,8 @@ public class Article extends BaseEntity {
 	private String verifyUrl;
 	//0待审核、1、审核中、2已审核、3已退稿、4已删除
 	private Integer status;
+	//已审核稿件阅读状态，方便客户检阅。1、未提取，2、未提取
+	private Integer approveStatus;
 	private String refundRemark;
 	private Integer verifyStatus;
 	private String beginTime;
@@ -53,7 +55,4 @@ public class Article extends BaseEntity {
 
 	private String typeParam;
 
-//	public String getVerifyDate() {
-//		return DateUtils.formatDate(verfiyDate);
-//	}
 }

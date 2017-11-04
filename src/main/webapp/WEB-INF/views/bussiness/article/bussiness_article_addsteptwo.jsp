@@ -9,8 +9,8 @@
 <body>
 <div class="container-fluent">
     <form:form id="entityForm" modelAttribute="article" action="${path}/article/save" method="post"
-               cssClass="form-horizontal" enctype="multipart/form-data">
-        <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+               cssClass="form-horizontal" enctype="multipart/form-data" >
+        <div class="panel-group" id="accordion">
             <div class="panel panel-default">
                 <div class="panel-heading" role="tab" id="heading1">
                     <h4 class="panel-title">
@@ -97,7 +97,7 @@
                 <input type="hidden" id="articleInfo" name="articleInfo">
                 <input type="hidden" id="mediaInfo" name="mediaInfo">
                 <a class="btn btn-danger" href="javaScript:addMore()">继续添加</a>
-                <a class="btn btn-default" href="javaScript:history.go(-1)">返回</a>
+                <%--<a class="btn btn-default" href="javaScript:history.go(-1)">返回</a>--%>
             </div>
         </div>
     </form:form>
@@ -225,12 +225,14 @@
     })
 
     function addMore() {
+        $('.collapse').collapse();
+        $('.in').collapse();
         var length = $(".panel-heading").length + 1;
         var html = "";
         var html = " <div class=\"panel panel-default\">";
         html += "<div class=\"panel-heading\" role=\"tab\" id=\"heading" + length + "\">";
         html += "<h4 class=\"panel-title\">";
-        html += "<a role=\"button\" data-toggle=\"collapse\" data-parent=\"#accordion\" href=\"#collapse" + length + "\"aria-expanded=\"true\" aria-controls=\"collapse" + length + "\"> 稿件（点击隐藏）</a>";
+        html += "<a role=\"button\" data-toggle=\"collapse\" data-parent=\"#accordion\" href=\"#collapse" + length + "\"aria-expanded=\"true\" aria-controls=\"collapse" + length + "\"> 稿件</a>";
         html += " <a class=\"btn  btn-info\" onclick='deleteArticle(\"collapse" + length + "\")' data-toggle=\"tooltip\" data-placement=\"top\" title=\"删除\"name=\"delete\"><span class=\"glyphicon glyphicon-trash\"></span></a>";
         html += "</h4>";
         html += "</div>";

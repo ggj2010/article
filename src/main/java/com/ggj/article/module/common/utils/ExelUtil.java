@@ -10,6 +10,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletResponse;
 
 import com.ggj.article.module.business.bean.MediaSettleMent;
+import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.hssf.usermodel.*;
 import org.apache.poi.ss.usermodel.Cell;
@@ -81,7 +82,8 @@ public class ExelUtil {
         }
         return list;
     }
-    public static List<Article> importArticle(InputStream fileInputStream,Integer userId) throws Exception {
+
+    public static List<Article> importArticle(InputStream fileInputStream, Integer userId) throws Exception {
         Workbook wb0 = null;
         List<Article> list = new ArrayList<Article>();
         try {
@@ -327,7 +329,9 @@ public class ExelUtil {
             for (Article article : listArticle) {
                 row = sheet.createRow((int) i);
                 row.createCell((short) 0).setCellValue(article.getMediaName());
-                row.createCell((short) 1).setCellValue(article.getTitle());
+                String title = article.getTitle();
+                title = StringEscapeUtils.unescapeHtml4(title.trim());
+                row.createCell((short) 1).setCellValue(title);
                 //链接
                 //如果是已审核就是发布后的链接
                 String url = article.getUrl();
@@ -338,6 +342,7 @@ public class ExelUtil {
                     statusName = "待审核";
                 } else if (status == 1) {
                     statusName = "审核中";
+                    url="";
                 } else if (status == 2) {
                     url = article.getVerifyUrl();
                     statusName = "已审核";
