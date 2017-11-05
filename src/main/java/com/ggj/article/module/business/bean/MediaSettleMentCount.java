@@ -11,6 +11,8 @@ public class MediaSettleMentCount implements Serializable{
     private long sumCustomPrice;
     //成本价格
     private long sumCostPrice;
+    //结算价格
+    private long sumSettlePrice;
     //0未结算，1已结算
     private Integer status;
     //总数量

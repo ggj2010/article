@@ -125,7 +125,9 @@
             </button>
             <nav class="page-tabs J_menuTabs">
                 <div class="page-tabs-content">
-                    <a href="${path}" class="active J_menuTab" data-id="index_v1.html">首页</a>
+                    <a href="javascript:;" class="active J_menuTab" data-id="${path}/notice">首页
+                        <i class="fa fa-times-circle"></i>
+                    </a>
                 </div>
             </nav>
             <button class="roll-nav roll-right J_tabRight"><i class="fa fa-forward"></i>
@@ -146,7 +148,7 @@
             <a href="${path}/logout" class="roll-nav roll-right J_tabExit"><i class="fa fa fa-sign-out"></i> 退出</a>
         </div>
         <div class="row J_mainContent" id="content-main">
-            <iframe class="J_iframe" name="iframe0" width="100%" height="100%" seamless src="${path}"></iframe>
+            <iframe class="J_iframe" name="iframe1" width="100%" height="100%" seamless src="${path}/notice" data-id="${path}/notice" frameborder="0"></iframe>
         </div>
         <div class="footer">
             <div class="pull-left"><strong>Copyright</strong> 郑州佳辰景行文化传播 © 2016~2017

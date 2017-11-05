@@ -39,8 +39,8 @@ public class MediaSettleMentService extends CrudService<MediaSettleMentMapper, M
         long totalPrice = 0;
         int settleSize = 0;
         long settlePrice = 0;
+        long costPrice = 0;
         boolean isCostPrice = false;
-
         if (mediaSettleMent.getArticle() != null) {
             Article article = mediaSettleMent.getArticle();
             //编辑结算
@@ -53,19 +53,23 @@ public class MediaSettleMentService extends CrudService<MediaSettleMentMapper, M
                 isCostPrice = true;
             }
         }
-        long beginTime=System.currentTimeMillis();
+        long beginTime = System.currentTimeMillis();
         List<MediaSettleMentCount> list = dao.settleStatistics(mediaSettleMent);
-        log.info("耗时：{}", (System.currentTimeMillis()-beginTime)+"ms");
+        log.info("耗时：{}", (System.currentTimeMillis() - beginTime) + "ms");
         if (CollectionUtils.isNotEmpty(list)) {
             for (MediaSettleMentCount mediaSettleMentCount : list) {
-                //未结算
+                //结算
                 if (mediaSettleMentCount.getStatus() == 1) {
-                    if (isCostPrice) {
-                        settlePrice = mediaSettleMentCount.getSumCostPrice();
-                    } else {
-                        settlePrice = mediaSettleMentCount.getSumCustomPrice();
-                    }
+                    settlePrice = mediaSettleMentCount.getSumSettlePrice();
                     settleSize = mediaSettleMentCount.getTotal();
+                } else {
+                    if (isCostPrice) {
+                        //成本价
+                        costPrice = mediaSettleMentCount.getSumCostPrice();
+                    } else {
+                        //报价
+                        costPrice = mediaSettleMentCount.getSumCustomPrice();
+                    }
                 }
                 if (isCostPrice) {
                     //成本价
@@ -81,5 +85,11 @@ public class MediaSettleMentService extends CrudService<MediaSettleMentMapper, M
         model.addAttribute("totalPrice", totalPrice);
         model.addAttribute("settleSize", settleSize);
         model.addAttribute("settlePrice", settlePrice);
+        model.addAttribute("costPrice", costPrice);
+    }
+    @Transactional(readOnly = false)
+    public void deleteMediaSettleMent(MediaSettleMent mediaSettleMent) {
+        mediaSettleMent.setFlag("1");
+        dao.update(mediaSettleMent);
     }
 }

@@ -7,6 +7,7 @@
         <result column="article_id" jdbcType="INTEGER" property="articleId"/>
         <result column="type" jdbcType="VARCHAR" property="type"/>
         <result column="price" jdbcType="DECIMAL" property="price"/>
+        <result column="original_price" jdbcType="DECIMAL" property="originalPrice"/>
         <result column="status" jdbcType="VARCHAR" property="status"/>
         <result column="remark" jdbcType="VARCHAR" property="remark"/>
         <result column="flag" jdbcType="VARCHAR" property="flag"/>
@@ -38,6 +39,7 @@
         <result column="status" jdbcType="INTEGER" property="status"/>
         <result column="sum_custom_price" jdbcType="DECIMAL" property="sumCustomPrice"/>
         <result column="sum_cost_price" jdbcType="DECIMAL" property="sumCostPrice"/>
+        <result column="sum_settle_price" jdbcType="DECIMAL" property="sumSettlePrice"/>
     </resultMap>
     <sql id="Inner_jonid_Column">
     INNER JOIN  tb_article b on a.article_id = b.id
@@ -72,7 +74,7 @@
         <if test="article.customId!=null and article.customId!=''">
             and b.custom_id=#{article.customId}
         </if>
-        <if test='type!=null and type!="" and (type=="2" or type=="3") and bussinnessType=="2" '>
+        <if test='type!=null and type!="" and type=="2"  and bussinnessType=="2" '>
             and a.article_id in ( select c.article_id from tb_media_settlement c where c.type=1 and c.status=1)
         </if>
         <if test='article.beginTimeStr != null and article.beginTimeStr != "" and article.timeType=="1" '>
@@ -92,6 +94,7 @@
     <delete id="delete" parameterType="MediaSettleMent">
     delete from tb_media_settlement  where article_id=#{articleId}
   </delete>
+
     <insert id="insert" parameterType="com.ggj.article.module.business.bean.MediaSettleMent">
         insert into tb_media_settlement
         <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -103,6 +106,9 @@
             </if>
             <if test="type != null">
                 type,
+            </if>
+            <if test="originalPrice != 0">
+                original_price,
             </if>
             <if test="status != null">
                 status,
@@ -130,6 +136,9 @@
             <if test="type != null">
                 #{type,jdbcType=VARCHAR},
             </if>
+            <if test="originalPrice != null">
+                #{originalPrice,jdbcType=DECIMAL},
+            </if>
             <if test="status != null">
                 #{status,jdbcType=VARCHAR},
             </if>
@@ -148,27 +157,41 @@
         </trim>
     </insert>
     <update id="update" parameterType="com.ggj.article.module.business.bean.MediaSettleMent">
-    update tb_media_settlement
-    set
-      price = #{price,jdbcType=DECIMAL},
-      status = #{status,jdbcType=VARCHAR},
-      remark = #{remark,jdbcType=VARCHAR}
-    where id = #{id,jdbcType=INTEGER}
-  </update>
+        update tb_media_settlement
+        <trim prefix="set" suffixOverrides=",">
+            <if test="price != null">
+                price = #{price,jdbcType=DECIMAL},
+            </if>
+            <if test="originalPrice != null">
+                original_price = #{originalPrice,jdbcType=DECIMAL},
+            </if>
+            <if test="status != null">
+                status = #{status,jdbcType=VARCHAR},
+            </if>
+            <if test="flag != null">
+                flag =#{flag,jdbcType=VARCHAR},
+            </if>
+            <if test="remark != null">
+                remark = #{remark,jdbcType=VARCHAR},
+            </if>
+        </trim>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
 
 
     <insert id="saveBatchSettle" parameterType="java.util.List">
-        insert into tb_media_settlement (article_id,type,status,flag)
+        insert into tb_media_settlement (article_id,type,price,status,flag)
         <foreach collection="list" item="settle" separator=" union all ">
             select
-            #{settle.articleId},#{settle.type},#{settle.status} ,#{settle.flag}
+            #{settle.articleId},#{settle.type},#{settle.price},#{settle.status} ,#{settle.flag}
             from dual
         </foreach>
     </insert>
 
 
     <select id="settleStatistics" parameterType="MediaSettleMent" resultMap="CountResultMap">
-        select sum(c.cost_price) as 'sum_cost_price',sum(c.custom_price) as 'sum_custom_price',count(*) as
+        select sum(b.price) as 'sum_settle_price',sum(c.cost_price) as 'sum_cost_price',sum(c.custom_price) as
+        'sum_custom_price',count(*) as
         'total',b.status
         from tb_media_settlement b,
         (select a.id ,a.cost_price ,a.custom_price from tb_article a
@@ -182,11 +205,23 @@
         <if test="article.customId!=null and article.customId!=''">
             and a.custom_id=#{article.customId}
         </if>
-        <if test='type!=null and type!="" and article.userId==null and (type=="2" or type=="3") and bussinnessType=="2" '>
-            and a.id in ( select e.article_id from tb_media_settlement e where e.type=1 and e.status=1)
+        <if test='type!=null and type!="" and article.userId==null and (type=="2") and bussinnessType=="2" '>
+            and a.id in ( select e.article_id from tb_media_settlement e where e.type=1 and e.status=1 and e.flag='0')
+        </if>
+        <if test='article.beginTimeStr != null and article.beginTimeStr != "" and article.timeType=="1" '>
+            and a.create_date<![CDATA[ >=  ]]> #{article.beginTime,jdbcType=TIMESTAMP}
+        </if>
+        <if test='article.endTimeStr != null and article.endTimeStr != "" and article.timeType=="1" '>
+            and a.create_date <![CDATA[ <=  ]]>#{article.endTime,jdbcType=TIMESTAMP}
+        </if>
+        <if test='article.beginTimeStr != null and article.beginTimeStr != "" and article.timeType=="2" '>
+            and a.verify_date<![CDATA[ >=  ]]> #{article.beginTime,jdbcType=TIMESTAMP}
+        </if>
+        <if test='article.endTimeStr != null and article.endTimeStr != "" and article.timeType=="2" '>
+            and a.verify_date <![CDATA[ <=  ]]>#{article.endTime,jdbcType=TIMESTAMP}
         </if>
         )as c
-        where b.article_id = c.id and
+        where b.article_id = c.id  and b.flag='0' and
         <!--员工-客户或者员工-系统统计-->
         <choose>
             <when test='article!=null and article.userId!=null  and article.userId!="" and bussinnessType=="2"'>

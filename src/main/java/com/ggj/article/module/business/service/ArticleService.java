@@ -7,6 +7,7 @@ import java.util.Map;
 
 import com.ggj.article.module.business.bean.*;
 import com.ggj.article.module.business.bean.enums.ArticleStatusEnum;
+import com.ggj.article.module.business.bean.enums.SettlementTypeEnum;
 import com.ggj.article.module.business.dao.*;
 import com.ggj.article.module.common.exception.BizException;
 import com.ggj.article.module.common.utils.UserUtils;
@@ -162,16 +163,19 @@ public class ArticleService extends CrudService<ArticleMapper, Article> {
             //类型1、客户结算2、公司结算、3、编辑结算
             MediaSettleMent mediaSettleMent1 = new MediaSettleMent();
             mediaSettleMent1.setArticleId(article.getId());
-            mediaSettleMent1.setType("1");
+            mediaSettleMent1.setType(SettlementTypeEnum.CUSTOM.getType()+"");
             mediaSettleMent1.setStatus("0");
+            mediaSettleMent1.setOriginalPrice(article.getCustomPrice());
             MediaSettleMent mediaSettleMent2 = new MediaSettleMent();
             mediaSettleMent2.setArticleId(article.getId());
-            mediaSettleMent2.setType("2");
+            mediaSettleMent2.setType(SettlementTypeEnum.USER.getType()+"");
             mediaSettleMent2.setStatus("0");
+            mediaSettleMent2.setOriginalPrice(article.getCustomPrice());
             MediaSettleMent mediaSettleMent3 = new MediaSettleMent();
             mediaSettleMent3.setArticleId(article.getId());
-            mediaSettleMent3.setType("3");
+            mediaSettleMent3.setType(SettlementTypeEnum.EDITOR.getType()+"");
             mediaSettleMent3.setStatus("0");
+            mediaSettleMent3.setOriginalPrice(article.getCostPrice());
             mediaSettleMentMapper.insert(mediaSettleMent1);
             mediaSettleMentMapper.insert(mediaSettleMent2);
             mediaSettleMentMapper.insert(mediaSettleMent3);

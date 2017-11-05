@@ -103,7 +103,7 @@
                     已结算金额 <span class="badge">${settlePrice}</span>
                 </button>
                 <button class="btn btn-xs btn-danger" type="button">
-                    未结算金额 <span class="badge">${totalPrice-settlePrice}</span>
+                    未结算金额 <span class="badge">${costPrice}</span>
                 </button>
             </div>
         </div>
@@ -194,7 +194,11 @@
                                     <shiro:hasPermission name="bussiness:settle:form">
                                         <c:if test="${entity.status=='0'}">
                                             <a href="javaScript:settleView('${entity.id}','${entity.type}','${entity.article.title}','${entity.article.costPrice}','${entity.article.customPrice}')"
-                                               data-toggle="tooltip" data-placement="top" title="结算">结算</a>
+                                              >结算</a>
+                                        </c:if>
+                                        <c:if test="${mediaSettleMent.bussinnessType=='2'&&formUrl=='user'}">
+                                            <a href="javascript:;" url="${path}/settle/delete?id=${entity.id}&bussinnessType=${mediaSettleMent.bussinnessType}"
+                                               name="delete" type="button" class="btn-xs btn-info">删除</a>
                                         </c:if>
                                     </shiro:hasPermission>
                                 </td>
@@ -331,7 +335,7 @@
 </body>
 
 <script type="text/javascript">
-    require(['jquery', 'bootstrap', 'datetimepicker', 'jqueryValidateMessages'], function ($) {
+    require(['jquery', 'bootstrap', 'datetimepicker', 'jqueryValidateMessages','sweetalert'], function ($) {
         require(['Chosen', 'toastr', 'datetimepickerzh', 'sys'], function () {
             //选择框赋值
             $("select").chosen();
@@ -451,6 +455,10 @@
             $("#priceId").val(customPrice);
         }
         $("#verifyModule").modal('show');
+    }
+
+    function deleteArticle(id) {
+        $("#" + id).parent().remove();
     }
 </script>
 
