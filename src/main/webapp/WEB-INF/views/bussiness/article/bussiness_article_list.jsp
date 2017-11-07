@@ -388,6 +388,8 @@
     function verify(name, id) {
         $("#verifyForm").attr("action"," ${path}/article/verifysave?typeParam=${article.typeParam}")
         $("#articleTitleId").val(name);
+        $("#refundRemarkDiv").hide();
+        $("#articleUrlDiv").show();
         $("#articleId").val(id);
         $("#verifyUrl").val("");
         $("#verifyModule").modal('show');
