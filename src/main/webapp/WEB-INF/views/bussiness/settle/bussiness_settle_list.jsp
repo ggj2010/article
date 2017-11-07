@@ -225,7 +225,7 @@
             <div class="modal-body">
                 <div class="container-fluid">
                     <div class="form-horizontal">
-                        <form action="${path}/settle/save" method="post">
+                        <form action="${path}/settle/save" method="post" id="settleParamForm">
                             <div style="display: none" id="settleParam">
 
                             </div>
@@ -347,6 +347,8 @@
                 $('#settleForm').submit();
             })
 
+            $("#settleParamForm").validate();
+
             $(".form_datetime").datetimepicker({
                 language: 'zh-CN',
                 weekStart: 1,
@@ -400,12 +402,10 @@
     })
 
     function addSettleParam() {
-        $("#settleParam").validate();
         $("#settleParam").html($("#settleParamCopy").html());
         return true;
     }
     function addSettleParam2() {
-        $("#settleParam2").validate();
         $("#settleParam2").html($("#settleParamCopy").html());
         return true;
     }
