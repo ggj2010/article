@@ -94,7 +94,7 @@ public class ArticleController extends BaseController {
 
     private String getReturnUrl(Article article, String defaultReturnUrl) {
         String url = "bussiness/article/$_article_list";
-        if (article.getTypeParam().equals(LoginRoleEnum.CUSTOM.getType()+"")) {
+        if (StringUtils.isNotEmpty(article.getTypeParam())&&article.getTypeParam().equals(LoginRoleEnum.CUSTOM.getType()+"")) {
             return url.replace("$",LoginRoleEnum.CUSTOM.getName());
         }
         return defaultReturnUrl;
