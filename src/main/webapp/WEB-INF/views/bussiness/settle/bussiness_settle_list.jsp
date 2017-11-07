@@ -75,11 +75,11 @@
                 <span class="add-on"><i class="icon-remove"></i></span>
                 <span class="add-on"><i class="icon-calendar"></i></span>
             </div>
-        <button type="submit" class="btn btn-info">查询</button>
-        <a type="button" onclick="location.reload();" class="btn btn-info">刷新</a>
+        <button type="submit" class="btn btn-small btn-info">查询</button>
+        <a type="button" onclick="location.reload();" class="btn btn-small btn-info">刷新</a>
         <shiro:hasPermission name="bussiness:settle:form">
             <c:if test="${mediaSettleMent.bussinnessType==2}">
-                <a type="button" onclick="settleMore()" class="btn btn-danger">批量审核</a>
+                <a type="button" onclick="settleMore()" class="btn  btn-danger">批量结算</a>
             </c:if>
         </shiro:hasPermission>
         </div>
@@ -250,7 +250,7 @@
                             <div class="form-group">
                                 <label for="realPayPrice" class="col-sm-2 control-label">实付价格</label>
                                 <div class="col-sm-10">
-                                    <input type="text" class="form-control" id="realPayPrice"
+                                    <input type="text" class="form-control required" id="realPayPrice"
                                            name="price">
                                 </div>
                             </div>
@@ -310,7 +310,7 @@
                             <div class="form-group">
                                 <label for="realPayPrice" class="col-sm-2 control-label">实付价格</label>
                                 <div class="col-sm-10">
-                                    <input type="text" class="form-control" id="moreRealPayPrice"
+                                    <input type="text" class="form-control required" id="moreRealPayPrice"
                                            name="price" readonly="readonly">
                                 </div>
                             </div>
@@ -384,7 +384,6 @@
                 toastr.success("${message}");
             }
 
-
             $("#choseAll").on("click", function () {
                 var checked = $(this).prop("checked")
                 if (checked == true) {
@@ -401,10 +400,12 @@
     })
 
     function addSettleParam() {
+        $("#settleParam").validate();
         $("#settleParam").html($("#settleParamCopy").html());
         return true;
     }
     function addSettleParam2() {
+        $("#settleParam2").validate();
         $("#settleParam2").html($("#settleParamCopy").html());
         return true;
     }
@@ -420,13 +421,13 @@
         $("input[type='checkbox']").each(function () {
             var checked = $(this).prop("checked")
             if (checked == true) {
-                sum += 1;
                 if (${formUrl=='editor'}) {
                     settlePrice = $(this).parent().parent().children(".settleCostPrice").html();
                 } else {
                     settlePrice = $(this).parent().parent().children(".settleCustomPrice").html();
                 }
                 if (settlePrice != null) {
+                    sum += 1;
                     ids = $(this).parent().attr("entityId") + "," + ids;
                     type = $(this).parent().attr("type");
                     priceStr = settlePrice + "," + priceStr;
@@ -434,13 +435,17 @@
                 }
             }
         })
-        $("#articleNum").val(sum - 1);
-        $("#morePrice").val(sumPrice);
-        $("#settleArticleIds").val(ids);
-        $("#settleType").val(type);
-        $("#priceStr").val(priceStr);
-        $("#moreRealPayPrice").val(sumPrice);
-        $("#moreSettleModule").modal('show');
+        if(sumPrice==0){
+            swal("请勾选需要结算的稿件!");
+        }else {
+            $("#articleNum").val(sum);
+            $("#morePrice").val(sumPrice);
+            $("#settleArticleIds").val(ids);
+            $("#settleType").val(type);
+            $("#priceStr").val(priceStr);
+            $("#moreRealPayPrice").val(sumPrice);
+            $("#moreSettleModule").modal('show');
+        }
     }
 
 
