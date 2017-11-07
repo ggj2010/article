@@ -382,10 +382,11 @@
         $("#articleUrlDiv").hide();
         $("#refundRemarkDiv").show();
         $("#articleId").val(id);
-        $("#verifyForm").attr("action","${path}/article/back?id=" + id+"&typeParam=${article.typeParam}")
+        $("#verifyForm").attr("action","${path}/article/back?id=" + id+"&typeParam=${article.typeParam}");
         $("#verifyModule").modal('show');
     }
     function verify(name, id) {
+        $("#verifyForm").attr("action"," ${path}/article/verifysave?typeParam=${article.typeParam}")
         $("#articleTitleId").val(name);
         $("#articleId").val(id);
         $("#verifyUrl").val("");
