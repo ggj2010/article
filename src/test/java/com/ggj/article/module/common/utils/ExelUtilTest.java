@@ -28,18 +28,18 @@ public class ExelUtilTest  extends BaseTest{
     protected MediaSettleMentMapper mediaSettleMentMapper;
     //@Test
     public void importArticle() throws Exception {
-        List<Article> list = ExelUtil.importArticle(new FileInputStream(new File("c:杨敏47.xls")), 47);
-//        List<Article> list = ExelUtil.importArticle(new FileInputStream(new File("c:苏时48.xls")), 48);
-        articleMapper.saveBatchArticle(list);
-        List<MediaSettleMent> mediaSettleMentList=new ArrayList<MediaSettleMent>();
-        for (Article article : list) {
-            MediaSettleMent mediaSettleMent=new MediaSettleMent();
-            mediaSettleMent.setArticleId(article.getId());
-            mediaSettleMent.setType("1");
-            mediaSettleMent.setStatus("1");
-            mediaSettleMentList.add(mediaSettleMent);
-        }
-        mediaSettleMentMapper.saveBatchSettle(mediaSettleMentList);
+//        List<Article> list = ExelUtil.importArticle(new FileInputStream(new File("c:杨敏47.xls")), 47);
+////        List<Article> list = ExelUtil.importArticle(new FileInputStream(new File("c:苏时48.xls")), 48);
+//        articleMapper.saveBatchArticle(list);
+//        List<MediaSettleMent> mediaSettleMentList=new ArrayList<MediaSettleMent>();
+//        for (Article article : list) {
+//            MediaSettleMent mediaSettleMent=new MediaSettleMent();
+//            mediaSettleMent.setArticleId(article.getId());
+//            mediaSettleMent.setType("1");
+//            mediaSettleMent.setStatus("1");
+//            mediaSettleMentList.add(mediaSettleMent);
+//        }
+//        mediaSettleMentMapper.saveBatchSettle(mediaSettleMentList);
     }
 
 }
