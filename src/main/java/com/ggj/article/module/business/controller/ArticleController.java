@@ -1,6 +1,8 @@
 package com.ggj.article.module.business.controller;
 
 import java.util.*;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -63,6 +65,8 @@ public class ArticleController extends BaseController {
     @Autowired
     private MediaService mediaService;
 
+    private Lock lock = new ReentrantLock();
+
     @ModelAttribute
     public Article get(@RequestParam(required = false) Integer id) {
         Article article = null;
@@ -94,8 +98,8 @@ public class ArticleController extends BaseController {
 
     private String getReturnUrl(Article article, String defaultReturnUrl) {
         String url = "bussiness/article/$_article_list";
-        if (StringUtils.isNotEmpty(article.getTypeParam())&&article.getTypeParam().equals(LoginRoleEnum.CUSTOM.getType()+"")) {
-            return url.replace("$",LoginRoleEnum.CUSTOM.getName());
+        if (StringUtils.isNotEmpty(article.getTypeParam()) && article.getTypeParam().equals(LoginRoleEnum.CUSTOM.getType() + "")) {
+            return url.replace("$", LoginRoleEnum.CUSTOM.getName());
         }
         return defaultReturnUrl;
     }
@@ -302,17 +306,25 @@ public class ArticleController extends BaseController {
     @RequiresPermissions("bussiness:article:verify")
     @RequestMapping(value = "/verifysave")
     public String verifysave(Article article, RedirectAttributes redirectAttributes) {
+        String typeParam = "2";
         try {
-            if (article != null && article.getId() != null) {
-                articleService.verify(article);
-                addMessage(redirectAttributes, "审核成功!");
+            typeParam = article.getTypeParam();
+            //防止重复提交
+            if (lock.tryLock()) {
+                article = articleService.get(article.getId());
+                if (article != null && article.getId() != null) {
+                    articleService.verify(article);
+                    addMessage(redirectAttributes, "审核成功!");
+                }
             }
         } catch (BizException e) {
             addMessage(redirectAttributes, e.getMessage());
         } catch (Exception e) {
             log.error("审核稿件失败！" + e.getLocalizedMessage());
+        } finally {
+            lock.unlock();
         }
-        redirectAttributes.addAttribute("typeParam", article.getTypeParam());
+        redirectAttributes.addAttribute("typeParam", typeParam);
         return "redirect:/article/";
     }
 
