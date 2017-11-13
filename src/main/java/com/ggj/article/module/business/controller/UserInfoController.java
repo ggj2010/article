@@ -79,7 +79,12 @@ public class UserInfoController extends BaseController {
 	@RequiresPermissions("bussiness:userInfo:view")
 	@RequestMapping(value = "addmedia")
 	public String addMedia(UserInfo userInfo, Model model) {
-		model.addAttribute("userInfo", userInfoService.getMedia(userInfo));
+		UserInfo mediaUserInfo = userInfoService.getMedia(userInfo);
+		if(mediaUserInfo!=null) {
+			model.addAttribute("userInfo", mediaUserInfo);
+		}else {
+			model.addAttribute("userInfo", userInfo);
+		}
 		return "bussiness/userInfo/bussiness_userInfo_media";
 	}
 	
