@@ -311,8 +311,9 @@ public class ArticleController extends BaseController {
             typeParam = article.getTypeParam();
             //防止重复提交
             if (lock.tryLock()) {
-                article = articleService.get(article.getId());
+                Article newArticle = articleService.get(article.getId());
                 if (article != null && article.getId() != null) {
+                    article.setStatus(newArticle.getStatus());
                     articleService.verify(article);
                     addMessage(redirectAttributes, "审核成功!");
                 }
