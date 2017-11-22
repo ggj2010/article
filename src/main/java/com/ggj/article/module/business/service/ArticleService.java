@@ -73,7 +73,7 @@ public class ArticleService extends CrudService<ArticleMapper, Article> {
                     CustomInfo customInfos = new CustomInfo();
                     customInfos.setUserId(newUserInfo.getId());
                     //非会员
-                    customInfos.setCustomStatus(0l);
+                    customInfos.setCustomStatus(0L);
                     customInfoMapper.insert(customInfos);
                     customId = newUserInfo.getId() + "";
                     CustomUserInfo customUserInfo = new CustomUserInfo();
@@ -126,6 +126,9 @@ public class ArticleService extends CrudService<ArticleMapper, Article> {
                 }
                 article.setStatus(0);
                 article.setCreateDate(new Date());
+                if(article.getTitle().endsWith("\"")){
+                    article.setTitle(article.getTitle().replaceAll("\"",""));
+                }
                 dao.insert(article);
             }
         }
