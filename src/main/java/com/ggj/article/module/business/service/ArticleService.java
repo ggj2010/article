@@ -126,7 +126,7 @@ public class ArticleService extends CrudService<ArticleMapper, Article> {
                 }
                 article.setStatus(0);
                 article.setCreateDate(new Date());
-                if(article.getTitle().endsWith("\"")){
+                if(article.getTitle().contains("\"")){
                     article.setTitle(article.getTitle().replaceAll("\"",""));
                 }
                 dao.insert(article);
