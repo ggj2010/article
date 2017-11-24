@@ -205,7 +205,8 @@
         <if test="article.customId!=null and article.customId!=''">
             and a.custom_id=#{article.customId}
         </if>
-        <if test='type!=null and type!="" and article.userId==null and (type=="2") and bussinnessType=="2" '>
+        <!--客户已经结算但是员工未向公司结算的金额-->
+        <if test='type!=null and type!="" and type=="2" and bussinnessType=="2" '>
             and a.id in ( select e.article_id from tb_media_settlement e where e.type=1 and e.status=1 and e.flag='0')
         </if>
         <if test='article.beginTimeStr != null and article.beginTimeStr != "" and article.timeType=="1" '>
