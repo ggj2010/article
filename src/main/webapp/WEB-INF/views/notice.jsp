@@ -1,5 +1,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ include file="../common/taglibs.jsp" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -30,17 +31,17 @@
                                     <div class="vertical-timeline-icon navy-bg">
                                         <i class="fa fa-briefcase"></i>
                                     </div>
-                                    <div class="vertical-timeline-content">
-                                        <h2>公告</h2>
-                                        <p>公告功能即将上线，尽情期待~~~。 </p>
-                                       <%-- <a href="#" class="btn btn-sm btn-primary"> 更多信息</a>--%>
-                                        <span class="vertical-date">
-                                        <%--今天 <br>--%>
-                                        <small>2017年11月05日</small>
-                                    </span>
-                                    </div>
-                                </div>
 
+                                    <c:forEach items="${list}" var="entity">
+                                        <div class="vertical-timeline-content">
+                                            <h2>${entity.title}</h2>
+                                            <p>${entity.content} </p>
+                                            <span class="vertical-date">
+                                        <small><fmt:formatDate value="${entity.createDate}" pattern="yyyy年MM月dd"/></small>
+                                    </span>
+                                        </div>
+                                    </c:forEach>
+                                </div>
                             </div>
                         </div>
                     </div>
