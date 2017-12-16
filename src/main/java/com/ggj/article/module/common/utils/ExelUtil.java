@@ -10,6 +10,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletResponse;
 
 import com.ggj.article.module.business.bean.MediaSettleMent;
+import com.ggj.article.module.business.bean.enums.SettlementTypeEnum;
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.hssf.usermodel.*;
@@ -342,7 +343,7 @@ public class ExelUtil {
                     statusName = "待审核";
                 } else if (status == 1) {
                     statusName = "审核中";
-                    url="";
+                    url = "";
                 } else if (status == 2) {
                     url = article.getVerifyUrl();
                     statusName = "已审核";
@@ -388,4 +389,132 @@ public class ExelUtil {
         }
     }
 
+    public static void exportSettleExel(MediaSettleMent mediaSettleMent, List<MediaSettleMent> mediaSettleMentList, HttpServletResponse rep) {
+        // 第一步，创建一个webbook，对应一个Excel文件
+        HSSFWorkbook wb = new HSSFWorkbook();
+        // 第二步，在webbook中添加一个sheet,对应Excel文件中的sheet
+        HSSFSheet sheet = wb.createSheet("媒体列表");
+        BufferedOutputStream bos = null;
+        try {
+            HSSFRow row = sheet.createRow((int) 0);
+            // 第四步，创建单元格，并设置值表头 设置表头居中
+            HSSFCellStyle style = wb.createCellStyle();
+            style.setAlignment(HSSFCellStyle.ALIGN_CENTER); // 创建一个居中格式
+            style.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);//垂直居中
+            HSSFFont font = wb.createFont();
+            font.setFontHeightInPoints((short) 14);
+            font.setFontName("黑体");
+            style.setFont(font);
+            HSSFCell cell = row.createCell((short) 0);
+            cell.setCellValue("媒体名称");
+            cell = row.createCell((short) 1);
+            cell.setCellValue("标题");
+            cell = row.createCell((short) 2);
+            cell.setCellValue("链接");
+            cell = row.createCell((short) 3);
+            cell.setCellValue("价格");
+            int i = 3;
+            //系统员工结算
+            if (mediaSettleMent.getBussinnessType().equals("2") && mediaSettleMent.getType().equals("2")) {
+                cell = row.createCell((short) ++i);
+                cell.setCellValue("成本价格");
+            }
+            if (mediaSettleMent.getType().equals("1") || mediaSettleMent.getType().equals("2")) {
+                cell = row.createCell((short) ++i);
+                cell.setCellValue("客户");
+            }
+            if (mediaSettleMent.getType().equals("3") ) {
+                cell = row.createCell((short) ++i);
+                cell.setCellValue("编辑");
+            }
+            cell = row.createCell((short) ++i);
+            cell.setCellValue("发布日期");
+            cell = row.createCell((short) ++i);
+            cell.setCellValue("审核日期");
+            cell = row.createCell((short) ++i);
+            cell.setCellValue("状态");
+            cell = row.createCell((short) ++i);
+            cell.setCellValue("结算状态");
+            cell = row.createCell((short) ++i);
+            cell.setCellValue("备注");
+            cell.setCellStyle(style);
+            int j = 1;
+            for (MediaSettleMent settleMent : mediaSettleMentList) {
+                row = sheet.createRow((int) j);
+                Article article = settleMent.getArticle();
+                row.createCell((short) 0).setCellValue(article.getMediaName());
+                String title = article.getTitle();
+                title = StringEscapeUtils.unescapeHtml4(title.trim());
+                row.createCell((short) 1).setCellValue(title);
+                //链接
+                //如果是已审核就是发布后的链接
+                String url = article.getUrl();
+                Integer status = article.getStatus();
+                String statusName = "";
+                //已审核
+                if (status == 0) {
+                    statusName = "待审核";
+                } else if (status == 1) {
+                    statusName = "审核中";
+                    url = "";
+                } else if (status == 2) {
+                    url = article.getVerifyUrl();
+                    statusName = "已审核";
+                } else if (status == 3) {
+                    statusName = "已退稿";
+                } else if (status == 4) {
+                    statusName = "已删除";
+                }
+                row.createCell((short) 2).setCellValue(url);
+                Long price = article.getCustomPrice();
+                Long costPrice = article.getCostPrice();
+                if (settleMent.getType().equals("3")) {
+                    row.createCell((short) 3).setCellValue(costPrice);
+                } else {
+                    row.createCell((short) 3).setCellValue(price);
+                }
+                int k = 3;
+                //系统员工结算
+                if (mediaSettleMent.getBussinnessType().equals("2") && mediaSettleMent.getType().equals("2")) {
+                    row.createCell((short) ++k).setCellValue(costPrice);
+                    //系统员工结算、员工结算、客户结算  需要客户这一列
+                }
+                if (mediaSettleMent.getType().equals("1") || mediaSettleMent.getType().equals("2")) {
+                    row.createCell((short) ++k).setCellValue(article.getCustomName());
+                }
+                if (mediaSettleMent.getType().equals("3") ) {
+                    cell = row.createCell((short) ++i);
+                    row.createCell((short) ++k).setCellValue(article.getEditorName());
+                }
+                row.createCell((short) ++k).setCellValue(DateUtils.formatDateTime(article.getCreateDate()));
+                row.createCell((short) ++k).setCellValue(article.getVerifyDate() == null ? "" : DateUtils.formatDateTime(article.getVerifyDate()));
+                row.createCell((short) ++k).setCellValue(statusName);
+                row.createCell((short) ++k).setCellValue(settleMent.getStatus().equals("0") ? "未结算" : "已结算");
+                row.createCell((short) ++k).setCellValue(article.getRemark());
+                j++;
+            }
+            String fileName = "结算列表.xls";
+            //处理中文文件名
+            rep.setCharacterEncoding("utf-8");
+            // 若想下载时自动填好文件名，则需要设置响应头的"Content-disposition"
+            rep.setHeader("Content-disposition", "attachment;filename=" + URLEncoder.encode(fileName, "UTF-8"));
+            rep.setCharacterEncoding("utf-8");
+            bos = new BufferedOutputStream(rep.getOutputStream());
+            rep.flushBuffer();
+            wb.write(bos);
+            bos.flush();
+        } catch (Exception e) {
+            log.error("结算列表失败", e);
+        } finally {
+            try {
+                if (bos != null) {
+                    // bos.close();
+                }
+                wb.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+    }
 }

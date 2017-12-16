@@ -22,6 +22,10 @@
             <result column="user_name" jdbcType="VARCHAR" property="userName"/>
             <result column="editor_name" jdbcType="VARCHAR" property="editorName"/>
             <result column="title" jdbcType="VARCHAR" property="title"/>
+            <result column="article_status" jdbcType="VARCHAR" property="status"/>
+            <result column="media_name" jdbcType="VARCHAR" property="mediaName"/>
+            <result column="url" jdbcType="VARCHAR" property="url" />
+            <result column="verify_url" jdbcType="VARCHAR" property="verifyUrl" />
             <result column="cost_price" jdbcType="DECIMAL" property="costPrice"/>
             <result column="custom_price" jdbcType="DECIMAL" property="customPrice"/>
             <result column="verify_date" jdbcType="TIMESTAMP" property="verifyDate"/>
@@ -29,7 +33,7 @@
         </association>
     </resultMap>
     <sql id="Base_Column_List">
-    a.*,b.user_id as'user_id',b.custom_id as'custom_id',b.editor_id as'editor_id',b.media_name as'media_name',b.custom_name as'custom_name'
+    a.*,b.user_id as'user_id',b.status as'article_status',b.custom_id as'custom_id',b.url as'url',b.verify_url as'verify_url',b.editor_id as'editor_id',b.media_name as'media_name',b.custom_name as'custom_name'
     ,b.title as 'title',b.cost_price as 'cost_price',b.custom_price as'custom_price',b.user_name as'user_name',b.editor_name as'editor_name'
     ,b.verify_date as'verify_date',b.create_date as 'create_date2'
   </sql>

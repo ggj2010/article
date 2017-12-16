@@ -22,6 +22,7 @@
         <div id="settleParamCopy">
             <input type="hidden" name="pageNum" id="pageNum" value="${pageInfo.pageNum}">
             <input type="hidden" name="pageSize" id="pageSize" value="${pageInfo.pageSize}">
+            <input type="hidden" name="formUrl" id="formUrl" value="${formUrl}">
             <input type="hidden" name="bussinnessType" id="bussinnessType" value="${mediaSettleMent.bussinnessType}">
             <div class="form-group">
                 <label for="status">结算状态</label>
@@ -75,13 +76,14 @@
                 <span class="add-on"><i class="icon-remove"></i></span>
                 <span class="add-on"><i class="icon-calendar"></i></span>
             </div>
-        <button type="submit" class="btn btn-small btn-info">查询</button>
-        <a type="button" onclick="location.reload();" class="btn btn-small btn-info">刷新</a>
-        <shiro:hasPermission name="bussiness:settle:form">
-            <c:if test="${mediaSettleMent.bussinnessType==2}">
-                <a type="button" onclick="settleMore()" class="btn  btn-danger">批量结算</a>
-            </c:if>
-        </shiro:hasPermission>
+            <button type="submit" class="btn btn-xs btn-info">查询</button>
+            <a type="button" onclick="location.reload();" class="btn btn-xs btn-info">刷新</a>
+            <shiro:hasPermission name="bussiness:settle:form">
+                <c:if test="${mediaSettleMent.bussinnessType==2}">
+                    <a type="button" onclick="settleMore()" class="btn  btn-xs btn-danger">批量结算</a>
+                </c:if>
+            </shiro:hasPermission>
+            <button id="exportExel" class="btn btn-xs btn-info">导出</button>
         </div>
     </form:form>
     <div class="panel panel-default">
@@ -123,15 +125,15 @@
                             <th>报价</th>
                         </c:if>
                         <c:if test="${(mediaSettleMent.bussinnessType=='2'||mediaSettleMent.bussinnessType=='1')&&formUrl=='custom'}">
-                        <c:if test="${mediaSettleMent.bussinnessType=='2'}">
-                            <th>顾客</th>
-                        </c:if>
+                            <c:if test="${mediaSettleMent.bussinnessType=='2'}">
+                                <th>顾客</th>
+                            </c:if>
                             <th>报价</th>
                         </c:if>
                         <c:if test="${(mediaSettleMent.bussinnessType=='2'||mediaSettleMent.bussinnessType=='1')&&formUrl=='editor'}">
-                        <c:if test="${mediaSettleMent.bussinnessType=='2'}">
-                            <th>编辑</th>
-                        </c:if>
+                            <c:if test="${mediaSettleMent.bussinnessType=='2'}">
+                                <th>编辑</th>
+                            </c:if>
                             <th>成本价格</th>
                         </c:if>
                         <th>结算价格</th>
@@ -173,14 +175,14 @@
                             </c:if>
                             <c:if test="${(mediaSettleMent.bussinnessType=='2'||mediaSettleMent.bussinnessType=='1')&&formUrl=='custom'}">
                                 <c:if test="${mediaSettleMent.bussinnessType=='2'}">
-                                <td>${entity.article.customName}</td>
-                                 </c:if>
+                                    <td>${entity.article.customName}</td>
+                                </c:if>
                                 <td class="settleCustomPrice">${entity.article.customPrice}</td>
                             </c:if>
                             <c:if test="${(mediaSettleMent.bussinnessType=='2'||mediaSettleMent.bussinnessType=='1')&&formUrl=='editor'}">
-                            <c:if test="${mediaSettleMent.bussinnessType=='2'}">
-                                <td>${entity.article.editorName}</td>
-                            </c:if>
+                                <c:if test="${mediaSettleMent.bussinnessType=='2'}">
+                                    <td>${entity.article.editorName}</td>
+                                </c:if>
                                 <td class="settleCostPrice">${entity.article.costPrice}</td>
                             </c:if>
                             <td>${entity.price}</td>
@@ -194,10 +196,11 @@
                                     <shiro:hasPermission name="bussiness:settle:form">
                                         <c:if test="${entity.status=='0'}">
                                             <a href="javaScript:settleView('${entity.id}','${entity.type}','${entity.article.title}','${entity.article.costPrice}','${entity.article.customPrice}')"
-                                              >结算</a>
+                                            >结算</a>
                                         </c:if>
                                         <c:if test="${mediaSettleMent.bussinnessType=='2'&&formUrl=='user'}">
-                                            <a href="javascript:;" url="${path}/settle/delete?id=${entity.id}&bussinnessType=${mediaSettleMent.bussinnessType}"
+                                            <a href="javascript:;"
+                                               url="${path}/settle/delete?id=${entity.id}&bussinnessType=${mediaSettleMent.bussinnessType}"
                                                name="delete" type="button" class="btn-xs btn-info">删除</a>
                                         </c:if>
                                     </shiro:hasPermission>
@@ -335,7 +338,7 @@
 </body>
 
 <script type="text/javascript">
-    require(['jquery', 'bootstrap', 'datetimepicker', 'jqueryValidateMessages','sweetalert'], function ($) {
+    require(['jquery', 'bootstrap', 'datetimepicker', 'jqueryValidateMessages', 'sweetalert'], function ($) {
         require(['Chosen', 'toastr', 'datetimepickerzh', 'sys'], function () {
             //选择框赋值
             $("select").chosen();
@@ -386,6 +389,14 @@
                 toastr.success("${message}");
             }
 
+            $("#exportExel").on("click", function () {
+                $("#settleForm").attr("action", "${path}/settle/export");
+                $("#settleForm").submit();
+                setTimeout(function () {
+                    $("#settleForm").attr("action", "${path}/settle/${formUrl}");
+                }, 1000)
+            })
+
             $("#choseAll").on("click", function () {
                 var checked = $(this).prop("checked")
                 if (checked == true) {
@@ -405,6 +416,7 @@
         $("#settleParam").html($("#settleParamCopy").html());
         return true;
     }
+
     function addSettleParam2() {
         $("#settleParam2").html($("#settleParamCopy").html());
         return true;
@@ -435,9 +447,9 @@
                 }
             }
         })
-        if(sumPrice==0){
+        if (sumPrice == 0) {
             swal("请勾选需要结算的稿件!");
-        }else {
+        } else {
             $("#articleNum").val(sum);
             $("#morePrice").val(sumPrice);
             $("#settleArticleIds").val(ids);

@@ -13,6 +13,8 @@ import javax.servlet.http.HttpServletResponse;
 import com.ggj.article.module.business.bean.enums.SettlementTypeEnum;
 import com.ggj.article.module.business.service.*;
 import com.ggj.article.module.common.GlobalConstants;
+import com.ggj.article.module.common.shiro.authc.Principal;
+import com.ggj.article.module.common.utils.ExelUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,6 +65,7 @@ public class MediaSettleController extends BaseController {
      * 员工客户结算	/settle/custom?bussinnessType=2		  
      * 客户结算	/settle/custom?bussinnessType=1
      * 系统客户结算	/settle/custom?bussinnessType=3
+     *
      * @param mediaSettleMent
      * @param request
      * @param rep
@@ -73,30 +76,7 @@ public class MediaSettleController extends BaseController {
     @RequestMapping(value = "custom")
     public String customList(MediaSettleMent mediaSettleMent, HttpServletRequest request, HttpServletResponse rep,
                              Model model) throws InterruptedException, ExecutionException {
-        mediaSettleMent.setType(SettlementTypeEnum.CUSTOM.getType()+"");
-        Article article = new Article();
-        if (mediaSettleMent.getArticle() == null) {
-            mediaSettleMent.setArticle(article);
-        }
-        //员工客户结算
-        if (mediaSettleMent.getBussinnessType().equals("2")) {
-            mediaSettleMent.getArticle().setUserId(UserUtils.getPrincipal().getId());
-            List<CustomUserInfo> customUserInfoList = customInfoService.getCustomUser(new CustomUserInfo(UserUtils.getPrincipal().getId(), true));
-            //默认未结算
-            if (StringUtils.isEmpty(mediaSettleMent.getStatus())) {
-                mediaSettleMent.setStatus(GlobalConstants.SETTLEMENT_STATUS_NO+"");
-            } else {
-                if (mediaSettleMent.getStatus().equals(GlobalConstants.SETTLEMENT_STATUS_YES)) {
-                    customUserInfoList = customInfoService.getCustomUser(new CustomUserInfo(UserUtils.getPrincipal().getId()));
-                }
-            }
-            model.addAttribute("customUserInfoList", customUserInfoList);
-        } else if (mediaSettleMent.getBussinnessType().equals("3")) {
-            List<UserInfo> listUserInfo = articleService.getUserInfo();
-            model.addAttribute("userInfoList", listUserInfo);
-        } else {
-            mediaSettleMent.getArticle().setCustomId(UserUtils.getPrincipal().getId());
-        }
+        setRequestParam(mediaSettleMent, "custom", model);
         pageUtils.setPage(request, rep);
         List<Future<PageInfo<MediaSettleMent>>> futureList = getFutureTaksList(request, rep, model, mediaSettleMent);
         for (Future<PageInfo<MediaSettleMent>> pageInfoFuture : futureList) {
@@ -112,6 +92,58 @@ public class MediaSettleController extends BaseController {
         return "bussiness/settle/bussiness_settle_list";
     }
 
+    private void setRequestParam(MediaSettleMent mediaSettleMent, String requestUrl, Model model) {
+        if (requestUrl.contains("custom")) {
+            mediaSettleMent.setType(SettlementTypeEnum.CUSTOM.getType() + "");
+            Article article = new Article();
+            if (mediaSettleMent.getArticle() == null) {
+                mediaSettleMent.setArticle(article);
+            }
+            //员工客户结算
+            if (mediaSettleMent.getBussinnessType().equals("2")) {
+                mediaSettleMent.getArticle().setUserId(UserUtils.getPrincipal().getId());
+                List<CustomUserInfo> customUserInfoList = customInfoService.getCustomUser(new CustomUserInfo(UserUtils.getPrincipal().getId(), true));
+                //默认未结算
+                if (StringUtils.isEmpty(mediaSettleMent.getStatus())) {
+                    mediaSettleMent.setStatus(GlobalConstants.SETTLEMENT_STATUS_NO + "");
+                } else {
+                    if (mediaSettleMent.getStatus().equals(GlobalConstants.SETTLEMENT_STATUS_YES)) {
+                        customUserInfoList = customInfoService.getCustomUser(new CustomUserInfo(UserUtils.getPrincipal().getId()));
+                    }
+                }
+                model.addAttribute("customUserInfoList", customUserInfoList);
+            } else if (mediaSettleMent.getBussinnessType().equals("3")) {
+                List<UserInfo> listUserInfo = articleService.getUserInfo();
+                model.addAttribute("userInfoList", listUserInfo);
+            } else {
+                mediaSettleMent.getArticle().setCustomId(UserUtils.getPrincipal().getId());
+            }
+        } else if (requestUrl.contains("user")) {
+            mediaSettleMent.setType(SettlementTypeEnum.USER.getType() + "");
+            Article article = new Article();
+            if (mediaSettleMent.getArticle() == null) {
+                mediaSettleMent.setArticle(article);
+            }
+            if (mediaSettleMent.getBussinnessType().equals("1")) {
+                mediaSettleMent.getArticle().setUserId(UserUtils.getPrincipal().getId());
+            }
+        } else if (requestUrl.contains("editor")) {
+            mediaSettleMent.setType(SettlementTypeEnum.EDITOR.getType() + "");
+            Article article = new Article();
+            if (mediaSettleMent.getArticle() == null) {
+                mediaSettleMent.setArticle(article);
+            }
+            if (mediaSettleMent.getBussinnessType().equals("1")) {
+                mediaSettleMent.getArticle().setEditorId(UserUtils.getPrincipal().getId());
+            } else {
+                if (mediaSettleMent.getArticle() != null && mediaSettleMent.getArticle().getUserId() != null) {
+                    mediaSettleMent.getArticle().setEditorId(mediaSettleMent.getArticle().getUserId());
+                    mediaSettleMent.getArticle().setUserId(null);
+                }
+            }
+        }
+    }
+
     private List<Future<PageInfo<MediaSettleMent>>> getFutureTaksList(HttpServletRequest request, HttpServletResponse rep, Model model, MediaSettleMent mediaSettleMent) throws InterruptedException {
         List<Callable<PageInfo<MediaSettleMent>>> list = new ArrayList<Callable<PageInfo<MediaSettleMent>>>();
         list.add(new MediaSettleMentTask(mediaSettleMentService, mediaSettleMent, request, rep, pageUtils));
@@ -121,8 +153,9 @@ public class MediaSettleController extends BaseController {
 
     /**
      * 员工结算	settle/user?bussinnessType=1
-     *
+     * <p>
      * 系统员工结算	/settle/user?bussinnessType=2 展示客户已经结算过的数据
+     *
      * @param mediaSettleMent
      * @param request
      * @param rep
@@ -133,15 +166,8 @@ public class MediaSettleController extends BaseController {
     @RequestMapping(value = "user")
     public String userList(MediaSettleMent mediaSettleMent, HttpServletRequest request, HttpServletResponse rep,
                            Model model) throws ExecutionException, InterruptedException {
-        mediaSettleMent.setType(SettlementTypeEnum.USER.getType() + "");
+        setRequestParam(mediaSettleMent, "user", model);
         pageUtils.setPage(request, rep);
-        Article article = new Article();
-        if (mediaSettleMent.getArticle() == null) {
-            mediaSettleMent.setArticle(article);
-        }
-        if (mediaSettleMent.getBussinnessType().equals("1")) {
-            mediaSettleMent.getArticle().setUserId(UserUtils.getPrincipal().getId());
-        }
         List<Future<PageInfo<MediaSettleMent>>> futureList = getFutureTaksList(request, rep, model, mediaSettleMent);
         for (Future<PageInfo<MediaSettleMent>> pageInfoFuture : futureList) {
             PageInfo<MediaSettleMent> pageInfo = pageInfoFuture.get();
@@ -174,19 +200,7 @@ public class MediaSettleController extends BaseController {
     @RequestMapping(value = "editor")
     public String editorList(MediaSettleMent mediaSettleMent, HttpServletRequest request, HttpServletResponse rep,
                              Model model) throws ExecutionException, InterruptedException {
-        mediaSettleMent.setType(SettlementTypeEnum.EDITOR.getType() + "");
-        Article article = new Article();
-        if (mediaSettleMent.getArticle() == null) {
-            mediaSettleMent.setArticle(article);
-        }
-        if (mediaSettleMent.getBussinnessType().equals("1")) {
-            mediaSettleMent.getArticle().setEditorId(UserUtils.getPrincipal().getId());
-        } else {
-            if (mediaSettleMent.getArticle() != null && mediaSettleMent.getArticle().getUserId() != null) {
-                mediaSettleMent.getArticle().setEditorId(mediaSettleMent.getArticle().getUserId());
-                mediaSettleMent.getArticle().setUserId(null);
-            }
-        }
+        setRequestParam(mediaSettleMent, "editor", model);
         List<Future<PageInfo<MediaSettleMent>>> futureList = getFutureTaksList(request, rep, model, mediaSettleMent);
         for (Future<PageInfo<MediaSettleMent>> pageInfoFuture : futureList) {
             PageInfo<MediaSettleMent> pageInfo = pageInfoFuture.get();
@@ -194,6 +208,7 @@ public class MediaSettleController extends BaseController {
                 model.addAttribute("pageInfo", pageInfo);
                 model.addAttribute("articleStatusList", dictionaryTableService.findList(new DictionaryTable("settle_status")));
                 model.addAttribute("timeTypeList", dictionaryTableService.findList(new DictionaryTable("time_type")));
+                mediaSettleMent.getArticle().setUserId(mediaSettleMent.getArticle().getEditorId());
                 model.addAttribute("MediaSettleMent", mediaSettleMent);
                 model.addAttribute("formUrl", "editor");
                 if (mediaSettleMent.getBussinnessType().equals("2")) {
@@ -203,6 +218,23 @@ public class MediaSettleController extends BaseController {
             }
         }
         return "bussiness/settle/bussiness_settle_list";
+    }
+
+
+    @RequiresPermissions("bussiness:article:view")
+    @RequestMapping(value = "export")
+    public String exportArticle(MediaSettleMent mediaSettleMent, String formUrl,HttpServletRequest request, RedirectAttributes redirectAttributes,
+                                HttpServletResponse rep, Model model) {
+        try {
+            setRequestParam(mediaSettleMent, formUrl, model);
+            List<MediaSettleMent> mediaSettleMentList = mediaSettleMentService.findList(mediaSettleMent);
+            ExelUtil.exportSettleExel(mediaSettleMent,mediaSettleMentList, rep);
+            addMessage(redirectAttributes, "媒体导出成功!");
+        } catch (Exception e) {
+            log.error("导入表格异常", e);
+            addMessage(redirectAttributes, "导出表格异常!");
+        }
+        return null;
     }
 
     @RequiresPermissions("bussiness:settle:edit")
@@ -216,7 +248,7 @@ public class MediaSettleController extends BaseController {
         }
         redirectAttributes.addAttribute("pageNum", request.getParameter("pageNum"));
         redirectAttributes.addAttribute("pageSize", request.getParameter("pageSize"));
-        addRedirectAttributes(mediaSettleMent,redirectAttributes);
+        addRedirectAttributes(mediaSettleMent, redirectAttributes);
         return "redirect:/settle/" + formUrl;
     }
 
@@ -256,7 +288,7 @@ public class MediaSettleController extends BaseController {
                 }
             }
             addMessage(redirectAttributes, "结算成功!");
-            addRedirectAttributes(mediaSettleMent,redirectAttributes);
+            addRedirectAttributes(mediaSettleMent, redirectAttributes);
         } catch (Exception e) {
             log.error("结算失败！" + e.getLocalizedMessage());
         }
