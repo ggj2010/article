@@ -226,10 +226,11 @@
         <!--员工-客户或者员工-系统统计-->
         <choose>
             <when test='article!=null and article.userId!=null  and article.userId!="" and bussinnessType=="2"'>
-                b.type=1
-            </when>
-            <when test='article!=null and article.userId!=null  and article.userId!="" and bussinnessType=="1"'>
                 b.type=2
+            </when>
+            <!--系统员工结算 bussinnessType=="2"-->
+            <when test='article!=null and article.userId!=null  and article.userId!="" and bussinnessType=="1"'>
+                b.type=1
             </when>
             <!--编辑统计-->
             <when test="article.editorId!=null and article.editorId!=''">
