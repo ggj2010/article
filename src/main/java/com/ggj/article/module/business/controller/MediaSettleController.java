@@ -239,7 +239,7 @@ public class MediaSettleController extends BaseController {
 
     @RequiresPermissions("bussiness:settle:edit")
     @RequestMapping(value = "save")
-    public String save(MediaSettleMent mediaSettleMent, HttpServletRequest request, RedirectAttributes redirectAttributes, String formUrl) {
+    public String save(MediaSettleMent mediaSettleMent, HttpServletRequest request, RedirectAttributes redirectAttributes, String settleFormUrl) {
         try {
             mediaSettleMentService.save(mediaSettleMent);
             addMessage(redirectAttributes, "结算成功!");
@@ -249,7 +249,7 @@ public class MediaSettleController extends BaseController {
         redirectAttributes.addAttribute("pageNum", request.getParameter("pageNum"));
         redirectAttributes.addAttribute("pageSize", request.getParameter("pageSize"));
         addRedirectAttributes(mediaSettleMent, redirectAttributes);
-        return "redirect:/settle/" + formUrl;
+        return "redirect:/settle/" + settleFormUrl;
     }
 
     private void addRedirectAttributes(MediaSettleMent mediaSettleMent, RedirectAttributes redirectAttributes) {
@@ -292,7 +292,7 @@ public class MediaSettleController extends BaseController {
         } catch (Exception e) {
             log.error("结算失败！" + e.getLocalizedMessage());
         }
-        return "redirect:/settle/" + mediaSettleMentVO.getFormUrl();
+        return "redirect:/settle/" + mediaSettleMentVO.getSettleFormUrl();
     }
 
     @RequiresPermissions("bussiness:settle:delete")

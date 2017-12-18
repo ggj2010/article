@@ -20,4 +20,6 @@ public class MediaSettleMentVO {
 	String type;
 	
 	String formUrl;
+
+	String settleFormUrl;
 }
