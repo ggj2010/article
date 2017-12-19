@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ggj.article.module.business.dao.MediaSettleMentMapper">
+    <cache/>
     <resultMap id="BaseResultMap" type="com.ggj.article.module.business.bean.MediaSettleMent">
         <id column="id" jdbcType="INTEGER" property="id"/>
         <result column="article_id" jdbcType="INTEGER" property="articleId"/>
@@ -228,10 +229,14 @@
         where b.article_id = c.id  and b.flag='0' and
         <!--员工-客户或者员工-系统统计-->
         <choose>
+            <!--客户结算-->
+            <when test='article!=null and article.userId!=null  and article.userId!="" and type=="1"'>
+                b.type=1
+            </when>
+            <!--系统员工结算-->
             <when test='article!=null and article.userId!=null  and article.userId!="" and bussinnessType=="2"'>
                 b.type=2
             </when>
-            <!--系统员工结算 bussinnessType=="2"-->
             <when test='article!=null and article.userId!=null  and article.userId!="" and bussinnessType=="1"'>
                 b.type=1
             </when>
