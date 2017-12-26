@@ -483,7 +483,6 @@ public class ExelUtil {
                     row.createCell((short) ++k).setCellValue(article.getCustomName());
                 }
                 if (mediaSettleMent.getType().equals("3") ) {
-                    cell = row.createCell((short) ++i);
                     row.createCell((short) ++k).setCellValue(article.getEditorName());
                 }
                 row.createCell((short) ++k).setCellValue(DateUtils.formatDateTime(article.getCreateDate()));
