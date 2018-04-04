@@ -19,7 +19,7 @@ require.config({
         jqueryui:'plugins/jquery-ui/jquery-ui.min',
         //分页tab
         contabs:'contabs.min',
-        
+
          //Switchery 让复选框变成ios形式
         Switchery:'plugins/switchery/switchery',
         
