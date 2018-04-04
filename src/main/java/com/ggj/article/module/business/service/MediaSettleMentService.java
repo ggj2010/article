@@ -42,12 +42,12 @@ public class MediaSettleMentService extends CrudService<MediaSettleMentMapper, M
         long costPrice = 0;
         boolean isCostPrice = false;
         if (mediaSettleMent.getArticle() != null) {
-            Article article = mediaSettleMent.getArticle();
-            //编辑结算
-            if (article.getEditorId() != null && article.getEditorId() > 0) {
-                isCostPrice = true;
-            }
-        } else {
+//            Article article = mediaSettleMent.getArticle();
+//            //编辑结算
+//            if (article.getEditorId() != null && article.getEditorId() > 0) {
+//                isCostPrice = true;
+//            }
+//        } else {
             //系统编辑结算
             if (mediaSettleMent.getBussinnessType().equals("2") && mediaSettleMent.getType().equals("3")) {
                 isCostPrice = true;
