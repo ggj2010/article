@@ -84,7 +84,7 @@ public class MenuController extends BaseController {
 		} catch (Exception e) {
 			 log.error("删除菜单失败！" + e.getLocalizedMessage());
 		}
-		return "redirect:/sys/dict/";
+		return "redirect:/sys/menu/";
 	}
 
 	@RequiresPermissions("sys:menu:edit")

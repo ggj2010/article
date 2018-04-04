@@ -190,6 +190,7 @@
       publish_speed = #{publishSpeed,jdbcType=VARCHAR},
       baidu_seo = #{baiduSeo,jdbcType=TINYINT},
       example_url = #{exampleUrl,jdbcType=VARCHAR},
+      flag=#{flag},
       remark = #{remark,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>

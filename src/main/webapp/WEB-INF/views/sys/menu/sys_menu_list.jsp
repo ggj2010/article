@@ -59,7 +59,7 @@
 										class="btn  btn-info"
 										href="${path}/sys/menu/delete?id=${entity.id}"
 										data-toggle="tooltip" data-placement="top" title="删除"
-										onclick="return confirmx('确认要删除该按钮吗？', this.href)"><span
+										onclick="return confirm('确认要删除该按钮吗？', this.href)"><span
 										class="glyphicon glyphicon-trash"></span></a>
 								</td>
 							</tr>

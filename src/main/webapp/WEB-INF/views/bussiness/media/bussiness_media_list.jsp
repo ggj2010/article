@@ -124,8 +124,15 @@
 								</td>
 								<shiro:hasPermission name="bussiness:media:edit">
 								<td>
-									<a class="btn btn-info" href="${path}/media/form?id=${entity.id}&typeParam=${media.typeParam}"  data-toggle="tooltip" data-placement="top" title="修改" ><span class="glyphicon glyphicon-edit"></span> </a>
-									<a class="btn  btn-info" url="${path}/media/delete?id=${entity.id}&typeParam=${media.typeParam}" data-toggle="tooltip" data-placement="top" title="删除" name="delete"><span class="glyphicon glyphicon-trash"></span></a>
+									<c:choose >
+										<c:when test="${isRecycle}">
+											<a class="btn btn-info" href="${path}/media/restore?id=${entity.id}&typeParam=${media.typeParam}"  data-toggle="tooltip" data-placement="top" title="还原" ><span class="glyphicon glyphicon-repeat"></span> </a>
+										</c:when>
+										<c:otherwise>
+											<a class="btn btn-info" href="${path}/media/form?id=${entity.id}&typeParam=${media.typeParam}"  data-toggle="tooltip" data-placement="top" title="修改" ><span class="glyphicon glyphicon-edit"></span> </a>
+											<a class="btn  btn-info" url="${path}/media/delete?id=${entity.id}&typeParam=${media.typeParam}" data-toggle="tooltip" data-placement="top" title="删除" name="delete"><span class="glyphicon glyphicon-trash"></span></a>
+										</c:otherwise>
+									</c:choose>
 								</td>
 								</shiro:hasPermission>
 							</tr>

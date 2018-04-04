@@ -79,6 +79,10 @@ public class MediaController extends BaseController {
             } else if (typeParam.equals("2")) {
                 media.setUserId(principal.getId());
                 pageInfo = mediaService.findEditorList(media);
+            }else if (typeParam.equals("3")) {
+                media.setFlag("1");
+                model.addAttribute("isRecycle", true);
+                pageInfo = mediaService.findPage(media);
             }
         }
         model.addAttribute("pageInfo", pageInfo);
@@ -149,6 +153,15 @@ public class MediaController extends BaseController {
         return "bussiness/media/bussiness_media_form";
     }
 
+    @RequiresPermissions("bussiness:media:edit")
+    @RequestMapping(value = "restore")
+    public String restore(Media media, RedirectAttributes redirectAttributes) {
+        media.setFlag("0");
+        mediaService.save(media);
+        addMessage(redirectAttributes, "媒体还原成功!");
+        redirectAttributes.addAttribute("typeParam",media.getTypeParam());
+        return "redirect:/media/";
+    }
     @RequiresPermissions("bussiness:media:edit")
     @RequestMapping(value = "save")
     public String save(@Valid Media media, BindingResult result, RedirectAttributes redirectAttributes) {

@@ -71,6 +71,8 @@
 		remark=#{remark}
 		where id=#{id}
 	</update>
-	
-	
+
+	<update id="delete">
+		update tc_sys_menu set flag=#{flag} where id=#{id}
+	</update>
 </mapper>
