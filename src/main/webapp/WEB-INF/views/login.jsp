@@ -1,41 +1,48 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<!DOCTYPE html>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<!DOCTYPE HTML>
 <html lang="en" class="no-js">
 <head>
-    <meta charset="utf-8">
     <title>郑州佳辰景行文化传播管理系统</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="">
     <meta name="author" content="">
     <!-- CSS -->
-    <link rel='stylesheet' href='http://fonts.googleapis.com/css?family=PT+Sans:400,700'>
-    <link rel="stylesheet" href="login/assets/css/reset.css">
-    <link rel="stylesheet" href="login/assets/css/supersized.css">
-    <link rel="stylesheet" href="login/assets/css/style.css">
-
+    <link rel="stylesheet" href="login2/css/login.css">
     <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
     <!--[if lt IE 9]>
     <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
-
 </head>
 <body>
-<div class="page-container">
-    <h1></h1>
-    <form action="/login" method="post">
-        <div style="color:red">${error}</div>
-        <div>佳辰景行文化传播</div>
-        <input type="text" name="userName" class="username" placeholder="用户名">
-        <input type="password" name="password" class="password" placeholder="密码">
-        <button type="submit">登录</button>
-        <div class="error"><span>+</span></div>
-    </form>
-</div>
-<!-- Javascript -->
-<script src="login/assets/js/jquery-1.8.2.min.js"></script>
-<script src="login/assets/js/supersized.3.2.7.min.js"></script>
-<script src="login/assets/js/supersized-init.js"></script>
-<script src="login/assets/js/scripts.js"></script>
+<div class="container demo-1">
+    <div class="content">
+        <div id="large-header" class="large-header" style="height: 667px;">
+            <canvas id="demo-canvas" width="375" height="667"></canvas>
+            <div class="logo_box">
+                <h3>欢迎你</h3>
+                <div style="color:red">${error}</div>
+                <form action="/login" id="form1" method="post">
+                    <div class="input_outer">
+                        <span class="u_user"></span>
+                        <input name="userName" class="text" style="color: #FFFFFF !important" type="text"
+                               placeholder="请输入账户" autocomplete="off">
+                    </div>
+                    <input style="display:none">
+                    <div class="input_outer">
+                        <span class="us_uer"></span>
+                        <input name="password" autocomplete="off" class="text"
+                               style="color: #FFFFFF !important; position:absolute; z-index:100;" value=""
+                               type="password" placeholder="请输入密码">
+                    </div>
+                    <div class="mb2"><a class="act-but submit" onclick="document.getElementById('form1').submit(); "
+                                        style="color: #FFFFFF">登录</a></div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div><!-- /container -->
+<script src="login2/js/login.js"></script>
 </body>
 </html>
-
