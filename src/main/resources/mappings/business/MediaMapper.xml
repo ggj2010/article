@@ -12,6 +12,7 @@
         <result column="collection_type" property="collectionType" jdbcType="VARCHAR"/>
         <result column="media_type" property="mediaType" jdbcType="VARCHAR"/>
         <result column="media_region" property="mediaRegion" jdbcType="VARCHAR"/>
+        <result column="media_channel" property="mediaChannel" jdbcType="VARCHAR"/>
         <result column="publish_speed" property="publishSpeed" jdbcType="VARCHAR"/>
         <result column="baidu_seo" property="baiduSeo" jdbcType="TINYINT"/>
         <result column="example_url" property="exampleUrl" jdbcType="VARCHAR"/>
@@ -42,6 +43,9 @@
         </if>
         <if test="mediaType != null and mediaType!=''">
             a.media_type = #{mediaType,jdbcType=VARCHAR} and
+        </if>
+        <if test="mediaChannel != null and mediaChannel!=''">
+            a.media_channel = #{mediaChannel,jdbcType=VARCHAR} and
         </if>
         <if test="collectionType != null and collectionType!=''">
             a.collection_type = #{collectionType,jdbcType=VARCHAR} and
@@ -83,6 +87,9 @@
             </if>
             <if test="mediaRegion != null">
                 media_region,
+            </if>
+            <if test="mediaChannel != null">
+                media_channel,
             </if>
             <if test="publishSpeed != null">
                 publish_speed,
@@ -133,6 +140,9 @@
             </if>
             <if test="mediaRegion != null">
                 #{mediaRegion,jdbcType=VARCHAR},
+            </if>
+            <if test="mediaChannel != null">
+                media_channel,
             </if>
             <if test="publishSpeed != null">
                 #{publishSpeed,jdbcType=VARCHAR},
@@ -187,6 +197,7 @@
       collection_type = #{collectionType,jdbcType=VARCHAR},
       media_type = #{mediaType,jdbcType=VARCHAR},
       media_region = #{mediaRegion,jdbcType=VARCHAR},
+      media_channel = #{mediaChannel,jdbcType=VARCHAR},
       publish_speed = #{publishSpeed,jdbcType=VARCHAR},
       baidu_seo = #{baiduSeo,jdbcType=TINYINT},
       example_url = #{exampleUrl,jdbcType=VARCHAR},

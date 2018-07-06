@@ -75,6 +75,15 @@
 				</div>
 
 				<div class="form-group">
+					<label class="col-sm-2 control-label" for="mediaChannel">媒体渠道</label>
+					<div class="col-sm-8">
+						<form:select id="mediaChannel" path="mediaChannel" cssClass="form-control">
+							<form:option value="" label="请选择"/>
+							<form:options items="${mediaChannelList}"/>
+						</form:select>
+					</div>
+				</div>
+				<div class="form-group">
 					<label class="col-sm-2 control-label" for="mediaType">媒体类型</label>
 					<div class="col-sm-8">
 						<form:select id="mediaType" path="mediaType" cssClass="form-control">

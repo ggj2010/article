@@ -24,6 +24,8 @@ public class Media extends BaseEntity {
 
     private String mediaType;
 
+    private String mediaChannel;
+
     private String mediaRegion;
 
     private String publishSpeed;

@@ -27,6 +27,13 @@
 			 <input type="hidden" name="pageSize" id="pageSize"  value="${pageInfo.pageSize}">
 			<form:hidden path="typeParam"/>
 			<div class="form-group">
+				<label>渠道</label>
+				<form:select id="mediaChannel" path="mediaChannel" class="form-control">
+					<form:option value="" label="请选择"/>
+					<form:options items="${mediaChannelList}"/>
+				</form:select>
+			</div>
+			<div class="form-group">
 				<label>媒体类型</label>
 				<form:select id="mediaType" path="mediaType" class="form-control">
 					<form:option value="" label="请选择"/>
@@ -69,6 +76,7 @@
 				<div class="table-responsive">
 					<table class="table table-hover  table-striped table-bordered">
 						<tr class="info">
+							<th>渠道</th>
 							<th>名称</th>
 							<c:if test="${principal.userType==0}">
 							<c:if test="${media.typeParam==1}">
@@ -92,6 +100,7 @@
 						</tr>
 						<c:forEach items="${pageInfo.list}" var="entity">
 							<tr>
+								<td>${entity.mediaChannel==null?'自媒体':entity.mediaChannel}</td>
 								<td title="${entity.remark}">${entity.name}</td>
 								<c:if test="${principal.userType==0}">
 									<c:if test="${media.typeParam==1}">

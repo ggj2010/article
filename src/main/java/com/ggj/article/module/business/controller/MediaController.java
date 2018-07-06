@@ -138,10 +138,11 @@ public class MediaController extends BaseController {
     }
 
     private void addSelectType(Model model) {
+        model.addAttribute("mediaChannelList", dictionaryTableService.getValueList(new DictionaryTable("media_channel")));
         model.addAttribute("mediaTypeList", dictionaryTableService.getValueList(new DictionaryTable("media_type")));
         model.addAttribute("publishSpeedList", dictionaryTableService.getValueList(new DictionaryTable("publish_speed")));
         model.addAttribute("mediaRegionList", dictionaryTableService.getValueList(new DictionaryTable("media_region")));
-        model.addAttribute("collectionTypeList", Arrays.asList("网页收录","新闻源收录"));
+        model.addAttribute("collectionTypeList", dictionaryTableService.getValueList(new DictionaryTable("collection_type")));
         model.addAttribute("baiduSeoList", dictionaryTableService.getValueList(new DictionaryTable("baidu_seo")));
     }
 
