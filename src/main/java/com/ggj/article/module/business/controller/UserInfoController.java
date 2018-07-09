@@ -127,6 +127,7 @@ public class UserInfoController extends BaseController {
 			return "bussiness/userInfo/bussiness_userInfo_form";
 		} else {
 			try {
+				userInfo.setStatus(1);
 				userInfoService.saveUserInfo(userInfo);
 				addMessage(redirectAttributes, "员工保存成功!");
 			} catch (Exception e) {

@@ -97,6 +97,7 @@
       user_name = #{userName,jdbcType=VARCHAR},
       phone_number = #{phoneNumber,jdbcType=VARCHAR},
       user_type = #{userType,jdbcType=BIGINT},
+      status = #{status,jdbcType=INTEGER},
       salt = #{salt,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
