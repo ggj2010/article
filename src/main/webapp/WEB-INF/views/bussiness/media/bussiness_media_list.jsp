@@ -22,6 +22,10 @@
 				</li>
 			</shiro:hasPermission>
 		</ul>
+		<div class="panel panel-default">
+
+
+		</div>
 		<form:form id="mediaForm" modelAttribute="media" action="${path}/media" method="post" class="form-inline well" enctype="multipart/form-data">
 			 <input type="hidden" name="pageNum" id="pageNum" value="${pageInfo.pageNum}">
 			 <input type="hidden" name="pageSize" id="pageSize"  value="${pageInfo.pageSize}">

@@ -12,6 +12,7 @@
     <result column="create_user" jdbcType="VARCHAR" property="createUser" />
     <result column="user_type" jdbcType="BIGINT" property="userType" />
     <result column="salt" jdbcType="VARCHAR" property="salt" />
+    <result column="status" jdbcType="INTEGER" property="status" />
     <collection property="roleList" ofType="Role">
       <result property="id" column="role.id" />
     </collection>
@@ -71,7 +72,7 @@
     <if test="userName != null and userName != ''">
       a.user_name like  concat (#{userName},'%') and
     </if>
-    a.flag=#{flag} and b.flag=#{flag}
+    a.flag=#{flag}
   </select>
 
 
@@ -82,11 +83,11 @@
     insert into tb_userinfo ( password, login_name,
       user_name, phone_number, flag,
       create_date, create_user, user_type, 
-      salt)
+      salt,status)
     values ( #{password,jdbcType=VARCHAR}, #{loginName,jdbcType=VARCHAR},
       #{userName,jdbcType=VARCHAR}, #{phoneNumber,jdbcType=VARCHAR}, #{flag,jdbcType=VARCHAR},
       #{createDate,jdbcType=TIMESTAMP}, #{createUser,jdbcType=VARCHAR}, #{userType,jdbcType=BIGINT}, 
-      #{salt,jdbcType=VARCHAR})
+      #{salt,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER})
   </insert>
 
   <update id="update" parameterType="com.ggj.article.module.business.bean.UserInfo">

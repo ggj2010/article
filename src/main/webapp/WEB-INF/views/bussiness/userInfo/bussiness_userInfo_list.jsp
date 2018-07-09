@@ -41,13 +41,15 @@
                         <th>姓名</th>
                         <th>登录名称</th>
                         <th>手机</th>
+                        <th>状态</th>
                         <th>操作</th>
                     </tr>
                     <c:forEach items="${pageInfo.list}" var="entity">
-                        <tr>
+                        <tr <c:if test="${entity.status==2}">class="error" </c:if> >
                             <td>${entity.userName}</td>
                             <td>${entity.loginName}</td>
                             <td>${entity.phoneNumber}</td>
+                            <td>${entity.status==1?'审核通过':'未审核'}</td>
                             <td>
                                 <a class="btn btn-info" href="${path}/userInfo/addcustom?id=${entity.id}"
                                    data-toggle="tooltip" data-placement="top" title="添加客户"><span

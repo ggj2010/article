@@ -121,6 +121,9 @@ public class SystemAuthorizingRealm extends AuthorizingRealm {
                     } else {
                         userinfo = null;
                     }
+                 //编辑
+                }else if(userinfo.getUserType() == 2){
+
                 }
             }
         } catch (Exception e) {

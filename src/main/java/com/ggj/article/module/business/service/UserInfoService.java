@@ -37,6 +37,7 @@ public class UserInfoService extends CrudService<UserInfoMapper, UserInfo> {
 	
 	@Transactional(readOnly = false)
 	public void saveUserInfo(UserInfo userInfo) throws Exception {
+		userInfo.setStatus(userInfo.getStatus()<=0?1:userInfo.getStatus());
 		String salt = IdGen.getSalt("");
 		String enyCrptPassword = new SimpleHash(GlobalConstants.HASH_ALGORITHM_NMAE, userInfo.getPassword(),
 				ByteSource.Util.bytes(salt), GlobalConstants.HASH_ITERATIONS).toHex();

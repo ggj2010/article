@@ -27,6 +27,8 @@ public class UserInfo extends BaseEntity {
 	
 	// 0为员工 1为客户
 	private Long userType;
+	//1、通过，2未通过
+	private int status;
 	
 	private String salt;
 	

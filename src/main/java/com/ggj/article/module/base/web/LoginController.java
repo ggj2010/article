@@ -3,6 +3,8 @@ package com.ggj.article.module.base.web;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.ggj.article.module.business.bean.UserInfo;
+import com.ggj.article.module.business.service.UserInfoService;
 import com.ggj.article.module.common.shiro.authc.Principal;
 import com.ggj.article.module.common.utils.UserUtils;
 import org.apache.shiro.SecurityUtils;
@@ -29,6 +31,8 @@ import lombok.extern.slf4j.Slf4j;
 @RequestMapping("/")
 public class LoginController {
 	@Autowired
+	private UserInfoService userInfoService;
+	@Autowired
 	SystemAuthorizingRealm ream;
 	
 //	@Autowired
@@ -42,7 +46,16 @@ public class LoginController {
 		}
 		return "login";
 	}
-	
+
+	@RequestMapping(value = "register", method = { RequestMethod.GET })
+	public String redirectToRegister(HttpServletRequest request, HttpServletResponse response, Model model) {
+		// 已经登陆过，就直接跳转到主界面
+		if (SecurityUtils.getSubject().getPrincipal() != null) {
+			return "redirect:";
+		}
+		return "register";
+	}
+
 	/**
 	 * @Description:Shiro登陆验证失败跳转到此页面
 	 * @param request
@@ -64,6 +77,15 @@ public class LoginController {
 		model.addAttribute("userName", principal.getName());
 		model.addAttribute("menuList", principal.getMenuList());
 		return "index";
+	}
+
+
+	@RequestMapping(value = "register/save", method = { RequestMethod.POST })
+	public String registerSave(UserInfo userInfo, HttpServletResponse response, Model model) throws Exception {
+		userInfo.setId(null);
+		userInfo.setStatus(2);
+		userInfoService.saveUserInfo(userInfo);
+		return "login";
 	}
 	
 	/****************************shiro相关的内容****************************/

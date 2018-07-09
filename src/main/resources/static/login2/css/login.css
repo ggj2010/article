@@ -58,6 +58,14 @@
     position: absolute;
     margin: 10px 13px;
 }
+.u_phone{
+    width: 25px;
+    height: 30px;
+    background: url(../img/login_ico.png);
+    background-position:  -85px -111px;
+    position: absolute;
+    margin: 10px 12px;
+}
 .us_uer{
     width: 25px;
     height: 25px;
@@ -95,6 +103,10 @@
     outline: none;
 }
 .submit {
+    padding: 15px;
+    margin-top: 20px;
+}
+.register {
     padding: 15px;
     margin-top: 20px;
     display: block;
