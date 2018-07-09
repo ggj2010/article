@@ -85,7 +85,7 @@ public class LoginController {
 		userInfo.setId(null);
 		userInfo.setStatus(2);
 		userInfoService.saveUserInfo(userInfo);
-		return "login";
+		return "redirect:/";
 	}
 	
 	/****************************shiro相关的内容****************************/
