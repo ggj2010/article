@@ -55,7 +55,7 @@
     <include refid="Base_Column_List" />
     from tb_userinfo a
     <include refid="jionUserInfoRoleColums" />
-    where a.id=#{id} and a.flag="0" and b.flag="0"
+    where a.id=#{id} and a.flag="0"
   </select>
   <select id="findList" resultMap="BaseResultMap" parameterType="com.ggj.article.module.business.bean.UserInfo">
     select

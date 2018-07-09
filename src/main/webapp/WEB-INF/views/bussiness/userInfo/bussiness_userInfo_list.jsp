@@ -45,7 +45,7 @@
                         <th>操作</th>
                     </tr>
                     <c:forEach items="${pageInfo.list}" var="entity">
-                        <tr <c:if test="${entity.status==2}">class="error" </c:if> >
+                        <tr <c:if test="${entity.status==2}">class="danger" </c:if> >
                             <td>${entity.userName}</td>
                             <td>${entity.loginName}</td>
                             <td>${entity.phoneNumber}</td>
