@@ -142,6 +142,7 @@
                             <td>${entity.status==1?'未审核':'审核通过'}</td>
                             <td>${entity.remark}
                             </td>
+                            <shiro:hasPermission name="bussiness:media:form">
                             <td>
                                 <c:choose>
                                     <c:when test="${isRecycle}">
@@ -183,6 +184,8 @@
                                     </c:otherwise>
                                 </c:choose>
                             </td>
+                            </shiro:hasPermission>
+                        </tr>
 
                         </tr>
                     </c:forEach>
