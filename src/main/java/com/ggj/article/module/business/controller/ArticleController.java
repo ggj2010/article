@@ -140,7 +140,7 @@ public class ArticleController extends BaseController {
                     article.setStatus(5);
                     Media media = new Media();
                     media.setUserId(principal.getId());
-                    List<Media> mediaList = mediaService.findAllEditorList(media);
+                    List<Media> mediaList = mediaService.findList(media);
                     List<String> idList = new ArrayList<String>();
                     if (mediaList != null && mediaList.size() > 0) {
                         for (Media m : mediaList) {
