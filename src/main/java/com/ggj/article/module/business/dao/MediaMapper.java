@@ -7,4 +7,5 @@ import java.util.List;
 
 public interface MediaMapper extends CrudDao<Media> {
     List<Media> findEditorList(Media media);
+    void updateStatus(int id);
 }

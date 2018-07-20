@@ -78,7 +78,7 @@ public class MediaController extends BaseController {
                 pageInfo = mediaService.findPage(media);
             } else if (typeParam.equals("2")) {
                 media.setUserId(principal.getId());
-                pageInfo = mediaService.findEditorList(media);
+                pageInfo = mediaService.findPage(media);
             }else if (typeParam.equals("3")) {
                 media.setFlag("1");
                 model.addAttribute("isRecycle", true);
@@ -128,6 +128,7 @@ public class MediaController extends BaseController {
     @RequestMapping(value = "/select")
     public String select(Media media, HttpServletRequest request, HttpServletResponse rep, Model model) {
         pageUtils.setPage(request, rep);
+        media.setStatus(2);
         PageInfo<Media> pageInfo = mediaService.findPage(media);
         model.addAttribute("pageInfo", pageInfo);
         addSelectType(model);
@@ -144,11 +145,21 @@ public class MediaController extends BaseController {
         model.addAttribute("mediaRegionList", dictionaryTableService.getValueList(new DictionaryTable("media_region")));
         model.addAttribute("collectionTypeList", dictionaryTableService.getValueList(new DictionaryTable("collection_type")));
         model.addAttribute("baiduSeoList", dictionaryTableService.getValueList(new DictionaryTable("baidu_seo")));
+        model.addAttribute("readsList", dictionaryTableService.getValueList(new DictionaryTable("reads_type")));
+        model.addAttribute("fansList", dictionaryTableService.getValueList(new DictionaryTable("fans_type")));
     }
 
-    @RequiresPermissions("bussiness:media:view")
+    @RequiresPermissions("bussiness:media:form")
     @RequestMapping(value = "form")
     public String form(Media media, Model model) {
+        model.addAttribute("media", media);
+        addSelectType(model);
+        return "bussiness/media/bussiness_media_form";
+    }
+
+    @RequiresPermissions("bussiness:media:edit")
+    @RequestMapping(value = "edit")
+    public String edit(Media media, Model model) {
         model.addAttribute("media", media);
         addSelectType(model);
         return "bussiness/media/bussiness_media_form";
@@ -169,6 +180,8 @@ public class MediaController extends BaseController {
         if (result.hasErrors()) {
             return "bussiness/media/bussiness_media_form";
         } else {
+            Principal principal = UserUtils.getPrincipal();
+            media.setUserId(principal.getId());
             mediaService.save(media);
             addMessage(redirectAttributes, "媒体保存成功!");
         }
@@ -176,13 +189,27 @@ public class MediaController extends BaseController {
         return "redirect:/media/";
     }
 
-    @RequiresPermissions("bussiness:media:edit")
+    @RequiresPermissions("bussiness:media:delete")
     @RequestMapping(value = "/delete")
     public String delete(Media media, RedirectAttributes redirectAttributes) {
         try {
             if (media != null && media.getId() != null) {
                 mediaService.delete(media);
                 addMessage(redirectAttributes, "媒体删除成功!");
+            }
+        } catch (Exception e) {
+            log.error("删除媒体失败！" + e.getLocalizedMessage());
+        }
+        redirectAttributes.addAttribute("typeParam",media.getTypeParam());
+        return "redirect:/media/";
+    }
+    @RequiresPermissions("bussiness:media:approve")
+    @RequestMapping(value = "/approve")
+    public String approve(Media media, RedirectAttributes redirectAttributes) {
+        try {
+            if (media != null && media.getId() != null) {
+                mediaService.approve(media.getId());
+                addMessage(redirectAttributes, "媒体审核成功!");
             }
         } catch (Exception e) {
             log.error("删除媒体失败！" + e.getLocalizedMessage());

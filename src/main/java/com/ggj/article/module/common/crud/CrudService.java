@@ -86,5 +86,4 @@ public abstract class CrudService<D extends CrudDao<T>, T extends BaseEntity> {
 		entity.setFlag("1");
 		dao.delete(entity);
 	}
-	
 }

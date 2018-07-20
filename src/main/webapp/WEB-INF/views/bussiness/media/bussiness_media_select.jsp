@@ -59,6 +59,8 @@
 							<th>媒体类型</th>
 							<th>媒体区域</th>
 							<th>发布速度</th>
+							<th>参考粉丝数</th>
+							<th>参考阅读数</th>
 							<th>百度权重</th>
 							<th>案例网址</th>
 							<th>备注</th>
@@ -88,6 +90,8 @@
 								<td>${entity.mediaType}</td>
 								<td>${entity.mediaRegion}</td>
 								<td>${entity.publishSpeed}</td>
+								<td>${entity.fansNum}</td>
+								<td>${entity.readsNum}</td>
 								<td>${entity.baiduSeo}</td>
 								<td>
 									<a name="type" href="${entity.exampleUrl}" data-toggle="tooltip"

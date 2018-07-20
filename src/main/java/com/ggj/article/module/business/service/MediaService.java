@@ -47,4 +47,8 @@ public class MediaService extends CrudService<MediaMapper, Media> {
             }
         }
     }
+    @Transactional(readOnly = false)
+    public void approve(Integer id) {
+        dao.updateStatus(id);
+    }
 }

@@ -113,6 +113,7 @@
 					</div>
 				</div>
 
+
             <div class="form-group">
                 <label class="col-sm-2 control-label" for="collectionType">收录类型</label>
                 <div class="col-sm-8">
@@ -122,6 +123,25 @@
                     </form:select>
                 </div>
             </div>
+
+				<div class="form-group">
+					<label class="col-sm-2 control-label" for="fansNum">参考粉丝数</label>
+					<div class="col-sm-8">
+						<form:select id="fans" path="fansNum" cssClass="form-control">
+							<form:option value="" label="请选择"/>
+							<form:options items="${fansList}"/>
+						</form:select>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-sm-2 control-label" for="reads">参考阅读数</label>
+					<div class="col-sm-8">
+						<form:select id="reads" path="readsNum" cssClass="form-control">
+							<form:option value="" label="请选择"/>
+							<form:options items="${readsList}"/>
+						</form:select>
+					</div>
+				</div>
             <div class="form-group">
                 <label class="col-sm-2 control-label" for="baiduSeo">百度权重</label>
                 <div class="col-sm-8">

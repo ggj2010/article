@@ -106,7 +106,7 @@
     <!--左侧导航结束-->
     <!--右侧部分开始-->
     <div id="page-wrapper" class="gray-bg dashbard-1">
-        <div class="row border-bottom">
+      <%--  <div class="row border-bottom">
             <nav class="navbar navbar-static-top" role="navigation" style="margin-bottom: 0">
                 <div class="navbar-header"><a class="navbar-minimalize minimalize-styl-2 btn btn-primary " href="#"><i
                         class="fa fa-bars"></i> </a>
@@ -119,7 +119,7 @@
                     </ul>
                 </div>
             </nav>
-        </div>
+        </div>--%>
         <div class="row content-tabs">
             <button class="roll-nav roll-left J_tabLeft"><i class="fa fa-backward"></i>
             </button>

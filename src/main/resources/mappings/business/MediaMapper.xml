@@ -17,9 +17,12 @@
         <result column="baidu_seo" property="baiduSeo" jdbcType="TINYINT"/>
         <result column="example_url" property="exampleUrl" jdbcType="VARCHAR"/>
         <result column="remark" property="remark" jdbcType="VARCHAR"/>
+        <result column="fansNum" property="fansNum" jdbcType="VARCHAR"/>
+        <result column="readsNum" property="readsNum" jdbcType="VARCHAR"/>
         <result column="flag" property="flag" jdbcType="TINYINT"/>
         <result column="create_date" property="createDate" jdbcType="TIMESTAMP"/>
         <result column="create_user" property="createUser" jdbcType="VARCHAR"/>
+        <result column="editor_id" property="userId" jdbcType="VARCHAR"/>
     </resultMap>
     <sql id="Base_Column_List">
     a.*
@@ -37,6 +40,12 @@
         where
         <if test="id != null and id != ''">
             a.id = #{id,jdbcType=INTEGER} and
+        </if>
+        <if test="userId != null and userId != ''">
+            a.editor_id = #{userId,jdbcType=INTEGER} and
+        </if>
+        <if test="status != null and status != ''">
+            a.status = #{status,jdbcType=INTEGER} and
         </if>
         <if test="name != null and name!=''">
             a.name like  concat ('%',#{name},'%') and
@@ -63,6 +72,9 @@
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null">
                 id,
+            </if>
+            <if test="userId != null">
+                editor_id,
             </if>
             <if test="name != null">
                 name,
@@ -91,6 +103,12 @@
             <if test="mediaChannel != null">
                 media_channel,
             </if>
+            <if test="fansNum != null">
+                fansNum,
+            </if>
+            <if test="readsNum != null">
+                readsNum,
+            </if>
             <if test="publishSpeed != null">
                 publish_speed,
             </if>
@@ -117,6 +135,9 @@
             <if test="id != null">
                 #{id,jdbcType=INTEGER},
             </if>
+            <if test="userId != null">
+                #{userId,jdbcType=INTEGER},
+            </if>
             <if test="name != null">
                 #{name,jdbcType=VARCHAR},
             </if>
@@ -142,7 +163,13 @@
                 #{mediaRegion,jdbcType=VARCHAR},
             </if>
             <if test="mediaChannel != null">
-                media_channel,
+                #{mediaChannel,jdbcType=VARCHAR},
+            </if>
+            <if test="fansNum != null">
+                #{fansNum,jdbcType=VARCHAR},
+            </if>
+            <if test="readsNum != null">
+                #{readsNum,jdbcType=VARCHAR},
             </if>
             <if test="publishSpeed != null">
                 #{publishSpeed,jdbcType=VARCHAR},
@@ -198,6 +225,8 @@
       media_type = #{mediaType,jdbcType=VARCHAR},
       media_region = #{mediaRegion,jdbcType=VARCHAR},
       media_channel = #{mediaChannel,jdbcType=VARCHAR},
+      fansNum = #{fansNum,jdbcType=VARCHAR},
+      readsNum = #{readsNum,jdbcType=VARCHAR},
       publish_speed = #{publishSpeed,jdbcType=VARCHAR},
       baidu_seo = #{baiduSeo,jdbcType=TINYINT},
       example_url = #{exampleUrl,jdbcType=VARCHAR},
@@ -205,4 +234,9 @@
       remark = #{remark,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
+
+    <update id="updateStatus">
+          update tb_media set status = 2  where id = #{id,jdbcType=INTEGER}
+    </update>
+
 </mapper>

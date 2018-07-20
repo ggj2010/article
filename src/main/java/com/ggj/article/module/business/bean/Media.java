@@ -36,6 +36,14 @@ public class Media extends BaseEntity {
 
     private String typeParam;
 
+    private String fansNum;
+    private String readsNum;
+    /**
+     * 1 未审核，2审核通过。
+     */
+    private int status;
+
+
     public Media(int id) {
         this.id = id;
     }
