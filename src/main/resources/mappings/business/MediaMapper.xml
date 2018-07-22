@@ -62,6 +62,12 @@
         <if test="mediaRegion != null and mediaRegion!=''">
             a.media_region = #{mediaRegion,jdbcType=VARCHAR} and
         </if>
+        <if test="fansNum != null and fansNum!=''">
+            a.fansNum = #{fansNum,jdbcType=VARCHAR} and
+        </if>
+        <if test="readsNum != null and readsNum!=''">
+            a.readsNum = #{readsNum,jdbcType=VARCHAR} and
+        </if>
         flag=#{flag}
     </select>
     <update id="delete" parameterType="Media">

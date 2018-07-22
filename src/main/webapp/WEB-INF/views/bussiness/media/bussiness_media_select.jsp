@@ -41,6 +41,20 @@
 				</form:select>
 			</div>
 			<div class="form-group">
+				<label>参考粉丝</label>
+				<form:select id="fansNum" path="fansNum" class="form-control">
+					<form:option value="" label="请选择"/>
+					<form:options items="${fansList}"/>
+				</form:select>
+			</div>
+			<div class="form-group">
+				<label>参考阅读数</label>
+				<form:select id="readsNum" path="readsNum" class="form-control">
+					<form:option value="" label="请选择"/>
+					<form:options items="${readsList}"/>
+				</form:select>
+			</div>
+			<div class="form-group">
 				<label for="name">媒体名称</label>
 				<form:input type="text" class="form-control" path="name" id="name"/>
 			</div>

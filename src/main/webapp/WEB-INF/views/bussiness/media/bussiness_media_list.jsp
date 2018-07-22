@@ -60,11 +60,25 @@
             </form:select>
         </div>
         <div class="form-group">
+            <label>参考粉丝</label>
+            <form:select id="fansNum" path="fansNum" class="form-control">
+                <form:option value="" label="请选择"/>
+                <form:options items="${fansList}"/>
+            </form:select>
+        </div>
+        <div class="form-group">
+            <label>参考阅读数</label>
+            <form:select id="readsNum" path="readsNum" class="form-control">
+                <form:option value="" label="请选择"/>
+                <form:options items="${readsList}"/>
+            </form:select>
+        </div>
+        <div class="form-group">
             <label for="name">媒体名称</label>
             <form:input type="text" class="form-control" path="name" id="name"/>
         </div>
         <button type="submit" class="btn btn-info">查询</button>
-
+<%--
         <div class="form-group">
             <shiro:hasPermission name="bussiness:media:import">
                 <input type="file" class="form-control" name="meidaExelFile" id="meidaExelFile">
@@ -73,7 +87,7 @@
             <shiro:hasPermission name="bussiness:media:export">
                 <a type="button" id="exportExel" class="btn btn-info">导出</a>
             </shiro:hasPermission>
-        </div>
+        </div>--%>
     </form:form>
     <div class="panel panel-default">
         <div class="panel-heading">媒体</div>
