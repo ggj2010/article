@@ -3,7 +3,7 @@
 <%@ include file="../../../common/taglibs.jsp"%>
 <html zh-CN>
 <head>
-<title>员工添加</title>
+<title>${userInfo.userType==0?"员工":"编辑"}添加</title>
 <%@ include file="../../../common/header.jsp"%>
 </head>
 <body>
@@ -11,23 +11,24 @@
 		<ul class="nav nav-tabs">
 			<shiro:hasPermission name="bussiness:userInfo:view">
 				<li>
-					<a href="${path}/userInfo/">员工列表</a>
+					<a href="${path}/userInfo/">${userInfo.userType==0?"员工":"编辑"}列表</a>
 				</li>
 			</shiro:hasPermission>
 			<shiro:hasPermission name="bussiness:userInfo:edit">
 				<li class="active">
-					<a href="#">员工${not empty entity.id?'修改':'添加'}</a>
+					<a href="#">${userInfo.userType==0?"员工":"编辑"}${not empty entity.id?'修改':'添加'}</a>
 				</li>
 			</shiro:hasPermission>
 		</ul>
 	</div>
 	<div class="panel panel-default">
-		<div class="panel-heading">员工添加</div>
+		<div class="panel-heading">${userInfo.userType==0?"员工":"编辑"}添加</div>
 		<div class="panel-body">
 			<form:form id="entityForm" modelAttribute="userInfo"
 				action="${path}/userInfo/save" method="post"
 				cssClass="form-horizontal">
 					<form:hidden path="id"/>
+					<form:hidden path="userType"/>
 				<div class="form-group">
 					<label class="col-sm-2 control-label" for="loginName">登录名称</label>
 					<div class="col-sm-8">
@@ -57,7 +58,7 @@
 					</div>
 				</div>
 				<div class="form-group">
-					<label class="col-sm-2 control-label" for="roleTree">用户角色(必勾选)</label>
+					<label class="col-sm-2 control-label" for="roleTree">用户角色(编辑必须勾选编辑)</label>
 					<div class="col-sm-8" >
 						<form:hidden path="roleIds" id="roleIds" />
 						<ul id="roleTree" class="ztree"></ul>

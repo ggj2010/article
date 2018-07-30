@@ -25,7 +25,7 @@ public class UserInfo extends BaseEntity {
 	
 	private String phoneNumber;
 	
-	// 0为员工 1为客户
+	// 0为员工 1为客户，2编辑
 	private Long userType;
 	//1、通过，2未通过
 	private int status;

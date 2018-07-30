@@ -3,7 +3,7 @@
 <%@ include file="../../../common/taglibs.jsp" %>
 <html zh-CN>
 <head>
-    <title>员工列表</title>
+    <title>${userInfo.userType==0?"员工":"编辑"}列表</title>
     <%@ include file="../../../common/header.jsp" %>
 </head>
 <body>
@@ -12,12 +12,12 @@
     <ul class="nav nav-tabs">
         <shiro:hasPermission name="bussiness:userInfo:view">
             <li class="active">
-                <a href="#">员工列表</a>
+                <a href="#">${userInfo.userType==0?"员工":"编辑"}列表</a>
             </li>
         </shiro:hasPermission>
         <shiro:hasPermission name="bussiness:userInfo:edit">
             <li>
-                <a href="${path}/userInfo/form">员工${not empty
+                <a href="${path}/userInfo/form?userType=${userInfo.userType}">${userInfo.userType==0?"员工":"编辑"}${not empty
                         entity.id?'修改':'添加'}</a>
             </li>
         </shiro:hasPermission>
@@ -26,14 +26,15 @@
                action="${path}/userInfo/" method="post" class="form-inline well">
         <input type="hidden" name="pageNum" id="pageNum" value="${pageInfo.pageNum}">
         <input type="hidden" name="pageSize" id="pageSize" value="${pageInfo.pageSize}">
+        <form:hidden  path="userType" />
         <div class="form-group">
-            <label for="userName">员工名称</label>
+            <label for="userName">${userInfo.userType==0?"员工":"编辑"}名称</label>
             <form:input type="text" class="form-control" path="userName" id="userName"/>
         </div>
         <button type="submit" class="btn btn-info">查询</button>
     </form:form>
     <div class="panel panel-default">
-        <div class="panel-heading">员工</div>
+        <div class="panel-heading">${userInfo.userType==0?"员工":"编辑"}</div>
         <div class="panel-body">
             <div class="table-responsive">
                 <table class="table table-hover  table-striped table-bordered">
@@ -54,9 +55,9 @@
                                 <a class="btn btn-info" href="${path}/userInfo/addcustom?id=${entity.id}"
                                    data-toggle="tooltip" data-placement="top" title="添加客户"><span
                                         class="glyphicon glyphicon-plus"></span> </a>
-                                <a class="btn btn-info" href="${path}/userInfo/addmedia?id=${entity.id}"
+                               <%-- <a class="btn btn-info" href="${path}/userInfo/addmedia?id=${entity.id}"
                                    data-toggle="tooltip" data-placement="top" title="添加文章"><span
-                                        class="glyphicon glyphicon-book"></span> </a>
+                                        class="glyphicon glyphicon-book"></span> </a>--%>
                                 <a class="btn btn-info" href="${path}/userInfo/form?id=${entity.id}"
                                    data-toggle="tooltip" data-placement="top" title="修改"><span
                                         class="glyphicon glyphicon-edit"></span> </a>

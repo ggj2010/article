@@ -62,13 +62,15 @@ public class UserInfoController extends BaseController {
 	@RequestMapping(value = "")
 	public String list(UserInfo userInfo, HttpServletRequest request, HttpServletResponse rep, Model model) {
 		pageUtils.setPage(request, rep);
-		userInfo.setUserType(0l);
+		if(userInfo.getUserType()==null){
+			userInfo.setUserType(0L);
+		}
 		PageInfo<UserInfo> pageInfo = userInfoService.findPage(userInfo);
 		model.addAttribute("pageInfo", pageInfo);
 		model.addAttribute("userInfo", userInfo);
 		return "bussiness/userInfo/bussiness_userInfo_list";
 	}
-	
+
 	@RequiresPermissions("bussiness:userInfo:view")
 	@RequestMapping(value = "form")
 	public String form(UserInfo userInfo, Model model) {
@@ -97,7 +99,7 @@ public class UserInfoController extends BaseController {
 		} catch (Exception e) {
 			addErrorMessage(redirectAttributes, e.getMessage());
 		}
-		return "redirect:/userInfo/";
+		return "redirect:/userInfo?userType="+userInfo.getUserType();
 	}
 	
 	@RequiresPermissions("bussiness:userInfo:view")
@@ -134,7 +136,7 @@ public class UserInfoController extends BaseController {
 				addErrorMessage(redirectAttributes, e.getMessage());
 			}
 		}
-		return "redirect:/userInfo/";
+		return "redirect:/userInfo?userType="+userInfo.getUserType();
 	}
 	
 	@RequiresPermissions("bussiness:userInfo:edit")
@@ -142,6 +144,7 @@ public class UserInfoController extends BaseController {
 	public String delete(UserInfo userInfo, RedirectAttributes redirectAttributes) {
 		try {
 			if (userInfo != null && userInfo.getId() != null) {
+				userInfo.setFlag("1");
 				userInfoService.delete(userInfo);
 				addMessage(redirectAttributes, "员工删除成功!");
 			}

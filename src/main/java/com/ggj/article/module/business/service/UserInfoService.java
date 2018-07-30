@@ -50,7 +50,9 @@ public class UserInfoService extends CrudService<UserInfoMapper, UserInfo> {
 				throw new Exception(userInfo.getLoginName() + "该登录名已存在，请勿重复添加");
 			}
 			userInfo.setCreateDate(new Date());
-			userInfo.setUserType(0l);
+			if(userInfo.getUserType()==null){
+				userInfo.setUserType(0L);
+			}
 			dao.insert(userInfo);
 		} else {
 			// 删除所有角色权限
