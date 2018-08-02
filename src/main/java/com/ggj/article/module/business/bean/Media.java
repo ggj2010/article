@@ -42,6 +42,10 @@ public class Media extends BaseEntity {
      * 1 未审核，2审核通过。
      */
     private int status;
+    /**
+     * 1不置顶，2置顶
+     */
+    private int topType;
 
 
     public Media(int id) {

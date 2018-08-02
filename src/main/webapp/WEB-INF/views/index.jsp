@@ -151,7 +151,7 @@
             <iframe class="J_iframe" name="iframe1" width="100%" height="100%" seamless src="${path}/notice" data-id="${path}/notice" frameborder="0"></iframe>
         </div>
         <div class="footer">
-            <div class="pull-left"><strong>Copyright</strong> 郑州佳辰景行文化传播 © 2016~2017
+            <div class="pull-left"><strong>合作qq:</strong>807093129   <strong>稿件问题售后qq:</strong>994130703/941545408   <strong>联系电话:</strong>施冠军18810359663/18972658565   <strong>微信: </strong>shigjun1993
             </div>
             <div class="pull-right"><strong>技术支持:18638217959</strong>
             </div>

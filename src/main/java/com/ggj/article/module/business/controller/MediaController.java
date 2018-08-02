@@ -4,6 +4,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
+import com.ggj.article.module.business.bean.MediaCollect;
+import com.ggj.article.module.business.service.MediaCollectService;
 import com.ggj.article.module.common.shiro.authc.Principal;
 import com.ggj.article.module.common.utils.ExelUtil;
 import com.ggj.article.module.common.utils.UserUtils;
@@ -49,6 +51,8 @@ public class MediaController extends BaseController {
 
     @Autowired
     private MediaService mediaService;
+    @Autowired
+    private MediaCollectService mediaCollectService;
 
     @Autowired
     private DictionaryTableService dictionaryTableService;
@@ -69,19 +73,22 @@ public class MediaController extends BaseController {
     @RequestMapping(value = "")
     public String list(Media media, HttpServletRequest request, HttpServletResponse rep, Model model) {
         pageUtils.setPage(request, rep);
-        String typeParam=media.getTypeParam();
-        PageInfo<Media> pageInfo=null;
+        String typeParam = media.getTypeParam();
+        PageInfo<Media> pageInfo = null;
         Principal principal = UserUtils.getPrincipal();
         model.addAttribute("principal", principal);
-        if(StringUtils.isNotEmpty(typeParam)) {
+        if (StringUtils.isNotEmpty(typeParam)) {
             if (typeParam.equals("1")) {
                 pageInfo = mediaService.findPage(media);
             } else if (typeParam.equals("2")) {
                 media.setUserId(principal.getId());
                 pageInfo = mediaService.findPage(media);
-            }else if (typeParam.equals("3")) {
+            } else if (typeParam.equals("3")) {
                 media.setFlag("1");
                 model.addAttribute("isRecycle", true);
+                pageInfo = mediaService.findPage(media);
+            } else if (typeParam.equals("4")) {
+                media.setUserId(principal.getId());
                 pageInfo = mediaService.findPage(media);
             }
         }
@@ -93,13 +100,13 @@ public class MediaController extends BaseController {
 
     @RequiresPermissions("bussiness:media:import")
     @RequestMapping(value = "import")
-    public String importMedia(Media media,HttpServletRequest request, RedirectAttributes redirectAttributes, HttpServletResponse rep, Model model, @RequestParam("meidaExelFile") MultipartFile meidaExelFile) {
-        if(meidaExelFile!=null){
+    public String importMedia(Media media, HttpServletRequest request, RedirectAttributes redirectAttributes, HttpServletResponse rep, Model model, @RequestParam("meidaExelFile") MultipartFile meidaExelFile) {
+        if (meidaExelFile != null) {
             try {
                 mediaService.saveImport(meidaExelFile.getInputStream());
                 addMessage(redirectAttributes, "媒体导入保存成功!");
             } catch (Exception e) {
-               log.error("导入表格异常",e);
+                log.error("导入表格异常", e);
                 addMessage(redirectAttributes, "导入表格异常!");
             }
         }
@@ -110,17 +117,18 @@ public class MediaController extends BaseController {
         model.addAttribute("media", media);
         return "bussiness/media/bussiness_media_list";
     }
+
     @RequiresPermissions("bussiness:media:export")
     @RequestMapping(value = "export")
-    public String exportMedia(Media media,HttpServletRequest request, RedirectAttributes redirectAttributes, HttpServletResponse rep, Model model) {
-            try {
-                List<Media> listMedia=mediaService.findList(media);
-                ExelUtil.exportExel(listMedia,rep);
-                addMessage(redirectAttributes, "媒体导入保存成功!");
-            } catch (Exception e) {
-               log.error("导入表格异常",e);
-                addMessage(redirectAttributes, "导入表格异常!");
-            }
+    public String exportMedia(Media media, HttpServletRequest request, RedirectAttributes redirectAttributes, HttpServletResponse rep, Model model) {
+        try {
+            List<Media> listMedia = mediaService.findList(media);
+            ExelUtil.exportExel(listMedia, rep);
+            addMessage(redirectAttributes, "媒体导入保存成功!");
+        } catch (Exception e) {
+            log.error("导入表格异常", e);
+            addMessage(redirectAttributes, "导入表格异常!");
+        }
         return null;
     }
 
@@ -171,9 +179,10 @@ public class MediaController extends BaseController {
         media.setFlag("0");
         mediaService.save(media);
         addMessage(redirectAttributes, "媒体还原成功!");
-        redirectAttributes.addAttribute("typeParam",media.getTypeParam());
+        redirectAttributes.addAttribute("typeParam", media.getTypeParam());
         return "redirect:/media/";
     }
+
     @RequiresPermissions("bussiness:media:edit")
     @RequestMapping(value = "save")
     public String save(@Valid Media media, BindingResult result, RedirectAttributes redirectAttributes) {
@@ -185,7 +194,7 @@ public class MediaController extends BaseController {
             mediaService.save(media);
             addMessage(redirectAttributes, "媒体保存成功!");
         }
-        redirectAttributes.addAttribute("typeParam",media.getTypeParam());
+        redirectAttributes.addAttribute("typeParam", media.getTypeParam());
         return "redirect:/media/";
     }
 
@@ -200,9 +209,10 @@ public class MediaController extends BaseController {
         } catch (Exception e) {
             log.error("删除媒体失败！" + e.getLocalizedMessage());
         }
-        redirectAttributes.addAttribute("typeParam",media.getTypeParam());
+        redirectAttributes.addAttribute("typeParam", media.getTypeParam());
         return "redirect:/media/";
     }
+
     @RequiresPermissions("bussiness:media:approve")
     @RequestMapping(value = "/approve")
     public String approve(Media media, RedirectAttributes redirectAttributes) {
@@ -214,7 +224,52 @@ public class MediaController extends BaseController {
         } catch (Exception e) {
             log.error("删除媒体失败！" + e.getLocalizedMessage());
         }
-        redirectAttributes.addAttribute("typeParam",media.getTypeParam());
+        redirectAttributes.addAttribute("typeParam", media.getTypeParam());
+        return "redirect:/media/";
+    }
+
+    @RequiresPermissions("bussiness:media:settop")
+    @RequestMapping(value = "/settop")
+    public String setTop(Media media, RedirectAttributes redirectAttributes) {
+        try {
+            mediaService.setTop(media);
+            addMessage(redirectAttributes, media.getTopType() == 1 ? "取消置顶成功!" : "置顶成功!");
+        } catch (Exception e) {
+            log.error("置顶失败！" + e.getLocalizedMessage());
+        }
+        redirectAttributes.addAttribute("typeParam", media.getTypeParam());
+        redirectAttributes.addAttribute("mediaChannel", media.getMediaChannel());
+        return "redirect:/media/";
+    }
+
+    @RequiresPermissions("bussiness:media:view")
+    @RequestMapping(value = "/collect")
+    public String collect(Media media, RedirectAttributes redirectAttributes) {
+        try {
+            MediaCollect mediaCollect = new MediaCollect();
+            mediaCollect.setMediaId(media.getId());
+            mediaCollect.setUserId(UserUtils.getPrincipal().getId());
+            mediaCollectService.save(mediaCollect);
+            addMessage(redirectAttributes, "收藏成功!");
+        } catch (Exception e) {
+            log.error("收藏失败！" + e.getLocalizedMessage());
+        }
+        redirectAttributes.addAttribute("typeParam", media.getTypeParam());
+        return "redirect:/media/";
+    }
+    @RequiresPermissions("bussiness:media:view")
+    @RequestMapping(value = "/uncollect")
+    public String unCollect(Media media, RedirectAttributes redirectAttributes) {
+        try {
+            MediaCollect mediaCollect = new MediaCollect();
+            mediaCollect.setMediaId(media.getId());
+            mediaCollect.setUserId(UserUtils.getPrincipal().getId());
+            mediaCollectService.delete(mediaCollect);
+            addMessage(redirectAttributes, "取消收藏成功!");
+        } catch (Exception e) {
+            log.error("取消收藏失败！" + e.getLocalizedMessage());
+        }
+        redirectAttributes.addAttribute("typeParam", media.getTypeParam());
         return "redirect:/media/";
     }
 
@@ -229,7 +284,7 @@ public class MediaController extends BaseController {
             Map<String, Object> map = new HashMap<String, Object>();
             map.put("id", media.getId());
             map.put("pId", "");
-            map.put("name", "【标题】："+media.getName()+"【成本价】："+media.getCostPrice());
+            map.put("name", "【标题】：" + media.getName() + "【成本价】：" + media.getCostPrice());
             map.put("open", true);
             mapList.add(map);
         }

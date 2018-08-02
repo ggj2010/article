@@ -2,7 +2,7 @@
 <!DOCTYPE HTML>
 <html lang="en" class="no-js">
 <head>
-    <title>郑州佳辰景行文化传播管理系统</title>
+    <title>冠新传媒稿业发布</title>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">

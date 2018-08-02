@@ -116,9 +116,7 @@
                         <th>案例网址</th>
                         <th>审核状态</th>
                         <th>备注</th>
-                        <shiro:hasPermission name="bussiness:media:form">
-                            <th>操作</th>
-                        </shiro:hasPermission>
+                        <th>操作</th>
                     </tr>
                     <c:forEach items="${pageInfo.list}" var="entity">
                         <tr>
@@ -156,8 +154,21 @@
                             <td>${entity.status==1?'未审核':'审核通过'}</td>
                             <td>${entity.remark}
                             </td>
-                            <shiro:hasPermission name="bussiness:media:form">
                             <td>
+                                <c:if test="${entity.status==2}">
+                                <c:if test="${media.typeParam==4}">
+                                    <a class="btn btn-info"
+                                       href="${path}/media/uncollect?id=${entity.id}&typeParam=${media.typeParam}"
+                                       data-toggle="tooltip" data-placement="top" title="取消收藏"><span
+                                            class="glyphicon glyphicon glyphicon-star-empty"></span> </a>
+                                </c:if>
+                                <c:if test="${media.typeParam!=4}">
+                                    <a class="btn btn-info"
+                                       href="${path}/media/collect?id=${entity.id}&typeParam=${media.typeParam}"
+                                       data-toggle="tooltip" data-placement="top" title="收藏"><span
+                                            class="glyphicon glyphicon-star"></span> </a>
+                                </c:if>
+                                </c:if>
                                 <c:choose>
                                     <c:when test="${isRecycle}">
                                         <a class="btn btn-info"
@@ -175,6 +186,11 @@
                                             </c:if>
                                             <c:if test="${entity.status==2}">
                                                 <a class="btn btn-info"
+                                                   href="${path}/media/settop?id=${entity.id}&typeParam=${media.typeParam}&topType=2"
+                                                   data-toggle="tooltip" data-placement="top" title="置顶"><span
+                                                        class="glyphicon glyphicon-triangle-top"></span> </a>
+
+                                                <a class="btn btn-info"
                                                    href="${path}/media/form?id=${entity.id}&typeParam=${media.typeParam}"
                                                    data-toggle="tooltip" data-placement="top" title="修改"><span
                                                         class="glyphicon glyphicon-edit"></span> </a>
@@ -190,17 +206,17 @@
                                                href="${path}/media/form?id=${entity.id}&typeParam=${media.typeParam}"
                                                data-toggle="tooltip" data-placement="top" title="修改"><span
                                                     class="glyphicon glyphicon-edit"></span> </a>
+                                            <shiro:hasPermission name="bussiness:media:delete">
                                             <a class="btn  btn-info"
                                                url="${path}/media/delete?id=${entity.id}&typeParam=${media.typeParam}"
                                                data-toggle="tooltip" data-placement="top" title="删除" name="delete"><span
                                                     class="glyphicon glyphicon-trash"></span></a>
+                                            </shiro:hasPermission>
                                         </c:if>
                                     </c:otherwise>
                                 </c:choose>
                             </td>
-                            </shiro:hasPermission>
                         </tr>
-
                         </tr>
                     </c:forEach>
                 </table>
