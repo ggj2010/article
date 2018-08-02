@@ -164,7 +164,7 @@
                                 </c:if>
                                 <c:if test="${media.typeParam!=4}">
                                     <a class="btn btn-info"
-                                       href="${path}/media/collect?id=${entity.id}&typeParam=${media.typeParam}"
+                                       href="${path}/media/collect?id=${entity.id}&typeParam=${media.typeParam}&mediaChannel=${entity.mediaChannel}"
                                        data-toggle="tooltip" data-placement="top" title="收藏"><span
                                             class="glyphicon glyphicon-star"></span> </a>
                                 </c:if>

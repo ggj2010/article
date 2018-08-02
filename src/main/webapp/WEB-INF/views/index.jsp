@@ -85,6 +85,7 @@
                         <i class="fa  <c:if test="${menu.name=='系统管理'}"> fa-home</c:if>
                 <c:if test="${menu.name=='媒体'}"> fa-desktop</c:if>
                 <c:if test="${menu.name=='财务'}"> fa-bar-chart-o</c:if>
+                <c:if test="${menu.name=='稿件'}"> fa-file-o</c:if>
                 <c:if test="${menu.name=='客户管理'}"> fa-cutlery</c:if>"></i>
                         <span class="nav-label">${menu.name}</span>
                         <span class="fa arrow"></span>

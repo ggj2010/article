@@ -255,6 +255,7 @@ public class MediaController extends BaseController {
             log.error("收藏失败！" + e.getLocalizedMessage());
         }
         redirectAttributes.addAttribute("typeParam", media.getTypeParam());
+        redirectAttributes.addAttribute("mediaChannel", media.getMediaChannel());
         return "redirect:/media/";
     }
     @RequiresPermissions("bussiness:media:view")
