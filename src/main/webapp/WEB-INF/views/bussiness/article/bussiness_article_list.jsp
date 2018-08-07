@@ -31,7 +31,7 @@
             </form:select>
         </div>
         </c:if>
-        <c:if test="${article.typeParam=='2'|| article.typeParam=='' }">
+        <c:if test="${article.typeParam=='2'|| article.typeParam==null|| article.typeParam==''}">
         <div class="form-group">
             <label for="userName">员工信息</label>
             <form:select id="userName" path="userId" class="">
