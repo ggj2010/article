@@ -12,7 +12,14 @@
     <link rel="stylesheet" href="login/assets/css/reset.css">
     <link rel="stylesheet" href="login/assets/css/supersized.css">
     <link rel="stylesheet" href="login/assets/css/style.css">
-
+    <style>
+        .footer{
+            height: 10px;
+            width: 100%;
+            position: fixed;
+            bottom: 0;
+        }
+    </style>
 
 </head>
 <body>
@@ -26,6 +33,9 @@
         <button type="submit">登录</button>
         <div class="error"><span>+</span></div>
     </form>
+    <div class="footer">
+        <a href="http://www.miitbeian.gov.cn">豫ICP备17027010号</a>
+    </div>
 </div>
 <!-- Javascript -->
 <script src="login/assets/js/jquery-1.8.2.min.js"></script>
