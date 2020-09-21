@@ -42,8 +42,8 @@ spring:
       maxOpenPreparedStatements: 20
 
 qiniu:
-  accessKey: aL-Y877Xpt0daNLqkule0TwNTsAFWR0aoYHUTRaA
-  secretKey: ngCEeu-AABo_d5GdGJ076bUNSBsntAyisPPeB9ed
+  accessKey: 
+  secretKey: 
   #ggj2010 ggjqn
   bucketName: ggjqn
   domain: http://o8c5x5dg6.bkt.clouddn.com/
@@ -69,8 +69,8 @@ mybatis:
 
 #######################阿里云sdk############
 ##Access Key管理
-access_Key_ID: ueRiEczaGI5oVGbH
-access_Key_Secret: DELR4vRsu4y0ZrSg8UPxs4SOEFqKUB
+access_Key_ID: 
+access_Key_Secret: 
 #Endpoint是阿里云OSS服务在各个区域的域名地址,外网Endpoint规则 Region + .aliyuncs.com
 endpoint: http://oss-cn-qingdao.aliyuncs.com
 #存储bucket
