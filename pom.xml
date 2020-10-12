@@ -14,7 +14,7 @@
     </parent>
     <properties>
         <!--test1 -->
-        <junit.version>4.12</junit.version>
+        <junit.version>4.13.1</junit.version>
         <!--apache shiro -->
         <shiro.version>1.2.3</shiro.version>
         <contiperf.version>2.2.0</contiperf.version>
